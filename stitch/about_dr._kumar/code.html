@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary-fixed": "#baeaff",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface-tint": "#3a5f94",
+                        "on-secondary-fixed-variant": "#004d62",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-container": "#7fdfde",
+                        "outline-variant": "#c2c6d4",
+                        "on-tertiary-fixed": "#002020",
+                        "surface-container": "#eceef0",
+                        "on-surface-variant": "#424752",
+                        "background": "#f7f9fb",
+                        "surface-variant": "#e0e3e5",
+                        "primary-fixed": "#d5e3ff",
+                        "tertiary-container": "#006363",
+                        "primary-container": "#34598e",
+                        "surface-container-lowest": "#ffffff",
+                        "on-background": "#191c1e",
+                        "on-secondary-fixed": "#001f29",
+                        "primary-fixed-dim": "#a7c8ff",
+                        "on-secondary-container": "#09657f",
+                        "tertiary-fixed": "#93f2f2",
+                        "primary": "#184275",
+                        "surface": "#f7f9fb",
+                        "secondary-container": "#9ae1ff",
+                        "on-primary-fixed": "#001b3c",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2d3133",
+                        "on-tertiary-fixed-variant": "#004f4f",
+                        "tertiary-fixed-dim": "#76d6d5",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#a7c8ff",
+                        "surface-container-low": "#f2f4f6",
+                        "secondary-fixed-dim": "#89d0ed",
+                        "secondary": "#0c6780",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#b7d1ff",
+                        "on-primary-fixed-variant": "#1f477b",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-error-container": "#93000a",
+                        "outline": "#727784",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-bright": "#f7f9fb",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#191c1e",
+                        "surface-dim": "#d8dadc",
+                        "tertiary": "#004949",
+                        "on-error": "#ffffff"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-nav {
+            background: rgba(248, 250, 252, 0.8);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-md shadow-sm dark:shadow-none">
+<div class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
+<span class="text-2xl font-bold tracking-tight text-blue-900 dark:text-white font-headline">Dr. Deepak Kumar</span>
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-slate-600 dark:text-slate-400 hover:text-blue-900 dark:hover:text-blue-200 transition-opacity duration-200" href="#">Home</a>
+<a class="text-blue-900 dark:text-blue-400 font-bold border-b-2 border-blue-900 dark:border-blue-400 pb-1" href="#">About</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-blue-900 dark:hover:text-blue-200 transition-opacity duration-200" href="#">Services</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-blue-900 dark:hover:text-blue-200 transition-opacity duration-200" href="#">Appointments</a>
+</div>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded-xl font-semibold hover:opacity-80 transition-all duration-200 scale-95 active:scale-90">
+                Book Now
+            </button>
+</div>
+</nav>
+<main class="pt-24 pb-20">
+<!-- Hero Section: Editorial Layout -->
+<section class="max-w-7xl mx-auto px-8 py-16 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<div class="lg:col-span-7">
+<span class="bg-tertiary-fixed text-on-tertiary-fixed px-4 py-1.5 rounded-full text-sm font-medium mb-6 inline-block">The Empathetic Authority</span>
+<h1 class="text-5xl lg:text-7xl font-headline font-extrabold text-primary leading-[1.1] tracking-tight mb-8">
+                    Healing with <span class="text-secondary">Precision</span>, Serving with <span class="text-tertiary">Heart</span>.
+                </h1>
+<p class="text-lg md:text-xl text-on-surface-variant leading-relaxed max-w-2xl">
+                    Dr. Deepak Kumar is a distinguished medical professional dedicated to revolutionizing patient care in Muzaffarpur. With a rigorous academic foundation and a deep-rooted commitment to his community, he bridges the gap between advanced medical science and compassionate healing.
+                </p>
+</div>
+<div class="lg:col-span-5 relative">
+<div class="aspect-[4/5] rounded-xl overflow-hidden bg-surface-container-high shadow-xl">
+<img alt="Professional portrait of Dr. Deepak Kumar in a clinical setting with a warm, confident expression" class="w-full h-full object-cover" data-alt="professional portrait of an Indian male doctor in a crisp white coat, warm smile, blurred medical office background with soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-Joa4SRC8hzSZ6JJVC3EqyW-Y8A1nTLPDs8wz8cyYO6oDcQmb66DA_N1n4e7rqGRKvh1ve41xm5nSNyN7sHXSo3ymXH0yiZAgvifJNkVNTaWO0yOMBVdDqGEB15kHJV1jUMcbU_Zb5ZiFHIBuw-6H56Wr5OLfmScStCJ9Od4W7gfJWDpXdJhM9vLIDW4AAvntf5-vsWvYAC_YXXAfro71hBo3Ue5evPzn3QQ_YvAcs7s_4xUr97anaJrmVQGkBqkuEA6cq_J9_0Q"/>
+</div>
+<div class="absolute -bottom-6 -left-6 bg-surface-container-lowest p-6 rounded-xl shadow-lg border border-outline-variant/15 max-w-[240px]">
+<p class="font-headline font-bold text-primary text-xl">15+ Years</p>
+<p class="text-sm text-on-surface-variant">Of clinical excellence and community service in Bihar.</p>
+</div>
+</div>
+</section>
+<!-- Education Bento Grid -->
+<section class="bg-surface-container-low py-24">
+<div class="max-w-7xl mx-auto px-8">
+<div class="mb-16">
+<h2 class="text-3xl font-headline font-bold text-primary mb-4">Academic Foundation</h2>
+<div class="h-1 w-20 bg-secondary rounded-full"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- MBBS Card -->
+<div class="bg-surface-container-lowest p-8 rounded-xl flex flex-col justify-between group hover:shadow-md transition-shadow">
+<div>
+<div class="w-12 h-12 bg-primary-fixed text-on-primary-fixed flex items-center justify-center rounded-lg mb-6">
+<span class="material-symbols-outlined">school</span>
+</div>
+<h3 class="text-2xl font-headline font-bold text-primary mb-2">MBBS</h3>
+<p class="text-on-surface-variant font-medium mb-4">Sri Krishna Medical College (SKMCH)</p>
+<p class="text-on-surface-variant leading-relaxed">Completed his foundational medical education at one of Bihar's premier institutions, developing a robust clinical perspective.</p>
+</div>
+</div>
+<!-- MD Card -->
+<div class="bg-surface-container-lowest p-8 rounded-xl flex flex-col justify-between group hover:shadow-md transition-shadow">
+<div>
+<div class="w-12 h-12 bg-secondary-container text-on-secondary-container flex items-center justify-center rounded-lg mb-6">
+<span class="material-symbols-outlined">medical_services</span>
+</div>
+<h3 class="text-2xl font-headline font-bold text-primary mb-2">MD</h3>
+<p class="text-on-surface-variant font-medium mb-4">Darbhanga Medical College (DMCH)</p>
+<p class="text-on-surface-variant leading-relaxed">Specialized training that honed his expertise in diagnostic precision and advanced therapeutic interventions.</p>
+</div>
+</div>
+<!-- Campus Image: Editorial Overlap -->
+<div class="md:col-span-2 lg:col-span-1 bg-primary relative overflow-hidden rounded-xl">
+<img alt="Stately medical college building architecture" class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay" data-alt="grand colonial style architecture of a prestigious medical college in India with green lawns and blue sky" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD90xfYO3RoQsbfBrdh9WSu5_0C3RjIiG3j_pfRtjEb1zQtBP0DP0mDHlpJTsai80_HUqLwGS7x9cwYYGZLIEi7bPVaoSI05N9XpT6pp7bArKRGuxGZy5zlrauwIk6aPM0sNUSHZzW7WpEZZ_vBO3SzooQaHRCIj3sjNzi96xW0_-bdGs5Qu5Q1EWi4gjFCNzNk2bU30Lue6zqLrjIdUgJy4uoY05QT43wwO3-evwWRukKCZxV3hG1hTT5ihBlGALXu6C2MYSg4yY8"/>
+<div class="relative p-8 h-full flex flex-col justify-end">
+<h3 class="text-white font-headline font-bold text-xl mb-2">Elite Training</h3>
+<p class="text-primary-fixed-dim">Educated at Bihar's most rigorous medical sanctuaries.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Community Commitment: Asymmetric Layout -->
+<section class="max-w-7xl mx-auto px-8 py-24">
+<div class="flex flex-col lg:flex-row items-center gap-16">
+<div class="lg:w-1/2 order-2 lg:order-1">
+<div class="grid grid-cols-2 gap-4">
+<div class="aspect-square rounded-xl overflow-hidden shadow-lg translate-y-8">
+<img alt="Doctor interacting with community members" class="w-full h-full object-cover" data-alt="candid shot of a doctor talking kindly to an elderly rural patient in a community health camp" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPEPwFemMOM0viuZGni7QzXfXGnruX8DoI0Nx-zlh1hBEg5uMXkzgqkCObcaS1Q6VobHto_LeMlud9DAlO-1x2yJotGp8nPif-T4uu-Y53_QTKpY3tl1w2rh33-g85cYQa4CuRHgMZ-LpsexK3T3lsd8HQc4kcroJGHxrK6LuPZ-qNqBcKY65T4tp4WHdY_2gRMz5FgmQpALUc4420LCHoOhDZxuR5AYkPZlJ20llTRjYykxKlh7KM0qAn122AOwpWNu1RV7ebvn8"/>
+</div>
+<div class="aspect-square rounded-xl overflow-hidden shadow-lg">
+<img alt="Life in Muzaffarpur Bihar" class="w-full h-full object-cover" data-alt="vibrant street scene of Muzaffarpur Bihar with local landmarks and soft afternoon sunlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3Clwpb1cmxXU11MoA57fPjch7cd2ADf_weIBF-Ao5RPUK4aOLtiM20rvX_6_Cc2ouV3_vdYgYRBOxpHrQKXKAsR3_WSU2307bljxrYpsOM_UZ6vD6kQuFTjQyrORUHaf6y1S-huCaieMIxToUzYlYV8iACaKOz5OOKXazUcJoXvvQtsDI0SCV4c5NfHG_CDGb0_HLynhcQsw_wnRZL8-EbXEGPx1OJNml2IEguQYJmx6oXH71jWwO5H882Tb3voMDovsoaBBXqA0"/>
+</div>
+</div>
+</div>
+<div class="lg:w-1/2 order-1 lg:order-2">
+<h2 class="text-4xl font-headline font-extrabold text-primary mb-6">A Lifelong Vow to Muzaffarpur</h2>
+<p class="text-lg text-on-surface-variant leading-relaxed mb-6">
+                        Muzaffarpur is more than just a practice location; it is home. Dr. Deepak Kumar’s commitment extends beyond the walls of his clinic. He is deeply involved in local health initiatives, ensuring that quality healthcare is accessible to every strata of society in Bihar.
+                    </p>
+<div class="space-y-4">
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-secondary mt-1">volunteer_activism</span>
+<p class="text-on-surface font-medium">Regular free health camps for underprivileged populations.</p>
+</div>
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-secondary mt-1">diversity_3</span>
+<p class="text-on-surface font-medium">Mentorship programs for local medical aspirants.</p>
+</div>
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-secondary mt-1">health_and_safety</span>
+<p class="text-on-surface font-medium">Primary advocate for preventive health education in rural zones.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Professional Milestones: Timeline -->
+<section class="bg-surface-dim py-24">
+<div class="max-w-4xl mx-auto px-8">
+<div class="text-center mb-16">
+<h2 class="text-3xl font-headline font-bold text-primary mb-4">Professional Milestones</h2>
+<p class="text-on-surface-variant">A legacy of clinical excellence and academic rigor.</p>
+</div>
+<div class="relative">
+<!-- Vertical Line -->
+<div class="absolute left-1/2 -translate-x-1/2 h-full w-px bg-outline-variant/30 hidden md:block"></div>
+<div class="space-y-12">
+<!-- Milestone 1 -->
+<div class="relative flex flex-col md:flex-row items-center gap-8">
+<div class="md:w-1/2 md:text-right">
+<h4 class="text-primary font-bold text-xl">Academic Commencement</h4>
+<p class="text-on-surface-variant">MBBS Graduation from SKMCH, Muzaffarpur.</p>
+</div>
+<div class="w-4 h-4 rounded-full bg-primary z-10 hidden md:block"></div>
+<div class="md:w-1/2">
+<span class="text-secondary font-bold font-headline">Foundation</span>
+</div>
+</div>
+<!-- Milestone 2 -->
+<div class="relative flex flex-col md:flex-row items-center gap-8">
+<div class="md:w-1/2 order-2 md:order-1 md:text-right">
+<span class="text-secondary font-bold font-headline">Specialization</span>
+</div>
+<div class="w-4 h-4 rounded-full bg-secondary z-10 hidden md:block"></div>
+<div class="md:w-1/2 order-1 md:order-2">
+<h4 class="text-primary font-bold text-xl">Advanced Medicine</h4>
+<p class="text-on-surface-variant">Obtained MD from the prestigious Darbhanga Medical College.</p>
+</div>
+</div>
+<!-- Milestone 3 -->
+<div class="relative flex flex-col md:flex-row items-center gap-8">
+<div class="md:w-1/2 md:text-right">
+<h4 class="text-primary font-bold text-xl">Civic Leadership</h4>
+<p class="text-on-surface-variant">Established the landmark clinic in Muzaffarpur focusing on empathetic care.</p>
+</div>
+<div class="w-4 h-4 rounded-full bg-tertiary z-10 hidden md:block"></div>
+<div class="md:w-1/2">
+<span class="text-secondary font-bold font-headline">Establishment</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Certifications: Tonal Cards -->
+<section class="max-w-7xl mx-auto px-8 py-24">
+<h2 class="text-3xl font-headline font-bold text-primary mb-12 text-center">Accreditations &amp; Honors</h2>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="bg-surface-container-low p-6 rounded-xl text-center border border-transparent hover:border-outline-variant/20 transition-all">
+<span class="material-symbols-outlined text-4xl text-primary mb-4" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<p class="font-bold text-primary">IMA Member</p>
+<p class="text-xs text-on-surface-variant mt-1">Indian Medical Association</p>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl text-center border border-transparent hover:border-outline-variant/20 transition-all">
+<span class="material-symbols-outlined text-4xl text-primary mb-4" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+<p class="font-bold text-primary">Board Certified</p>
+<p class="text-xs text-on-surface-variant mt-1">Medical Council of India</p>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl text-center border border-transparent hover:border-outline-variant/20 transition-all">
+<span class="material-symbols-outlined text-4xl text-primary mb-4" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+<p class="font-bold text-primary">Excellence Award</p>
+<p class="text-xs text-on-surface-variant mt-1">State Health Mission</p>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl text-center border border-transparent hover:border-outline-variant/20 transition-all">
+<span class="material-symbols-outlined text-4xl text-primary mb-4" style="font-variation-settings: 'FILL' 1;">published_with_changes</span>
+<p class="font-bold text-primary">Fellowship</p>
+<p class="text-xs text-on-surface-variant mt-1">Internal Medicine</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Section -->
+<footer class="bg-slate-200 dark:bg-slate-900">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-8 py-12 max-w-7xl mx-auto">
+<div class="flex flex-col gap-4">
+<span class="text-xl font-bold text-blue-900 dark:text-white font-headline">Dr. Deepak Kumar</span>
+<p class="text-slate-500 dark:text-slate-400 font-body text-sm leading-relaxed">
+                    Providing compassionate medical care and building a healthier Muzaffarpur through dedicated service and expertise.
+                </p>
+</div>
+<div class="flex flex-col gap-3">
+<h4 class="font-headline font-bold text-primary dark:text-white">Quick Links</h4>
+<a class="text-slate-500 dark:text-slate-400 hover:text-blue-900 dark:hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-blue-900 dark:hover:text-white transition-colors" href="#">Terms of Service</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-blue-900 dark:hover:text-white transition-colors" href="#">Patient Portal</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-blue-900 dark:hover:text-white transition-colors" href="#">Careers</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-headline font-bold text-primary dark:text-white">Contact</h4>
+<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-lg">location_on</span>
+<span class="text-sm">Muzaffarpur, Bihar, India</span>
+</div>
+<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-lg">mail</span>
+<span class="text-sm">contact@drdeepakkumar.com</span>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-4 italic">
+                    © 2024 Dr. Deepak Kumar. All rights reserved.
+                </p>
+</div>
+</div>
+</footer>
+</body></html>
