@@ -16,6 +16,7 @@ A modern, high-performance web presence for **Arogya Clinic**, led by **Dr. Deep
   - Comprehensive Clinical Diagnostics
 - **Clinic Timing:** Evening Clinic starts at **8:30 PM**
 - **Contact:** +91 74888 78725
+- **Email:** deepakkumar21121995@gmail.com
 - **Location:** Muzaffarpur, Bihar
 
 ## 🚀 Features

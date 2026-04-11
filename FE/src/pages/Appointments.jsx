@@ -44,7 +44,7 @@ export default function Appointments() {
                 </div>
                 <div>
                   <p className="font-headline font-bold text-primary">Email Address</p>
-                  <p className="text-on-surface-variant">contact@drdeepakkumar.com</p>
+                  <p className="text-on-surface-variant">deepakkumar21121995@gmail.com</p>
                 </div>
               </div>
             </div>
