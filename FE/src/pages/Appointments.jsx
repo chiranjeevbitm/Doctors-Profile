@@ -8,7 +8,7 @@ export default function Appointments() {
           <div className="lg:col-span-5 space-y-10">
             <div className="space-y-4">
               <h1 className="font-headline text-5xl font-extrabold text-primary leading-tight tracking-tight">Let's prioritize your health.</h1>
-              <p className="text-on-surface-variant text-lg leading-relaxed max-w-md">Schedule a consultation with Dr. Deepak Kumar at our Muzaffarpur clinic. We're committed to providing you with the highest standard of care.</p>
+              <p className="text-on-surface-variant text-lg leading-relaxed max-w-md">Schedule a consultation with Dr. Deepak Kumar at Arogya Clinic in Muzaffarpur. We're committed to providing you with the highest standard of care.</p>
             </div>
             <div className="space-y-6">
               <div className="flex items-start gap-4 p-4 rounded-xl bg-surface-container-low transition-colors hover:bg-surface-container">
@@ -26,7 +26,16 @@ export default function Appointments() {
                 </div>
                 <div>
                   <p className="font-headline font-bold text-primary">Phone Number</p>
-                  <p className="text-on-surface-variant">+91 98765 43210</p>
+                  <p className="text-on-surface-variant">+91 74888 78725</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4 p-4 rounded-xl bg-surface-container-low transition-colors hover:bg-surface-container">
+                <div className="bg-secondary-container p-3 rounded-lg text-on-secondary-container">
+                  <span className="material-symbols-outlined">schedule</span>
+                </div>
+                <div>
+                  <p className="font-headline font-bold text-primary">Operating Hours</p>
+                  <p className="text-on-surface-variant">Evening Clinic: 8:30 PM</p>
                 </div>
               </div>
               <div className="flex items-start gap-4 p-4 rounded-xl bg-surface-container-low transition-colors hover:bg-surface-container">
@@ -77,7 +86,8 @@ export default function Appointments() {
                     <select className="w-full bg-surface-container-low border-none rounded-lg p-4 focus:ring-0 focus:bg-surface-container-lowest focus:border-b-2 focus:border-primary transition-all">
                       <option>Morning (9 AM - 12 PM)</option>
                       <option>Afternoon (2 PM - 5 PM)</option>
-                      <option>Evening (6 PM - 8 PM)</option>
+                      <option>Evening Clinic (8:30 PM Onwards)</option>
+                      <option>Teleconsultation</option>
                     </select>
                   </div>
                 </div>

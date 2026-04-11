@@ -14,10 +14,10 @@ export default function Home() {
               Muzaffarpur, Bihar
             </div>
             <h1 className="text-5xl md:text-7xl font-extrabold text-primary leading-[1.1] tracking-tight">
-              Compassionate Care <br /><span className="text-secondary">Rooted in Excellence.</span>
+              Aapka Swasthya <br /><span className="text-secondary">Hamari Jimmedari.</span>
             </h1>
             <p className="text-xl text-on-surface-variant max-w-xl leading-relaxed">
-              Dedicated to providing high-quality medical services with a personal touch. Experienced practitioner specializing in comprehensive patient wellness and advanced clinical diagnostics.
+              Welcome to <strong>Arogya Clinic</strong>. We provide guideline-directed comprehensive care for Diabetes, Blood Pressure, Thyroid, Asthma, COPD, and Abdominal diseases, prioritizing your long-term wellness.
             </p>
             <div className="flex flex-wrap gap-4 pt-4">
               <Link to="/appointments" className="bg-gradient-to-br from-primary to-primary-container text-on-primary px-8 py-4 rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2">
@@ -162,7 +162,7 @@ export default function Home() {
               </Link>
               <div className="flex items-center justify-center md:justify-start gap-4 text-on-primary/80">
                 <span className="material-symbols-outlined">call</span>
-                <span className="font-bold">+91-XXXXX-XXXXX</span>
+                <span className="font-bold">+91 74888 78725</span>
               </div>
             </div>
           </div>

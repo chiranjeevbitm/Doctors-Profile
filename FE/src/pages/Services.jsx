@@ -41,11 +41,11 @@ export default function Services() {
             <div className="md:col-span-8 bg-surface-container-lowest p-8 rounded-xl flex flex-col justify-between group hover:shadow-lg transition-shadow duration-300">
               <div>
                 <div className="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center text-primary mb-6">
-                  <span className="material-symbols-outlined text-3xl">stethoscope</span>
+                  <span className="material-symbols-outlined text-3xl">monitor_heart</span>
                 </div>
-                <h3 className="font-headline text-2xl font-bold text-primary mb-3">General Consultation</h3>
+                <h3 className="font-headline text-2xl font-bold text-primary mb-3">Diabetes & Blood Pressure Management</h3>
                 <p className="text-on-surface-variant leading-relaxed max-w-lg mb-8">
-                  Comprehensive wellness exams and routine health screenings designed to identify risks early and maintain optimal health balance. We prioritize preventative medicine through detailed assessments.
+                  Guideline-directed medical treatment for managing chronic conditions like Diabetes and Hypertension. We provide continuous monitoring and personalized therapeutic plans to ensure your vitals remain balanced and optimal.
                 </p>
               </div>
               <Link to="/appointments" className="inline-flex items-center text-tertiary font-bold group-hover:gap-2 transition-all">
@@ -54,40 +54,40 @@ export default function Services() {
             </div>
             <div className="md:col-span-4 bg-surface-container-lowest p-8 rounded-xl flex flex-col group hover:shadow-lg transition-shadow duration-300">
               <div className="w-14 h-14 bg-secondary/10 rounded-lg flex items-center justify-center text-secondary mb-6">
-                <span className="material-symbols-outlined text-3xl">clinical_notes</span>
+                <span className="material-symbols-outlined text-3xl">local_pharmacy</span>
               </div>
-              <h3 className="font-headline text-2xl font-bold text-primary mb-3">Specialized Care</h3>
-              <p className="text-on-surface-variant mb-6 flex-grow">Advanced treatment protocols for chronic conditions and acute medical concerns with specialized oversight.</p>
+              <h3 className="font-headline text-2xl font-bold text-primary mb-3">Endocrine Care</h3>
+              <p className="text-on-surface-variant mb-6 flex-grow">Advanced diagnosis and holistic management of Thyroid-related disorders.</p>
               <Link to="/appointments" className="inline-flex items-center text-tertiary font-bold">
                 Learn More <span className="material-symbols-outlined ml-1">arrow_forward</span>
               </Link>
             </div>
             <div className="md:col-span-4 bg-surface-container-lowest p-8 rounded-xl flex flex-col group hover:shadow-lg transition-shadow duration-300">
               <div className="w-14 h-14 bg-tertiary/10 rounded-lg flex items-center justify-center text-tertiary mb-6">
-                <span className="material-symbols-outlined text-3xl">biotech</span>
+                <span className="material-symbols-outlined text-3xl">pulmonology</span>
               </div>
-              <h3 className="font-headline text-2xl font-bold text-primary mb-3">Diagnostic Advice</h3>
-              <p className="text-on-surface-variant mb-6 flex-grow">Expert interpretation of laboratory results and imaging, providing clarity for complex medical situations.</p>
+              <h3 className="font-headline text-2xl font-bold text-primary mb-3">Respiratory Health</h3>
+              <p className="text-on-surface-variant mb-6 flex-grow">Specialized interventions for Asthma, COPD, and other pulmonary challenges.</p>
               <Link to="/appointments" className="inline-flex items-center text-tertiary font-bold">
                 Learn More <span className="material-symbols-outlined ml-1">arrow_forward</span>
               </Link>
             </div>
             <div className="md:col-span-4 bg-surface-container-lowest p-8 rounded-xl flex flex-col group hover:shadow-lg transition-shadow duration-300">
               <div className="w-14 h-14 bg-primary-container/10 rounded-lg flex items-center justify-center text-primary-container mb-6">
-                <span className="material-symbols-outlined text-3xl">monitor_heart</span>
+                <span className="material-symbols-outlined text-3xl">gastroenterology</span>
               </div>
-              <h3 className="font-headline text-2xl font-bold text-primary mb-3">Remote Monitoring</h3>
-              <p className="text-on-surface-variant mb-6 flex-grow">Seamless digital health tracking allowing for continuous care outside of traditional clinic visits.</p>
+              <h3 className="font-headline text-2xl font-bold text-primary mb-3">Abdomen Diseases</h3>
+              <p className="text-on-surface-variant mb-6 flex-grow">Expert consultations and treatment plans for diseases related to the abdomen and GI tract.</p>
               <Link to="/appointments" className="inline-flex items-center text-tertiary font-bold">
                 Learn More <span className="material-symbols-outlined ml-1">arrow_forward</span>
               </Link>
             </div>
             <div className="md:col-span-4 bg-surface-container-lowest p-8 rounded-xl flex flex-col group hover:shadow-lg transition-shadow duration-300">
               <div className="w-14 h-14 bg-secondary-container/20 rounded-lg flex items-center justify-center text-secondary mb-6">
-                <span className="material-symbols-outlined text-3xl">medical_services</span>
+                <span className="material-symbols-outlined text-3xl">video_camera_front</span>
               </div>
-              <h3 className="font-headline text-2xl font-bold text-primary mb-3">Surgical Advice</h3>
-              <p className="text-on-surface-variant mb-6 flex-grow">Pre and post-operative guidance to ensure the highest safety standards and recovery outcomes.</p>
+              <h3 className="font-headline text-2xl font-bold text-primary mb-3">Teleconsultation</h3>
+              <p className="text-on-surface-variant mb-6 flex-grow">Access personalized medical advice and follow-up care remotely from the comfort of your home.</p>
               <Link to="/appointments" className="inline-flex items-center text-tertiary font-bold">
                 Learn More <span className="material-symbols-outlined ml-1">arrow_forward</span>
               </Link>

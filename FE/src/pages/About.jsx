@@ -1,5 +1,6 @@
 import React from 'react';
 import profileImg from '../assets/hero.png';
+import arogyaImg from '../assets/arogya_clinic_front.jpeg';
 
 export default function About() {
   return (
@@ -12,7 +13,7 @@ export default function About() {
             Healing with <span className="text-secondary">Precision</span>, Serving with <span className="text-tertiary">Heart</span>.
           </h1>
           <p className="text-lg md:text-xl text-on-surface-variant leading-relaxed max-w-2xl">
-            Dr. Deepak Kumar is a distinguished medical professional dedicated to revolutionizing patient care in Muzaffarpur. With a rigorous academic foundation and a deep-rooted commitment to his community, he bridges the gap between advanced medical science and compassionate healing.
+            Dr. Deepak Kumar is a distinguished medical professional dedicated to revolutionizing patient care throughout the Tirhut division. Based in Muzaffarpur, the "Capital of North Bihar," he bridges the gap between advanced medical science and compassionate healing, offering a trusted sanctuary for the community's health.
           </p>
         </div>
         <div className="lg:col-span-5 relative">
@@ -20,7 +21,7 @@ export default function About() {
             <img alt="Professional portrait of Dr. Deepak Kumar" className="w-full h-full object-cover object-[center_10%]" src={profileImg} />
           </div>
           <div className="absolute -bottom-6 -left-6 bg-surface-container-lowest p-6 rounded-xl shadow-lg border border-outline-variant/15 max-w-[240px]">
-            <p className="font-headline font-bold text-primary text-xl">15+ Years</p>
+            <p className="font-headline font-bold text-primary text-xl">5+ Years</p>
             <p className="text-sm text-on-surface-variant">Of clinical excellence and community service in Bihar.</p>
           </div>
         </div>
@@ -71,7 +72,7 @@ export default function About() {
           <div className="lg:w-1/2 order-2 lg:order-1">
             <div className="grid grid-cols-2 gap-4">
               <div className="aspect-square rounded-xl overflow-hidden shadow-lg translate-y-8">
-                <img alt="Doctor interacting with community members" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPEPwFemMOM0viuZGni7QzXfXGnruX8DoI0Nx-zlh1hBEg5uMXkzgqkCObcaS1Q6VobHto_LeMlud9DAlO-1x2yJotGp8nPif-T4uu-Y53_QTKpY3tl1w2rh33-g85cYQa4CuRHgMZ-LpsexK3T3lsd8HQc4kcroJGHxrK6LuPZ-qNqBcKY65T4tp4WHdY_2gRMz5FgmQpALUc4420LCHoOhDZxuR5AYkPZlJ20llTRjYykxKlh7KM0qAn122AOwpWNu1RV7ebvn8" />
+                <img alt="Arogya Clinic Entrance" className="w-full h-full object-cover" src={arogyaImg} />
               </div>
               <div className="aspect-square rounded-xl overflow-hidden shadow-lg">
                 <img alt="Life in Muzaffarpur Bihar" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3Clwpb1cmxXU11MoA57fPjch7cd2ADf_weIBF-Ao5RPUK4aOLtiM20rvX_6_Cc2ouV3_vdYgYRBOxpHrQKXKAsR3_WSU2307bljxrYpsOM_UZ6vD6kQuFTjQyrORUHaf6y1S-huCaieMIxToUzYlYV8iACaKOz5OOKXazUcJoXvvQtsDI0SCV4c5NfHG_CDGb0_HLynhcQsw_wnRZL8-EbXEGPx1OJNml2IEguQYJmx6oXH71jWwO5H882Tb3voMDovsoaBBXqA0" />
@@ -81,7 +82,7 @@ export default function About() {
           <div className="lg:w-1/2 order-1 lg:order-2">
             <h2 className="text-4xl font-headline font-extrabold text-primary mb-6">A Lifelong Vow to Muzaffarpur</h2>
             <p className="text-lg text-on-surface-variant leading-relaxed mb-6">
-              Muzaffarpur is more than just a practice location; it is home. Dr. Deepak Kumar’s commitment extends beyond the walls of his clinic. He is deeply involved in local health initiatives, ensuring that quality healthcare is accessible to every strata of society in Bihar.
+              Muzaffarpur is more than just a practice location; it is home. Operating from Arogya Clinic, Dr. Deepak Kumar’s commitment extends to the heart of the "Land of Shahi Lychees". He is deeply involved in local health initiatives, ensuring that quality healthcare is accessible to every strata of society in Bihar.
             </p>
             <div className="space-y-4">
               <div className="flex items-start gap-4">

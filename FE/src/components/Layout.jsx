@@ -36,7 +36,7 @@ export default function Layout() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-8 py-12 max-w-7xl mx-auto">
           <div className="space-y-4">
             <div className="text-xl font-bold text-blue-900">Dr. Deepak Kumar</div>
-            <p className="text-slate-500 max-w-xs leading-relaxed">Expert healthcare professional dedicated to the wellness of the Muzaffarpur community. MBBS (SKMCH), MD (DMCH).</p>
+            <p className="text-slate-500 max-w-xs leading-relaxed">Expert healthcare professional dedicated to the wellness of the Muzaffarpur community at Arogya Clinic. MBBS (SKMCH), MD (DMCH).</p>
           </div>
           <div className="space-y-4">
             <h4 className="font-bold text-blue-900 uppercase text-xs tracking-widest">Navigation</h4>
@@ -48,11 +48,12 @@ export default function Layout() {
             </ul>
           </div>
           <div className="space-y-4">
-            <h4 className="font-bold text-blue-900 uppercase text-xs tracking-widest">Clinic Location</h4>
+            <h4 className="font-bold text-blue-900 uppercase text-xs tracking-widest">Arogya Clinic Location</h4>
             <p className="text-slate-500 leading-relaxed">
               Main Road, Muzaffarpur,<br/>
               Bihar - 842001<br/>
-              <span className="inline-block mt-2 font-semibold">Mon - Sat: 10:00 AM - 6:00 PM</span>
+              <span className="inline-block mt-2 font-semibold">Evening Clinic Starts: 8:30 PM</span><br/>
+              <span className="inline-block mt-1 font-semibold text-blue-900">+91 74888 78725</span>
             </p>
           </div>
         </div>
