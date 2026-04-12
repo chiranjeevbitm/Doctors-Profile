@@ -1,43 +1,40 @@
-#!/usr/bin/env python3
 """
-test_email.py — Test script for Resend API notification service
+BE/test_email.py — Manual test script for Resend API notification.
 """
 import asyncio
-import logging
 import sys
-import os
+import anyio
+from config import settings
+import resend
 
-# Add the current directory to sys.path so we can import 'services' and 'config'
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__))))
+async def test_resend_notification():
+    """
+    Test the Resend notification logic.
+    """
+    if not settings.RESEND_API_KEY or "re_" not in settings.RESEND_API_KEY:
+        print("\n❌ ERROR: RESEND_API_KEY is missing or invalid in .env")
+        print("Please add: RESEND_API_KEY=re_your_key_here")
+        return
 
-from services.email_service import send_appointment_notification
-
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-)
-logger = logging.getLogger(__name__)
-
-async def run_test():
     test_appt = {
-        "full_name": "Resend Connection Test",
-        "phone": "+91 0000000000",
-        "email": "test@resend.com",
-        "preferred_date": "2026-04-15",
+        "full_name": "Test Patient (Resend)",
+        "phone": "+91 99999 88888",
+        "email": "patient@example.com",
+        "preferred_date": "2026-04-20",
         "time_slot": "10:00 AM - 11:00 AM",
-        "medical_concern": "Verifying that the API connection through Resend is working in production.",
-        "submitted_at": "2026-04-12 18:15:00"
+        "medical_concern": "Testing Resend API integration from Render migration.",
+        "submitted_at": "2026-04-12 18:35:00"
     }
 
     print("\n🚀 Starting Resend API connection test...")
     try:
+        from services.email_service import send_appointment_notification
         await send_appointment_notification(test_appt)
-        print("\n✅ TEST SUCCESSFUL! The request was accepted by Resend.")
-        print("Note: If you are using a trial/onboarding key, the email will be sent to your verified Resend email address.")
+        print("\n✅ TEST SUCCESSFUL!")
+        print(f"Check the Resend dashboard or target emails: {settings.NOTIFICATION_EMAILS}")
     except Exception as e:
         print(f"\n❌ TEST FAILED: {e}")
         sys.exit(1)
 
 if __name__ == "__main__":
-    asyncio.run(run_test())
+    asyncio.run(test_resend_notification())

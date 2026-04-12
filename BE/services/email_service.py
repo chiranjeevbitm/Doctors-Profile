@@ -1,15 +1,11 @@
 """
-services/email_service.py — Sends formatted HTML notification emails via Resend API
+services/email_service.py — Sends formatted HTML notification emails via Gmail SMTP
 """
-import logging
-import resend
+import aiosmtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from typing import List
 from config import settings
-
-logger = logging.getLogger(__name__)
-
-# Configure Resend
-resend.api_key = settings.RESEND_API_KEY
 
 
 def _build_html_body(appointment_data: dict) -> str:
@@ -81,24 +77,19 @@ def _build_html_body(appointment_data: dict) -> str:
 
 async def send_appointment_notification(appointment_data: dict) -> None:
     """
-    Sends an HTML email notification via Resend API.
+    Sends an HTML email notification to all configured recipients via Resend API.
     """
-    recipients: List[str] = settings.notification_email_list
+    resend.api_key = settings.RESEND_API_KEY
     patient_name = appointment_data.get("full_name", "Unknown")
     html_body = _build_html_body(appointment_data)
 
-    try:
-        # Note: If using the trial/onboarding key, 'from' must be onboarding@resend.dev
-        # After verifying a domain, change this to your custom domain.
-        params = {
-            "from": "Arogya Clinic <onboarding@resend.dev>",
-            "to": recipients,
-            "subject": f"📋 New Appointment Request: {patient_name} — Arogya Clinic",
-            "html": html_body,
-        }
+    params = {
+        "from": settings.EMAIL_FROM,
+        "to": settings.notification_email_list,
+        "subject": f"📋 New Appointment Request: {patient_name} — Arogya Clinic",
+        "html": html_body,
+    }
 
-        resend.Emails.send(params)
-        logger.info(f"Notification email sent via Resend for {patient_name}")
-    except Exception as e:
-        logger.error(f"Failed to send email via Resend: {e}")
-        raise e
+    # Resend Python SDK is synchronous; we use anyio to run it in a thread
+    # to avoid blocking the FastAPI event loop.
+    await anyio.to_thread.run_sync(resend.Emails.send, params)

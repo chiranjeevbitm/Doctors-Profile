@@ -9,8 +9,9 @@ class Settings(BaseSettings):
     # PostgreSQL (Neon)
     DATABASE_URL: str
 
-    # Resend API
+    # Email Service (Resend)
     RESEND_API_KEY: str
+    EMAIL_FROM: str = "onboarding@resend.dev"
 
     # Comma-separated notification recipients
     NOTIFICATION_EMAILS: str
