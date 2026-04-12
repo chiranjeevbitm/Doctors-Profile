@@ -1,10 +1,55 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+const INITIAL_FORM = {
+  full_name: '',
+  phone: '',
+  email: '',
+  preferred_date: '',
+  time_slot: 'Evening Clinic (8:30 PM Onwards)',
+  medical_concern: '',
+};
 
 export default function Appointments() {
+  const [form, setForm] = useState(INITIAL_FORM);
+  const [status, setStatus] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const handleChange = (e) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus('loading');
+    setErrorMsg('');
+
+    try {
+      const response = await fetch(`${API_BASE}/api/appointments/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.detail || `Server error (${response.status})`);
+      }
+
+      setStatus('success');
+      setForm(INITIAL_FORM);
+    } catch (err) {
+      setStatus('error');
+      setErrorMsg(err.message || 'Something went wrong. Please try again.');
+    }
+  };
+
   return (
     <>
       <main className="pt-12 pb-20 px-6 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          {/* Left Panel: Clinic Info */}
           <div className="lg:col-span-5 space-y-10">
             <div className="space-y-4">
               <h1 className="font-headline text-5xl font-extrabold text-primary leading-tight tracking-tight">Let's prioritize your health.</h1>
@@ -53,6 +98,8 @@ export default function Appointments() {
               <div className="absolute inset-0 bg-primary/10 group-hover:bg-transparent transition-colors duration-300"></div>
             </div>
           </div>
+
+          {/* Right Panel: Form */}
           <div className="lg:col-span-7">
             <div className="bg-surface-container-lowest p-8 md:p-12 rounded-xl shadow-sm border border-outline-variant/10">
               <div className="mb-8">
@@ -61,29 +108,86 @@ export default function Appointments() {
                 </span>
                 <h2 className="font-headline text-3xl font-bold text-primary">Request an Appointment</h2>
               </div>
-              <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+
+              {/* Success Banner */}
+              {status === 'success' && (
+                <div className="flex items-start gap-3 bg-green-50 border border-green-200 text-green-800 rounded-xl p-4 mb-6">
+                  <span className="material-symbols-outlined text-green-600 mt-0.5">check_circle</span>
+                  <div>
+                    <p className="font-bold">Appointment Requested!</p>
+                    <p className="text-sm mt-0.5">We've received your request and will contact you shortly to confirm your appointment.</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Error Banner */}
+              {status === 'error' && (
+                <div className="flex items-start gap-3 bg-red-50 border border-red-200 text-red-800 rounded-xl p-4 mb-6">
+                  <span className="material-symbols-outlined text-red-600 mt-0.5">error</span>
+                  <div>
+                    <p className="font-bold">Submission Failed</p>
+                    <p className="text-sm mt-0.5">{errorMsg}</p>
+                  </div>
+                </div>
+              )}
+
+              <form className="space-y-6" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-on-surface-variant px-1">Full Name</label>
-                    <input className="w-full bg-surface-container-low border-none rounded-lg p-4 focus:ring-0 focus:bg-surface-container-lowest focus:border-b-2 focus:border-primary transition-all" placeholder="John Doe" type="text"/>
+                    <label className="text-sm font-semibold text-on-surface-variant px-1">Full Name *</label>
+                    <input
+                      name="full_name"
+                      required
+                      value={form.full_name}
+                      onChange={handleChange}
+                      className="w-full bg-surface-container-low border-none rounded-lg p-4 focus:ring-0 focus:bg-surface-container-lowest focus:border-b-2 focus:border-primary transition-all"
+                      placeholder="e.g. Ramesh Kumar"
+                      type="text"
+                    />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold text-on-surface-variant px-1">Phone Number</label>
-                    <input className="w-full bg-surface-container-low border-none rounded-lg p-4 focus:ring-0 focus:bg-surface-container-lowest focus:border-b-2 focus:border-primary transition-all" placeholder="+91 00000 00000" type="tel"/>
+                    <label className="text-sm font-semibold text-on-surface-variant px-1">Phone Number *</label>
+                    <input
+                      name="phone"
+                      required
+                      value={form.phone}
+                      onChange={handleChange}
+                      className="w-full bg-surface-container-low border-none rounded-lg p-4 focus:ring-0 focus:bg-surface-container-lowest focus:border-b-2 focus:border-primary transition-all"
+                      placeholder="+91 00000 00000"
+                      type="tel"
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-on-surface-variant px-1">Email Address</label>
-                  <input className="w-full bg-surface-container-low border-none rounded-lg p-4 focus:ring-0 focus:bg-surface-container-lowest focus:border-b-2 focus:border-primary transition-all" placeholder="john@example.com" type="email"/>
+                  <input
+                    name="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    className="w-full bg-surface-container-low border-none rounded-lg p-4 focus:ring-0 focus:bg-surface-container-lowest focus:border-b-2 focus:border-primary transition-all"
+                    placeholder="your@email.com"
+                    type="email"
+                  />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-on-surface-variant px-1">Preferred Date</label>
-                    <input className="w-full bg-surface-container-low border-none rounded-lg p-4 focus:ring-0 focus:bg-surface-container-lowest focus:border-b-2 focus:border-primary transition-all" type="date"/>
+                    <input
+                      name="preferred_date"
+                      value={form.preferred_date}
+                      onChange={handleChange}
+                      className="w-full bg-surface-container-low border-none rounded-lg p-4 focus:ring-0 focus:bg-surface-container-lowest focus:border-b-2 focus:border-primary transition-all"
+                      type="date"
+                    />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-semibold text-on-surface-variant px-1">Preferred Time Slot</label>
-                    <select className="w-full bg-surface-container-low border-none rounded-lg p-4 focus:ring-0 focus:bg-surface-container-lowest focus:border-b-2 focus:border-primary transition-all">
+                    <select
+                      name="time_slot"
+                      value={form.time_slot}
+                      onChange={handleChange}
+                      className="w-full bg-surface-container-low border-none rounded-lg p-4 focus:ring-0 focus:bg-surface-container-lowest focus:border-b-2 focus:border-primary transition-all"
+                    >
                       <option>Morning (9 AM - 12 PM)</option>
                       <option>Afternoon (2 PM - 5 PM)</option>
                       <option>Evening Clinic (8:30 PM Onwards)</option>
@@ -93,11 +197,30 @@ export default function Appointments() {
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-on-surface-variant px-1">Medical Concern</label>
-                  <textarea className="w-full bg-surface-container-low border-none rounded-lg p-4 focus:ring-0 focus:bg-surface-container-lowest focus:border-b-2 focus:border-primary transition-all resize-none" placeholder="Briefly describe your health concern..." rows="4"></textarea>
+                  <textarea
+                    name="medical_concern"
+                    value={form.medical_concern}
+                    onChange={handleChange}
+                    className="w-full bg-surface-container-low border-none rounded-lg p-4 focus:ring-0 focus:bg-surface-container-lowest focus:border-b-2 focus:border-primary transition-all resize-none"
+                    placeholder="Briefly describe your health concern..."
+                    rows="4"
+                  ></textarea>
                 </div>
                 <div className="pt-4">
-                  <button className="w-full bg-gradient-to-br from-primary to-primary-container text-white py-4 rounded-xl font-bold text-lg shadow-md hover:opacity-90 transition-all active:scale-[0.98]" type="submit">
-                    Send Request
+                  <button
+                    className="w-full bg-gradient-to-br from-primary to-primary-container text-white py-4 rounded-xl font-bold text-lg shadow-md hover:opacity-90 transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    type="submit"
+                    disabled={status === 'loading'}
+                  >
+                    {status === 'loading' ? (
+                      <>
+                        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                        </svg>
+                        Submitting...
+                      </>
+                    ) : 'Send Request'}
                   </button>
                   <p className="text-center text-xs text-on-surface-variant mt-4">
                     By submitting this form, you agree to our <a className="underline" href="#">Privacy Policy</a>.
