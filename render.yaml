@@ -12,7 +12,7 @@ services:
         sync: false
       - key: EMAIL_FROM
         value: "onboarding@resend.dev"
-      - key: NOTIFY_EMAIL
+      - key: NOTIFICATION_EMAILS
         sync: false
       - key: ENABLE_DB
         value: "True"
