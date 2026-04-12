@@ -77,19 +77,35 @@ def _build_html_body(appointment_data: dict) -> str:
 
 async def send_appointment_notification(appointment_data: dict) -> None:
     """
-    Sends an HTML email notification to all configured recipients via Resend API.
+    Sends an HTML email notification to all configured recipients.
+    Uses Gmail SMTP with TLS (STARTTLS on port 587).
     """
-    resend.api_key = settings.RESEND_API_KEY
+    recipients: List[str] = settings.notification_email_list
     patient_name = appointment_data.get("full_name", "Unknown")
+
+    # Build the MIME message
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = f"📋 New Appointment Request: {patient_name} — Arogya Clinic"
+    msg["From"] = settings.SMTP_USER
+    msg["To"] = ", ".join(recipients)
+
     html_body = _build_html_body(appointment_data)
+    msg.attach(MIMEText(html_body, "html"))
 
-    params = {
-        "from": settings.EMAIL_FROM,
-        "to": settings.notification_email_list,
-        "subject": f"📋 New Appointment Request: {patient_name} — Arogya Clinic",
-        "html": html_body,
-    }
-
-    # Resend Python SDK is synchronous; we use anyio to run it in a thread
-    # to avoid blocking the FastAPI event loop.
-    await anyio.to_thread.run_sync(resend.Emails.send, params)
+    # Send via aiosmtplib (async SMTP)
+    # Use SSL (use_tls=True) for port 465, STARTTLS (start_tls=True) for 587
+    use_ssl = (settings.SMTP_PORT == 465)
+    
+    await aiosmtplib.send(
+        msg,
+        hostname=settings.SMTP_HOST,
+        port=settings.SMTP_PORT,
+        username=settings.SMTP_USER,
+        password=settings.SMTP_PASSWORD,
+        use_tls=use_ssl,
+        start_tls=not use_ssl,
+        # Only disable validation if we're forced to use a raw IP (local DNS issues)
+        validate_certs=False if settings.SMTP_HOST.replace('.', '').isdigit() else True,
+        timeout=30,
+        recipients=recipients,
+    )
