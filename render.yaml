@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: arogya-clinic-be
+    env: python
+    rootDir: BE
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn -k uvicorn.workers.UvicornWorker main:app
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: "465"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: NOTIFY_EMAIL
+        sync: false
+      - key: ENABLE_DB
+        value: "False"
+      - key: PYTHON_VERSION
+        value: "3.12.0"

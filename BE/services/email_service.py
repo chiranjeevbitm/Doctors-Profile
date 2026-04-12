@@ -93,12 +93,19 @@ async def send_appointment_notification(appointment_data: dict) -> None:
     msg.attach(MIMEText(html_body, "html"))
 
     # Send via aiosmtplib (async SMTP)
+    # Use SSL (use_tls=True) for port 465, STARTTLS (start_tls=True) for 587
+    use_ssl = (settings.SMTP_PORT == 465)
+    
     await aiosmtplib.send(
         msg,
         hostname=settings.SMTP_HOST,
         port=settings.SMTP_PORT,
         username=settings.SMTP_USER,
         password=settings.SMTP_PASSWORD,
-        start_tls=True,
+        use_tls=use_ssl,
+        start_tls=not use_ssl,
+        # Only disable validation if we're forced to use a raw IP (local DNS issues)
+        validate_certs=False if settings.SMTP_HOST.replace('.', '').isdigit() else True,
+        timeout=30,
         recipients=recipients,
     )

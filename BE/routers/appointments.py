@@ -4,7 +4,7 @@ routers/appointments.py — POST /api/appointments endpoint
 import logging
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database import get_db
@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 )
 async def create_appointment(
     payload: AppointmentRequest,
+    background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
 ):
     """
@@ -32,36 +33,50 @@ async def create_appointment(
     3. Sends an HTML notification email to all configured recipients.
     4. Returns the saved appointment record.
     """
-    # --- 1. Persist to database ---
-    appointment = Appointment(
+    # --- 1. Persist to database (if enabled) ---
+    appointment_id = 0
+    submitted_at = datetime.now(timezone.utc)
+    
+    if db is not None:
+        appointment = Appointment(
+            full_name=payload.full_name,
+            phone=payload.phone,
+            email=payload.email,
+            preferred_date=payload.preferred_date,
+            time_slot=payload.time_slot,
+            medical_concern=payload.medical_concern,
+            submitted_at=submitted_at,
+        )
+        db.add(appointment)
+        await db.commit()
+        await db.refresh(appointment)
+        appointment_id = appointment.id
+        submitted_at = appointment.submitted_at
+        logger.info(f"New appointment saved: id={appointment_id} name={appointment.full_name}")
+    else:
+        logger.info(f"Database persistence skipped for {payload.full_name} (ENABLE_DB=False)")
+
+    # --- 2. Send email notification IN BACKGROUND (non-blocking) ---
+    appointment_data = {
+        "full_name": payload.full_name,
+        "phone": payload.phone,
+        "email": payload.email,
+        "preferred_date": payload.preferred_date,
+        "time_slot": payload.time_slot,
+        "medical_concern": payload.medical_concern,
+        "submitted_at": submitted_at.strftime("%Y-%m-%d %H:%M:%S UTC"),
+    }
+    background_tasks.add_task(send_appointment_notification, appointment_data)
+    logger.info(f"Email queued in background for {payload.full_name}")
+
+    # Create response object
+    return AppointmentResponse(
+        id=appointment_id,
         full_name=payload.full_name,
         phone=payload.phone,
         email=payload.email,
         preferred_date=payload.preferred_date,
         time_slot=payload.time_slot,
         medical_concern=payload.medical_concern,
-        submitted_at=datetime.now(timezone.utc),
+        submitted_at=submitted_at
     )
-    db.add(appointment)
-    await db.commit()
-    await db.refresh(appointment)
-    logger.info(f"New appointment saved: id={appointment.id} name={appointment.full_name}")
-
-    # --- 2. Send email notification (non-blocking on failure) ---
-    try:
-        appointment_data = {
-            "full_name": appointment.full_name,
-            "phone": appointment.phone,
-            "email": appointment.email,
-            "preferred_date": appointment.preferred_date,
-            "time_slot": appointment.time_slot,
-            "medical_concern": appointment.medical_concern,
-            "submitted_at": appointment.submitted_at.strftime("%Y-%m-%d %H:%M:%S UTC"),
-        }
-        await send_appointment_notification(appointment_data)
-        logger.info(f"Notification email sent for appointment id={appointment.id}")
-    except Exception as exc:
-        # Log the error but do NOT fail the API response
-        logger.error(f"Email notification failed for appointment id={appointment.id}: {exc}")
-
-    return appointment

@@ -18,6 +18,9 @@ class Settings(BaseSettings):
     # Comma-separated notification recipients
     NOTIFICATION_EMAILS: str
 
+    # Database Toggle
+    ENABLE_DB: bool = False
+
     @property
     def notification_email_list(self) -> List[str]:
         return [e.strip() for e in self.NOTIFICATION_EMAILS.split(",")]

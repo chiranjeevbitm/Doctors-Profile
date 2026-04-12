@@ -7,6 +7,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from config import settings
 from database import engine, Base
 from routers import appointments
 
@@ -26,9 +27,16 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    logger.info("Database tables verified/created.")
+    if settings.ENABLE_DB:
+        try:
+            async with engine.begin() as conn:
+                await conn.run_sync(Base.metadata.create_all)
+            logger.info("Database tables verified/created.")
+        except Exception as e:
+            logger.error(f"Failed to initialize database on startup: {e}")
+            logger.info("Server starting anyway. DB-dependent features may fail.")
+    else:
+        logger.info("Database initialization skipped (ENABLE_DB=False).")
     yield
     await engine.dispose()
     logger.info("Database engine disposed.")
