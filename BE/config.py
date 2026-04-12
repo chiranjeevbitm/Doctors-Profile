@@ -9,11 +9,8 @@ class Settings(BaseSettings):
     # PostgreSQL (Neon)
     DATABASE_URL: str
 
-    # SMTP (Gmail)
-    SMTP_HOST: str = "smtp.gmail.com"
-    SMTP_PORT: int = 587
-    SMTP_USER: str
-    SMTP_PASSWORD: str
+    # Resend API
+    RESEND_API_KEY: str
 
     # Comma-separated notification recipients
     NOTIFICATION_EMAILS: str

@@ -1,11 +1,15 @@
 """
-services/email_service.py — Sends formatted HTML notification emails via Gmail SMTP
+services/email_service.py — Sends formatted HTML notification emails via Resend API
 """
-import aiosmtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+import logging
+import resend
 from typing import List
 from config import settings
+
+logger = logging.getLogger(__name__)
+
+# Configure Resend
+resend.api_key = settings.RESEND_API_KEY
 
 
 def _build_html_body(appointment_data: dict) -> str:
@@ -77,35 +81,24 @@ def _build_html_body(appointment_data: dict) -> str:
 
 async def send_appointment_notification(appointment_data: dict) -> None:
     """
-    Sends an HTML email notification to all configured recipients.
-    Uses Gmail SMTP with TLS (STARTTLS on port 587).
+    Sends an HTML email notification via Resend API.
     """
     recipients: List[str] = settings.notification_email_list
     patient_name = appointment_data.get("full_name", "Unknown")
-
-    # Build the MIME message
-    msg = MIMEMultipart("alternative")
-    msg["Subject"] = f"📋 New Appointment Request: {patient_name} — Arogya Clinic"
-    msg["From"] = settings.SMTP_USER
-    msg["To"] = ", ".join(recipients)
-
     html_body = _build_html_body(appointment_data)
-    msg.attach(MIMEText(html_body, "html"))
 
-    # Send via aiosmtplib (async SMTP)
-    # Use SSL (use_tls=True) for port 465, STARTTLS (start_tls=True) for 587
-    use_ssl = (settings.SMTP_PORT == 465)
-    
-    await aiosmtplib.send(
-        msg,
-        hostname=settings.SMTP_HOST,
-        port=settings.SMTP_PORT,
-        username=settings.SMTP_USER,
-        password=settings.SMTP_PASSWORD,
-        use_tls=use_ssl,
-        start_tls=not use_ssl,
-        # Only disable validation if we're forced to use a raw IP (local DNS issues)
-        validate_certs=False if settings.SMTP_HOST.replace('.', '').isdigit() else True,
-        timeout=30,
-        recipients=recipients,
-    )
+    try:
+        # Note: If using the trial/onboarding key, 'from' must be onboarding@resend.dev
+        # After verifying a domain, change this to your custom domain.
+        params = {
+            "from": "Arogya Clinic <onboarding@resend.dev>",
+            "to": recipients,
+            "subject": f"📋 New Appointment Request: {patient_name} — Arogya Clinic",
+            "html": html_body,
+        }
+
+        resend.Emails.send(params)
+        logger.info(f"Notification email sent via Resend for {patient_name}")
+    except Exception as e:
+        logger.error(f"Failed to send email via Resend: {e}")
+        raise e
