@@ -63,6 +63,7 @@ app.add_middleware(
         "http://doctors-profile-chi.vercel.app",
         "https://doctors-profile-chi.vercel.app/",
     ],
+    allow_origin_regex=r"https://.*\.koyeb\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
