@@ -70,6 +70,15 @@ app.add_middleware(
 app.include_router(appointments.router)
 
 
+@app.get("/", tags=["Home"])
+async def root():
+    return {
+        "message": "Welcome to the Arogya Clinic — Backend API",
+        "docs": "/docs",
+        "health": "/health"
+    }
+
+
 @app.get("/health", tags=["Health"])
 async def health_check():
     return {"status": "ok", "clinic": "Arogya Clinic"}
