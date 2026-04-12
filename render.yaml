@@ -19,6 +19,6 @@ services:
       - key: NOTIFY_EMAIL
         sync: false
       - key: ENABLE_DB
-        value: "False"
+        value: "True"
       - key: PYTHON_VERSION
         value: "3.12.0"
