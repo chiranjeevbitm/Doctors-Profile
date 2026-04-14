@@ -1,9 +1,5 @@
-"""
-services/email_service.py — Sends formatted HTML notification emails via Gmail SMTP
-"""
-import aiosmtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+import resend
+import anyio
 from typing import List
 from config import settings
 
