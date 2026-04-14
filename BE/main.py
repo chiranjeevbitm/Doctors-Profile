@@ -1,15 +1,12 @@
 """
 main.py — FastAPI application entry point
+Appointment emails are now handled client-side via EmailJS.
+The BE provides health-check and any future server-side endpoints only.
 """
 import logging
-from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-from config import settings
-from database import engine, Base
-from routers import appointments
 
 # ---------------------------------------------------------------------------
 # Logging
@@ -23,42 +20,25 @@ logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
-# Lifespan: create tables on startup
-# ---------------------------------------------------------------------------
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    if settings.ENABLE_DB:
-        try:
-            async with engine.begin() as conn:
-                await conn.run_sync(Base.metadata.create_all)
-            logger.info("Database tables verified/created.")
-        except Exception as e:
-            logger.error(f"Failed to initialize database on startup: {e}")
-            logger.info("Server starting anyway. DB-dependent features may fail.")
-    else:
-        logger.info("Database initialization skipped (ENABLE_DB=False).")
-    yield
-    await engine.dispose()
-    logger.info("Database engine disposed.")
-
-
-# ---------------------------------------------------------------------------
 # App
 # ---------------------------------------------------------------------------
 app = FastAPI(
     title="Arogya Clinic — Backend API",
-    description="Appointment management API for Dr. Deepak Kumar's Arogya Clinic, Muzaffarpur.",
-    version="1.0.0",
-    lifespan=lifespan,
+    description="Backend API for Dr. Deepak Kumar's Arogya Clinic, Muzaffarpur.",
+    version="2.0.0",
 )
 
-# CORS — allow the Vite dev server and any local origin
+# CORS — allow the Vite dev server and the Vercel production domain
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:5175",
         "http://localhost:3000",
         "http://127.0.0.1:5173",
+        "http://127.0.0.1:5174",
+        "http://127.0.0.1:5175",
         "https://doctors-profile-chi.vercel.app",
         "http://doctors-profile-chi.vercel.app",
         "https://doctors-profile-chi.vercel.app/",
@@ -68,16 +48,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Routers
-app.include_router(appointments.router)
-
 
 @app.get("/", tags=["Home"])
 async def root():
     return {
         "message": "Welcome to the Arogya Clinic — Backend API",
         "docs": "/docs",
-        "health": "/health"
+        "health": "/health",
     }
 
 

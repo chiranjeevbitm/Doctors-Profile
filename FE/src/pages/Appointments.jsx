@@ -1,19 +1,32 @@
 import React, { useState } from 'react';
+import emailjs from '@emailjs/browser';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// ─── EmailJS config (public keys only) ────────────────────────────────────────
+const EMAILJS_CONFIG = {
+  serviceId:  import.meta.env.VITE_EMAILJS_SERVICE_ID,
+  templateId: import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+  publicKey:  import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+};
+
+const TIME_SLOTS = [
+  { value: 'morning',       label: 'Morning (9 AM - 12 PM)' },
+  { value: 'afternoon',     label: 'Afternoon (2 PM - 5 PM)' },
+  { value: 'evening',       label: 'Evening Clinic (8:30 PM Onwards)' },
+  { value: 'teleconsult',   label: 'Teleconsultation' },
+];
 
 const INITIAL_FORM = {
-  full_name: '',
-  phone: '',
-  email: '',
-  preferred_date: '',
-  time_slot: 'Evening Clinic (8:30 PM Onwards)',
+  full_name:       '',
+  phone:           '',
+  email:           '',
+  preferred_date:  '',
+  time_slot:       'evening',
   medical_concern: '',
 };
 
 export default function Appointments() {
-  const [form, setForm] = useState(INITIAL_FORM);
-  const [status, setStatus] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
+  const [form, setForm]       = useState(INITIAL_FORM);
+  const [status, setStatus]   = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
   const [errorMsg, setErrorMsg] = useState('');
 
   const handleChange = (e) => {
@@ -25,23 +38,38 @@ export default function Appointments() {
     setStatus('loading');
     setErrorMsg('');
 
+    const slotLabel = TIME_SLOTS.find((t) => t.value === form.time_slot)?.label || form.time_slot;
+
+    // Template variables — synced with EmailJS template exactly
+    const templateParams = {
+      // Required by EmailJS template "From Name" and intro text
+      name:           form.full_name,
+      // Required by EmailJS template "Reply To" field
+      email:          form.email || '',
+
+      // Content variables
+      patient_name:   form.full_name,
+      phone:          form.phone,
+      patient_email:  form.email         || 'Not provided',
+      preferred_date: form.preferred_date || 'Not specified',
+      time_slot:      slotLabel,
+      concern:        form.medical_concern || 'Not specified',
+      submitted_at:   new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+    };
+
     try {
-      const response = await fetch(`${API_BASE}/api/appointments/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      });
-
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
-        throw new Error(data.detail || `Server error (${response.status})`);
-      }
-
+      await emailjs.send(
+        EMAILJS_CONFIG.serviceId,
+        EMAILJS_CONFIG.templateId,
+        templateParams,
+        EMAILJS_CONFIG.publicKey,
+      );
       setStatus('success');
       setForm(INITIAL_FORM);
     } catch (err) {
+      console.error('EmailJS Error:', err);
       setStatus('error');
-      setErrorMsg(err.message || 'Something went wrong. Please try again.');
+      setErrorMsg('Something went wrong. Please try again or call us directly.');
     }
   };
 
@@ -176,6 +204,7 @@ export default function Appointments() {
                       name="preferred_date"
                       value={form.preferred_date}
                       onChange={handleChange}
+                      min={new Date().toISOString().split('T')[0]}
                       className="w-full bg-surface-container-low border-none rounded-lg p-4 focus:ring-0 focus:bg-surface-container-lowest focus:border-b-2 focus:border-primary transition-all"
                       type="date"
                     />
@@ -188,10 +217,9 @@ export default function Appointments() {
                       onChange={handleChange}
                       className="w-full bg-surface-container-low border-none rounded-lg p-4 focus:ring-0 focus:bg-surface-container-lowest focus:border-b-2 focus:border-primary transition-all"
                     >
-                      <option>Morning (9 AM - 12 PM)</option>
-                      <option>Afternoon (2 PM - 5 PM)</option>
-                      <option>Evening Clinic (8:30 PM Onwards)</option>
-                      <option>Teleconsultation</option>
+                      {TIME_SLOTS.map((slot) => (
+                        <option key={slot.value} value={slot.value}>{slot.label}</option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -218,7 +246,7 @@ export default function Appointments() {
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                         </svg>
-                        Submitting...
+                        Sending...
                       </>
                     ) : 'Send Request'}
                   </button>

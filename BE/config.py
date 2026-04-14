@@ -1,29 +1,12 @@
 """
 config.py — Centralised configuration loaded from .env
+Appointment emails are handled client-side via EmailJS — no SMTP/DB config needed.
 """
 from pydantic_settings import BaseSettings
-from typing import List
 
 
 class Settings(BaseSettings):
-    # PostgreSQL (Neon)
-    DATABASE_URL: str
-
-    # SMTP (Gmail)
-    SMTP_HOST: str = "smtp.gmail.com"
-    SMTP_PORT: int = 587
-    SMTP_USER: str
-    SMTP_PASSWORD: str
-
-    # Comma-separated notification recipients
-    NOTIFICATION_EMAILS: str
-
-    # Database Toggle
-    ENABLE_DB: bool = False
-
-    @property
-    def notification_email_list(self) -> List[str]:
-        return [e.strip() for e in self.NOTIFICATION_EMAILS.split(",")]
+    # Add any future server-side config here
 
     class Config:
         env_file = ".env"

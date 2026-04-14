@@ -6,19 +6,5 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn -k uvicorn.workers.UvicornWorker main:app
     envVars:
-      - key: DATABASE_URL
-        sync: false
-      - key: SMTP_HOST
-        value: smtp.gmail.com
-      - key: SMTP_PORT
-        value: "587"
-      - key: SMTP_USER
-        sync: false
-      - key: SMTP_PASSWORD
-        sync: false
-      - key: NOTIFICATION_EMAILS
-        sync: false
-      - key: ENABLE_DB
-        value: "True"
       - key: PYTHON_VERSION
         value: "3.12.0"
