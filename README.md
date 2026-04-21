@@ -40,41 +40,93 @@
 
 ```
 Doctors_Profile/
-├── render.yaml                  # Render deployment config (Backend)
-├── README.md
+├── .DS_Store                              # macOS metadata (gitignored)
+├── .git/                                  # Git version control
+├── README.md                              # ← You are here
+├── render.yaml                            # Render.com deployment config (Backend)
+├── clinic.png                             # Clinic image asset
+├── 1983119_eDiploma.pdf                   # Doctor's educational diploma (PDF)
+├── 16f3100c-...zuA07I1z3Y3y....webp      # OG / social preview image
 │
-├── FE/                          # ── React + Vite Frontend ──────────────
-│   ├── index.html
-│   ├── vite.config.js
-│   ├── tailwind.config.js
-│   ├── postcss.config.js
-│   ├── .env                     # VITE_EMAILJS_* keys
-│   ├── package.json
+├── FE/                                    # ── React + Vite Frontend ──────────────
+│   ├── .browserslistrc                    # Browser compatibility targets
+│   ├── .env                               # 🔐 VITE_EMAILJS_* secrets (not committed)
+│   ├── .gitignore                         # FE gitignore rules
+│   ├── README.md                          # Vite default readme
+│   ├── index.html                         # HTML shell / Vite entry point
+│   ├── vite.config.js                     # Vite build & plugin configuration
+│   ├── tailwind.config.js                 # Tailwind theme, colors & design tokens
+│   ├── postcss.config.js                  # PostCSS (Tailwind + Autoprefixer)
+│   ├── eslint.config.js                   # ESLint flat config (React rules)
+│   ├── package.json                       # npm scripts & dependencies
+│   ├── package-lock.json                  # Exact dependency lockfile
+│   │
+│   ├── public/                            # Static files served as-is
+│   │   ├── favicon.svg                    # Browser tab icon
+│   │   └── icons.svg                      # Reusable SVG icon sprite
+│   │
+│   ├── dist/                              # ⚙️ Production build output (auto-generated)
+│   │
 │   └── src/
-│       ├── main.jsx             # React entry point
-│       ├── App.jsx              # Router setup (BrowserRouter + Routes)
-│       ├── index.css            # Global styles
-│       ├── App.css
-│       ├── assets/
-│       │   └── hero.png         # Doctor profile image
-│       ├── components/
-│       │   ├── Layout.jsx       # Shared navbar + footer + WhatsApp button
-│       │   └── WhatsAppButton.jsx  # Floating WhatsApp contact button
-│       └── pages/
-│           ├── Home.jsx         # Landing page
-│           ├── About.jsx        # Doctor bio & qualifications
-│           ├── Services.jsx     # Medical services offered
-│           ├── Appointments.jsx # EmailJS-powered booking form
-│           └── Reserve.jsx      # Internal dashboard
+│       ├── main.jsx                       # React DOM render entry point
+│       ├── App.jsx                        # BrowserRouter + Routes definition
+│       ├── index.css                      # Global styles + Tailwind directives
+│       ├── App.css                        # App-level scoped styles
+│       │
+│       ├── assets/                        # Images & media imported by components
+│       │   ├── hero.png                   # Doctor portrait — hero section (primary)
+│       │   ├── hero1.png                  # Alternate hero image
+│       │   ├── arogya_clinic_front.jpeg   # Clinic exterior photo
+│       │   ├── dr_deepak_kumar_card.jpeg  # Doctor visiting card scan
+│       │   ├── services_banner.jpeg       # Services page banner image
+│       │   ├── react.svg                  # Vite boilerplate asset
+│       │   └── vite.svg                   # Vite boilerplate asset
+│       │
+│       ├── components/                    # Shared / reusable UI components
+│       │   ├── Layout.jsx                 # Global shell: Navbar + Footer + WhatsApp
+│       │   └── WhatsAppButton.jsx         # 💬 Floating WhatsApp contact button
+│       │
+│       └── pages/                         # Route-level page components
+│           ├── Home.jsx                   # Landing page (hero, services CTA)
+│           ├── About.jsx                  # Doctor bio, qualifications & philosophy
+│           ├── Services.jsx               # Detailed medical services cards
+│           ├── Appointments.jsx           # EmailJS-powered patient booking form
+│           └── Reserve.jsx                # Internal clinic dashboard (staff only)
 │
-└── BE/                          # ── FastAPI Backend ─────────────────────
-    ├── main.py                  # FastAPI app entry point + CORS config
-    ├── config.py                # Pydantic settings (env vars)
-    ├── requirements.txt         # Python dependencies
-    ├── .env                     # Backend environment secrets
-    ├── .venv/                   # Python virtual environment
-    ├── routers/                 # API route modules
-    └── services/                # Business logic / helper services
+├── BE/                                    # ── FastAPI Backend ──────────────────────
+│   ├── .env                               # 🔐 Backend secrets (not committed)
+│   ├── .gitignore                         # BE gitignore rules
+│   ├── main.py                            # FastAPI app entry + CORS middleware config
+│   ├── config.py                          # Pydantic BaseSettings (loads .env vars)
+│   ├── requirements.txt                   # Python package dependencies
+│   │
+│   ├── .venv/                             # Python virtual environment (not committed)
+│   │
+│   ├── routers/                           # FastAPI APIRouter modules
+│   │   ├── __init__.py                    # Package init
+│   │   └── appointments.py                # POST /appointments route (legacy SMTP)
+│   │
+│   ├── services/                          # Business logic & helper services
+│   │   ├── __init__.py                    # Package init
+│   │   └── email_service.py               # Gmail SMTP email sender (legacy logic)
+│   │
+│   └── __pycache__/                       # Python bytecode cache (auto-generated)
+│
+└── stitch/                                # ── Stitch AI Design Exports ─────────────
+    ├── home_page/
+    │   ├── code.html                      # AI-generated HTML mockup for Home
+    │   └── screen.png                     # Design preview screenshot
+    ├── about_dr._kumar/
+    │   ├── code.html                      # AI-generated HTML mockup for About
+    │   └── screen.png                     # Design preview screenshot
+    ├── medical_services/
+    │   ├── code.html                      # AI-generated HTML mockup for Services
+    │   └── screen.png                     # Design preview screenshot
+    ├── book_appointment/
+    │   ├── code.html                      # AI-generated HTML mockup for Appointments
+    │   └── screen.png                     # Design preview screenshot
+    └── kumar_clinical_reserve/
+        └── DESIGN.md                      # Design spec & notes for Reserve dashboard
 ```
 
 ---
@@ -90,15 +142,15 @@ Doctors_Profile/
 | **React Router DOM 7** | Client-side routing |
 | **Tailwind CSS 3** | Utility-first styling |
 | **EmailJS** | Client-side email sending (appointment form) |
-| **Material Symbols** | Icons (Google Fonts) |
+| **Material Symbols** | Icons (Google Fonts CDN) |
 
 ### Backend (`/BE`)
 
 | Technology | Purpose |
 |------------|---------|
 | **FastAPI** | REST API framework |
-| **Uvicorn** | ASGI server (dev) |
-| **Gunicorn + UvicornWorker** | Production server (Render) |
+| **Uvicorn** | ASGI server (development) |
+| **Gunicorn + UvicornWorker** | Production server (Render.com) |
 | **Pydantic-settings** | Environment variable management |
 | **Python 3.12** | Runtime |
 
@@ -140,7 +192,7 @@ pip install -r requirements.txt
 uvicorn main:app --reload --port 8000
 ```
 
-✅ Backend running at: **http://127.0.0.1:8000**
+✅ Backend running at: **http://127.0.0.1:8000**  
 📄 Interactive API docs: **http://127.0.0.1:8000/docs**
 
 ---
@@ -191,18 +243,20 @@ Appointments are handled **100% on the frontend** using [EmailJS](https://www.em
 - EmailJS sends a formatted email directly to the clinic — **no backend call required**
 - This keeps the architecture simple and cost-free for email delivery
 
+> **Legacy:** The BE still contains `routers/appointments.py` and `services/email_service.py` from the original Gmail SMTP implementation, preserved for reference.
+
 ---
 
 ## 💬 WhatsApp Integration
 
-A floating **WhatsApp button** is embedded on every page:
+A floating **WhatsApp button** is embedded on every page via `WhatsAppButton.jsx`:
 
 ```
 Phone: +91 95465 19953
 Pre-filled message: "Hi, I came from your website, I want to book an appointment"
 ```
 
-Clicking the button opens WhatsApp directly (mobile app or web) with the message pre-filled, so the patient can immediately contact the doctor.
+Clicking the button opens WhatsApp (mobile app or web) with the message pre-filled, so the patient can immediately reach the doctor.
 
 **Component:** `FE/src/components/WhatsAppButton.jsx`
 
@@ -215,14 +269,14 @@ Clicking the button opens WhatsApp directly (mobile app or web) with the message
 ```bash
 cd FE
 npm run build       # generates /dist
-# Deploy /dist to Vercel
+# Push to GitHub → Vercel auto-deploys
 ```
 
 Vercel auto-deploys on every push to `main`.
 
 ### Backend → Render
 
-Configured via `render.yaml`:
+Configured via `render.yaml` at the project root:
 
 ```yaml
 services:
@@ -232,6 +286,9 @@ services:
     rootDir: BE
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn -k uvicorn.workers.UvicornWorker main:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.0"
 ```
 
 ---
@@ -251,9 +308,9 @@ Dr. Deepak Kumar provides expert care for:
 
 ## 📍 Clinic Location
 
-**Arogya Clinic**
-Main Road, Muzaffarpur, Bihar — 842001
-📞 +91 74888 78725
+**Arogya Clinic**  
+Main Road, Muzaffarpur, Bihar — 842001  
+📞 +91 74888 78725  
 🕗 Evening Clinic: **8:30 PM onwards**
 
 ---
