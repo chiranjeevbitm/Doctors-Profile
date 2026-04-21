@@ -6,9 +6,9 @@ const CLINIC_NAME    = 'Arogya Clinic';
 
 const CONTACTS = [
   { name: 'Dr. Deepak', phone: '919546519953' },
-  { name: 'Reception 1', phone: '919199943818' },
-  { name: 'Reception 2', phone: '919748721112' },
-  { name: 'Reception 3', phone: '918877556142' },
+  { name: 'Papa', phone: '919199943818' },
+  { name: 'Komal', phone: '919748721112' },
+  { name: 'Dr. Deepak Kumar', phone: '918877556142' },
 ];
 
 // ─── CHAT FLOW DEFINITION ──────────────────────────────────────────────────
