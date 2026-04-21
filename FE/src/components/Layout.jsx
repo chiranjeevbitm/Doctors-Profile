@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, Link, Outlet } from 'react-router-dom';
-import WhatsAppButton from './WhatsAppButton';
+import DrDeeepakWidget from './DrDeeepakWidget';
 
 export default function Layout() {
   const getNavLinkClass = ({ isActive }) => {
@@ -63,8 +63,8 @@ export default function Layout() {
         </div>
       </footer>
 
-      {/* Floating WhatsApp Button - visible on all pages */}
-      <WhatsAppButton />
+      {/* Pre-consultation WhatsApp Chat Widget - visible on all pages */}
+      <DrDeeepakWidget />
     </div>
   );
 }
