@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink, Link, Outlet } from 'react-router-dom';
+import WhatsAppButton from './WhatsAppButton';
 
 export default function Layout() {
   const getNavLinkClass = ({ isActive }) => {
@@ -61,6 +62,9 @@ export default function Layout() {
           <p className="text-slate-500 text-sm">© 2024 Dr. Deepak Kumar. All rights reserved.</p>
         </div>
       </footer>
+
+      {/* Floating WhatsApp Button - visible on all pages */}
+      <WhatsAppButton />
     </div>
   );
 }
