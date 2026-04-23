@@ -5,10 +5,8 @@ const DOCTOR_NAME    = 'Dr. Deepak Kumar';
 const CLINIC_NAME    = 'Arogya Clinic';
 
 const CONTACTS = [
-  { name: 'Dr. Deepak', phone: '919546519953' },
-  { name: 'Papa', phone: '919199943818' },
-  { name: 'Komal', phone: '919748721112' },
   { name: 'Dr. Deepak Kumar', phone: '918877556142' },
+  { name: 'Reception',        phone: '919199943818' },
 ];
 
 // ─── CHAT FLOW DEFINITION ──────────────────────────────────────────────────
@@ -17,39 +15,22 @@ const STEPS = [
   {
     id: 'concern',
     bot: `Hello! 👋 I'm the ${CLINIC_NAME} assistant.\n\nWhat is your main health concern today?`,
-    placeholder: 'e.g. Fever, Cough, Stomach pain…',
+    chips: ['Fever', 'Cold Cough', 'Thyroid', 'Others'],
+    type: 'chips',
+  },
+  {
+    id: 'other_concern',
+    bot: 'Please type your symptoms:',
+    placeholder: 'e.g. Stomach pain, Headache…',
     type: 'text',
-  },
-  {
-    id: 'duration',
-    bot: 'How long have you been experiencing this?',
-    placeholder: 'e.g. 2 days, 1 week…',
-    chips: ['Since today', '2–3 days', '4–7 days', 'More than 1 week'],
-    type: 'chips',
-  },
-  {
-    id: 'severity',
-    bot: 'How would you rate the severity of your symptoms?',
-    chips: ['🟢 Mild', '🟡 Moderate', '🔴 Severe'],
-    type: 'chips',
-  },
-  {
-    id: 'medication',
-    bot: 'Are you currently taking any medication for this?',
-    chips: ['No medication', 'Yes, OTC medicine', 'Yes, prescribed medicine', 'Not sure'],
-    type: 'chips',
-  },
+  }
 ];
 
 // ─── HELPERS ──────────────────────────────────────────────────────────────
 function buildWhatsAppMessage(answers) {
-  const clean = (s) => s.replace(/[🟢🟡🔴]/gu, '').trim();
   return encodeURIComponent(
     `Hello ${DOCTOR_NAME}! I've filled out the pre-consultation form:\n\n` +
-    `🩺 *Concern:* ${answers.concern}\n` +
-    `⏱️ *Duration:* ${answers.duration}\n` +
-    `📊 *Severity:* ${clean(answers.severity)}\n` +
-    `💊 *Medication:* ${answers.medication}\n\n` +
+    `🩺 *Concern:* ${answers.concern}\n\n` +
     `Please help me with further guidance.`
   );
 }
@@ -112,28 +93,32 @@ export default function DrDeeepakWidget() {
   // ─── Advance conversation ──────────────────────────────────────────────
   const advance = (value) => {
     const currentStep = STEPS[step];
-    const newAnswers  = { ...answers, [currentStep.id]: value };
+    const keyToStore  = currentStep.id === 'other_concern' ? 'concern' : currentStep.id;
+    const newAnswers  = { ...answers, [keyToStore]: value };
+    
     setAnswers(newAnswers);
     pushUser(value);
     setInputVal('');
 
-    const nextStep = step + 1;
-
-    if (nextStep < STEPS.length) {
-      setStep(nextStep);
-      pushBot(STEPS[nextStep].bot);
-    } else {
-      // All 4 rounds done — show summary + CTA
-      setDone(true);
-      pushBot(
-        `✅ Thanks! Here's your summary:\n\n` +
-        `🩺 Concern: ${newAnswers.concern}\n` +
-        `⏱️ Duration: ${newAnswers.duration}\n` +
-        `📊 Severity: ${newAnswers.severity.replace(/[🟢🟡🔴]/gu, '').trim()}\n` +
-        `💊 Medication: ${newAnswers.medication}\n\n` +
-        `Choose a contact below to send this summary on WhatsApp!`
-      );
+    if (currentStep.id === 'concern') {
+      if (value === 'Others') {
+        setStep(1);
+        pushBot(STEPS[1].bot);
+      } else {
+        finishChat(newAnswers);
+      }
+    } else if (currentStep.id === 'other_concern') {
+      finishChat(newAnswers);
     }
+  };
+
+  const finishChat = (finalAnswers) => {
+    setDone(true);
+    pushBot(
+      `✅ Thanks! Here's your summary:\n\n` +
+      `🩺 Concern: ${finalAnswers.concern}\n\n` +
+      `Click the button below to send this summary on WhatsApp!`
+    );
   };
 
   // ─── Text submit ──────────────────────────────────────────────────────
@@ -144,10 +129,14 @@ export default function DrDeeepakWidget() {
     advance(val);
   };
 
-  // ─── Open WhatsApp with summary ───────────────────────────────────────
-  const openWhatsApp = (phone) => {
+  // ─── Open WhatsApp with summary — sends to ALL contacts ─────────────
+  const openWhatsApp = () => {
     const msg = buildWhatsAppMessage(answers);
-    window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+    CONTACTS.forEach((contact, index) => {
+      setTimeout(() => {
+        window.open(`https://wa.me/${contact.phone}?text=${msg}`, '_blank', 'noopener,noreferrer');
+      }, index * 350);
+    });
   };
 
   // ─── Reset ────────────────────────────────────────────────────────────
@@ -427,7 +416,7 @@ export default function DrDeeepakWidget() {
               )}
             </div>
           ) : (
-            /* Done state — WhatsApp CTA */
+            /* Done state — two separate WhatsApp buttons */
             <div style={{
               borderTop:  '1px solid rgba(0,0,0,0.06)',
               background: '#fff',
@@ -435,13 +424,14 @@ export default function DrDeeepakWidget() {
               display:    'flex',
               flexDirection: 'column',
               gap:        '8px',
-              maxHeight:  '200px',
-              overflowY:  'auto',
             }}>
-              {CONTACTS.map((contact, idx) => (
+              {CONTACTS.map((contact) => (
                 <button
-                  key={idx}
-                  onClick={() => openWhatsApp(contact.phone)}
+                  key={contact.phone}
+                  onClick={() => {
+                    const msg = buildWhatsAppMessage(answers);
+                    window.open(`https://wa.me/${contact.phone}?text=${msg}`, '_blank', 'noopener,noreferrer');
+                  }}
                   style={{
                     width:       '100%',
                     padding:     '12px',
@@ -458,7 +448,6 @@ export default function DrDeeepakWidget() {
                     gap:         '8px',
                     boxShadow:   '0 2px 8px rgba(37,211,102,0.3)',
                     transition:  'opacity 0.2s',
-                    flexShrink:  0,
                   }}
                   onMouseEnter={e => e.currentTarget.style.opacity = '0.9'}
                   onMouseLeave={e => e.currentTarget.style.opacity = '1'}
@@ -469,22 +458,6 @@ export default function DrDeeepakWidget() {
                   Send to {contact.name}
                 </button>
               ))}
-              <button
-                onClick={resetChat}
-                style={{
-                  width:       '100%',
-                  padding:     '10px',
-                  borderRadius: '12px',
-                  border:      '1.5px solid #e2e8f0',
-                  background:  'transparent',
-                  color:       '#64748b',
-                  fontWeight:  600,
-                  fontSize:    '13px',
-                  cursor:      'pointer',
-                }}
-              >
-                ↺ Start over
-              </button>
             </div>
           )}
 

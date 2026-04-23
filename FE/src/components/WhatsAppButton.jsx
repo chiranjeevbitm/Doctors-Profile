@@ -1,19 +1,36 @@
 import React, { useState } from 'react';
 
-const WHATSAPP_NUMBER = '919546519953';
+// Recipients — every click opens WhatsApp for BOTH numbers
+const WHATSAPP_RECIPIENTS = [
+  { name: 'Dr. Deepak Kumar', number: '918877556142' },
+  { name: 'Reception',        number: '919199943818' },
+];
+
 const WHATSAPP_MESSAGE = 'Hello, How may I assist you!';
-const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+
+function buildUrl(number) {
+  return `https://wa.me/${number}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+}
 
 export default function WhatsAppButton() {
   const [hovered, setHovered] = useState(false);
 
+  const handleClick = (e) => {
+    e.preventDefault();
+    // Open a WhatsApp chat for every recipient
+    WHATSAPP_RECIPIENTS.forEach((recipient, index) => {
+      // Small delay between windows so browsers don't block the second popup
+      setTimeout(() => {
+        window.open(buildUrl(recipient.number), '_blank', 'noopener,noreferrer');
+      }, index * 300);
+    });
+  };
+
   return (
-    <a
+    <button
       id="whatsapp-float-btn"
-      href={WHATSAPP_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Chat with Dr. Deepak Kumar on WhatsApp"
+      onClick={handleClick}
+      aria-label="Chat with us on WhatsApp"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
@@ -24,8 +41,11 @@ export default function WhatsAppButton() {
         display: 'flex',
         alignItems: 'center',
         gap: '10px',
-        textDecoration: 'none',
-        transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+        background: 'none',
+        border: 'none',
+        cursor: 'pointer',
+        padding: 0,
+        transition: 'transform 0.25s ease',
         transform: hovered ? 'scale(1.08)' : 'scale(1)',
       }}
     >
@@ -99,6 +119,6 @@ export default function WhatsAppButton() {
           z-index: -1;
         }
       `}</style>
-    </a>
+    </button>
   );
 }
