@@ -1,7 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Services() {
+  const { t } = useLanguage();
+
   return (
     <>
       {/* Hero Section */}
@@ -10,13 +13,13 @@ export default function Services() {
           <div className="flex-1 z-10">
             <div className="inline-flex items-center px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed text-sm font-semibold mb-6">
               <span className="material-symbols-outlined text-sm mr-2">verified_user</span>
-              Patient-Centered Excellence
+              {t('servicesHeroBadge')}
             </div>
             <h1 className="font-headline text-5xl md:text-6xl font-extrabold tracking-tight text-primary leading-[1.1] mb-6">
-              Specialized Care Tailored to <span className="text-secondary">Your Wellness</span>
+              {t('servicesHeroTitle')}
             </h1>
             <p className="text-lg md:text-xl text-on-surface-variant leading-relaxed max-w-2xl mb-8">
-              Experience comprehensive medical solutions combining state-of-the-art diagnostics with a compassionate, editorial approach to modern healthcare.
+              {t('servicesHeroDesc')}
             </p>
           </div>
           <div className="flex-1 relative">
@@ -24,7 +27,6 @@ export default function Services() {
               <img className="w-full h-full object-cover" alt="professional medical setting with modern diagnostic equipment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAcY89hGQbZC7A1BgiyItCfj2abPLHHWoiXaWY2bETea7xwvBhGpIiC-c4GAFSnuQvY2QjRzwu3jA_BBI4BIwv_DkbCdDOdk-neH76gs8tYwOiH1WxhRuc5GxLSWplkoVKjCF4lAl5Q_faOEZw_tomtfIy6H2BYvyyHNy_yrgwhr1w3O2TNdP3yne19phJDEmIx2luMYQb9hDhuGIYlOKMcOrQizSh-pXaV7XDYCk3WBDAQ3jt9smanUpzuXiK-Nezc0BUCxr7VpU" />
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent"></div>
             </div>
-            {/* Decorative Elements */}
             <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-secondary-container rounded-2xl -z-10 opacity-50"></div>
           </div>
         </div>
@@ -34,8 +36,8 @@ export default function Services() {
       <section className="px-8 py-16 bg-surface-container-low">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col mb-16">
-            <h2 className="font-headline text-4xl font-bold text-primary mb-4">Clinical Services</h2>
-            <p className="text-on-surface-variant max-w-xl">Our multidisciplinary approach ensures every patient receives focused attention and a personalized treatment roadmap.</p>
+            <h2 className="font-headline text-4xl font-bold text-primary mb-4">{t('clinicalServices')}</h2>
+            <p className="text-on-surface-variant max-w-xl">{t('clinicalServicesDesc')}</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             <div className="md:col-span-8 bg-surface-container-lowest p-8 rounded-xl flex flex-col justify-between group hover:shadow-lg transition-shadow duration-300">
@@ -43,53 +45,53 @@ export default function Services() {
                 <div className="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center text-primary mb-6">
                   <span className="material-symbols-outlined text-3xl">monitor_heart</span>
                 </div>
-                <h3 className="font-headline text-2xl font-bold text-primary mb-3">Diabetes & Blood Pressure Management</h3>
+                <h3 className="font-headline text-2xl font-bold text-primary mb-3">{t('diabetesBp')}</h3>
                 <p className="text-on-surface-variant leading-relaxed max-w-lg mb-8">
-                  Guideline-directed medical treatment for managing chronic conditions like Diabetes and Hypertension. We provide continuous monitoring and personalized therapeutic plans to ensure your vitals remain balanced and optimal.
+                  {t('diabetesBpDesc')}
                 </p>
               </div>
               <Link to="/appointments" className="inline-flex items-center text-tertiary font-bold group-hover:gap-2 transition-all">
-                Learn More <span className="material-symbols-outlined ml-1">arrow_forward</span>
+                {t('learnMore')} <span className="material-symbols-outlined ml-1">arrow_forward</span>
               </Link>
             </div>
             <div className="md:col-span-4 bg-surface-container-lowest p-8 rounded-xl flex flex-col group hover:shadow-lg transition-shadow duration-300">
               <div className="w-14 h-14 bg-secondary/10 rounded-lg flex items-center justify-center text-secondary mb-6">
                 <span className="material-symbols-outlined text-3xl">local_pharmacy</span>
               </div>
-              <h3 className="font-headline text-2xl font-bold text-primary mb-3">Endocrine Care</h3>
-              <p className="text-on-surface-variant mb-6 flex-grow">Advanced diagnosis and holistic management of Thyroid-related disorders.</p>
+              <h3 className="font-headline text-2xl font-bold text-primary mb-3">{t('endocrineCare')}</h3>
+              <p className="text-on-surface-variant mb-6 flex-grow">{t('endocrineCareDesc')}</p>
               <Link to="/appointments" className="inline-flex items-center text-tertiary font-bold">
-                Learn More <span className="material-symbols-outlined ml-1">arrow_forward</span>
+                {t('learnMore')} <span className="material-symbols-outlined ml-1">arrow_forward</span>
               </Link>
             </div>
             <div className="md:col-span-4 bg-surface-container-lowest p-8 rounded-xl flex flex-col group hover:shadow-lg transition-shadow duration-300">
               <div className="w-14 h-14 bg-tertiary/10 rounded-lg flex items-center justify-center text-tertiary mb-6">
                 <span className="material-symbols-outlined text-3xl">pulmonology</span>
               </div>
-              <h3 className="font-headline text-2xl font-bold text-primary mb-3">Respiratory Health</h3>
-              <p className="text-on-surface-variant mb-6 flex-grow">Specialized interventions for Asthma, COPD, and other pulmonary challenges.</p>
+              <h3 className="font-headline text-2xl font-bold text-primary mb-3">{t('respiratoryHealth')}</h3>
+              <p className="text-on-surface-variant mb-6 flex-grow">{t('respiratoryHealthDesc')}</p>
               <Link to="/appointments" className="inline-flex items-center text-tertiary font-bold">
-                Learn More <span className="material-symbols-outlined ml-1">arrow_forward</span>
+                {t('learnMore')} <span className="material-symbols-outlined ml-1">arrow_forward</span>
               </Link>
             </div>
             <div className="md:col-span-4 bg-surface-container-lowest p-8 rounded-xl flex flex-col group hover:shadow-lg transition-shadow duration-300">
               <div className="w-14 h-14 bg-primary-container/10 rounded-lg flex items-center justify-center text-primary-container mb-6">
                 <span className="material-symbols-outlined text-3xl">gastroenterology</span>
               </div>
-              <h3 className="font-headline text-2xl font-bold text-primary mb-3">Abdomen Diseases</h3>
-              <p className="text-on-surface-variant mb-6 flex-grow">Expert consultations and treatment plans for diseases related to the abdomen and GI tract.</p>
+              <h3 className="font-headline text-2xl font-bold text-primary mb-3">{t('abdomenDiseases')}</h3>
+              <p className="text-on-surface-variant mb-6 flex-grow">{t('abdomenDiseasesDesc')}</p>
               <Link to="/appointments" className="inline-flex items-center text-tertiary font-bold">
-                Learn More <span className="material-symbols-outlined ml-1">arrow_forward</span>
+                {t('learnMore')} <span className="material-symbols-outlined ml-1">arrow_forward</span>
               </Link>
             </div>
             <div className="md:col-span-4 bg-surface-container-lowest p-8 rounded-xl flex flex-col group hover:shadow-lg transition-shadow duration-300">
               <div className="w-14 h-14 bg-secondary-container/20 rounded-lg flex items-center justify-center text-secondary mb-6">
                 <span className="material-symbols-outlined text-3xl">video_camera_front</span>
               </div>
-              <h3 className="font-headline text-2xl font-bold text-primary mb-3">Teleconsultation</h3>
-              <p className="text-on-surface-variant mb-6 flex-grow">Access personalized medical advice and follow-up care remotely from the comfort of your home.</p>
+              <h3 className="font-headline text-2xl font-bold text-primary mb-3">{t('teleconsultation')}</h3>
+              <p className="text-on-surface-variant mb-6 flex-grow">{t('teleconsultationDesc')}</p>
               <Link to="/appointments" className="inline-flex items-center text-tertiary font-bold">
-                Learn More <span className="material-symbols-outlined ml-1">arrow_forward</span>
+                {t('learnMore')} <span className="material-symbols-outlined ml-1">arrow_forward</span>
               </Link>
             </div>
           </div>
@@ -100,15 +102,15 @@ export default function Services() {
       <section className="px-8 py-20 bg-background relative overflow-hidden">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
           <div className="md:w-1/2">
-            <h2 className="font-headline text-4xl font-bold text-primary mb-8 leading-tight">Beyond Medicine:<br />A Partnership in Health</h2>
+            <h2 className="font-headline text-4xl font-bold text-primary mb-8 leading-tight">{t('beyondMedicine')}</h2>
             <div className="space-y-10">
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-12 h-12 bg-tertiary-fixed rounded-full flex items-center justify-center text-on-tertiary-fixed">
                   <span className="material-symbols-outlined">task_alt</span>
                 </div>
                 <div>
-                  <h4 className="font-bold text-primary text-lg">Evidenced-Based Protocols</h4>
-                  <p className="text-on-surface-variant">Treatments rooted in the latest clinical research and global medical standards.</p>
+                  <h4 className="font-bold text-primary text-lg">{t('evidenceBased')}</h4>
+                  <p className="text-on-surface-variant">{t('evidenceBasedDesc')}</p>
                 </div>
               </div>
               <div className="flex gap-4">
@@ -116,8 +118,8 @@ export default function Services() {
                   <span className="material-symbols-outlined">diversity_1</span>
                 </div>
                 <div>
-                  <h4 className="font-bold text-primary text-lg">Personalized Touch</h4>
-                  <p className="text-on-surface-variant">Every patient is unique. We build medical plans that respect individual lifestyles.</p>
+                  <h4 className="font-bold text-primary text-lg">{t('personalizedTouch')}</h4>
+                  <p className="text-on-surface-variant">{t('personalizedTouchDesc')}</p>
                 </div>
               </div>
             </div>
@@ -140,16 +142,16 @@ export default function Services() {
         <div className="max-w-5xl mx-auto rounded-[2rem] bg-gradient-to-br from-primary to-primary-container p-12 md:p-20 text-center relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/20 rounded-full blur-3xl -mr-32 -mt-32"></div>
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-tertiary/20 rounded-full blur-3xl -ml-32 -mb-32"></div>
-          <h2 className="font-headline text-3xl md:text-5xl font-extrabold text-white mb-6 relative z-10">Start Your Path to Recovery</h2>
+          <h2 className="font-headline text-3xl md:text-5xl font-extrabold text-white mb-6 relative z-10">{t('startRecovery')}</h2>
           <p className="text-on-primary-container text-lg md:text-xl max-w-2xl mx-auto mb-10 relative z-10">
-            Schedule a comprehensive consultation today and experience healthcare reimagined for the modern age.
+            {t('startRecoveryDesc')}
           </p>
           <div className="flex flex-col md:flex-row justify-center gap-4 relative z-10">
             <Link to="/appointments" className="px-8 py-4 bg-surface-container-lowest text-primary rounded-xl font-bold shadow-xl hover:scale-105 transition-transform text-center">
-              Schedule Appointment
+              {t('scheduleAppt')}
             </Link>
             <Link to="/appointments" className="px-8 py-4 bg-transparent border border-white/30 text-white rounded-xl font-bold hover:bg-white/10 transition-colors text-center">
-              View Pricing
+              {t('viewPricing')}
             </Link>
           </div>
         </div>

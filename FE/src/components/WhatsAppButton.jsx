@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLanguage } from '../context/LanguageContext';
 
 // Recipients — every click opens WhatsApp for BOTH numbers
 const WHATSAPP_RECIPIENTS = [
@@ -6,14 +7,17 @@ const WHATSAPP_RECIPIENTS = [
   { name: 'Reception',        number: '919199943818' },
 ];
 
-const WHATSAPP_MESSAGE = 'Hello, How may I assist you!';
-
-function buildUrl(number) {
-  return `https://wa.me/${number}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
-}
-
 export default function WhatsAppButton() {
+  const { t, language } = useLanguage();
   const [hovered, setHovered] = useState(false);
+
+  const whatsappMessage = language === 'hi'
+    ? 'नमस्ते, मैं आपकी कैसे सहायता कर सकता हूं!'
+    : 'Hello, How may I assist you!';
+
+  function buildUrl(number) {
+    return `https://wa.me/${number}?text=${encodeURIComponent(whatsappMessage)}`;
+  }
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -66,7 +70,7 @@ export default function WhatsAppButton() {
           pointerEvents: 'none',
         }}
       >
-        Chat with us
+        {t('whatsappChat')}
       </span>
 
       {/* WhatsApp icon button */}
