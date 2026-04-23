@@ -9,10 +9,10 @@ export default function Home() {
       <section className="relative min-h-[870px] flex items-center overflow-hidden bg-surface">
         <div className="max-w-7xl mx-auto px-8 w-full grid md:grid-cols-12 gap-12 items-center">
           <div className="md:col-span-7 space-y-8 z-10">
-            <div className="inline-flex items-center gap-2 bg-tertiary-fixed text-on-tertiary-fixed px-4 py-1.5 rounded-full text-sm font-medium">
+            <a href="https://www.google.com/maps/place/Dr+Deepak+kumar/@26.1500074,85.4007174,17z/data=!4m6!3m5!1s0x39ed110057681ebf:0xcc7a1deab9d79035!8m2!3d26.150109!4d85.400502!16s%2Fg%2F11z5t68_qr?entry=ttu&g_ep=EgoyMDI2MDQxOS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-tertiary-fixed text-on-tertiary-fixed px-4 py-1.5 rounded-full text-sm font-medium hover:bg-tertiary hover:text-white transition-colors cursor-pointer">
               <span className="material-symbols-outlined text-sm">location_on</span>
               Muzaffarpur, Bihar
-            </div>
+            </a>
             <h1 className="text-5xl md:text-7xl font-extrabold text-primary leading-[1.1] tracking-tight">
               Aapka Swasthya <br /><span className="text-secondary">Hamari Jimmedari.</span>
             </h1>
@@ -36,7 +36,7 @@ export default function Home() {
               </div>
               <div>
                 <p className="text-sm font-bold uppercase tracking-widest text-outline">Specialization</p>
-                <p className="text-lg font-bold text-primary">MD, DMCH</p>
+                <p className="text-lg font-bold text-primary">MD General medicine, DMCH Darbhanga</p>
                 <p className="text-sm text-on-surface-variant">Darbhanga</p>
               </div>
             </div>
@@ -66,7 +66,7 @@ export default function Home() {
               </div>
               <div>
                 <h3 className="text-2xl font-bold text-primary mb-3">Academic Excellence</h3>
-                <p className="text-on-surface-variant leading-relaxed text-lg">With foundational training from SKMCH and advanced MD specialization from DMCH, Dr. Deepak Kumar brings institutional expertise to private practice.</p>
+                <p className="text-on-surface-variant leading-relaxed text-lg">With foundational training from SKMCH and advanced MD General medicine specialization from DMCH Darbhanga, Dr. Deepak Kumar brings institutional expertise to private practice.</p>
               </div>
             </div>
             <div className="bg-secondary text-on-secondary p-10 rounded-[2rem] flex flex-col shadow-lg">
@@ -162,7 +162,7 @@ export default function Home() {
               </Link>
               <div className="flex items-center justify-center md:justify-start gap-4 text-on-primary/80">
                 <span className="material-symbols-outlined">call</span>
-                <span className="font-bold">+91 74888 78725</span>
+                <span className="font-bold">9199943818</span>
               </div>
             </div>
           </div>

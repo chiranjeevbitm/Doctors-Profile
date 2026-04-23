@@ -37,7 +37,7 @@ export default function Layout() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-8 py-12 max-w-7xl mx-auto">
           <div className="space-y-4">
             <div className="text-xl font-bold text-blue-900">Dr. Deepak Kumar</div>
-            <p className="text-slate-500 max-w-xs leading-relaxed">Expert healthcare professional dedicated to the wellness of the Muzaffarpur community at Arogya Clinic. MBBS (SKMCH), MD (DMCH).</p>
+            <p className="text-slate-500 max-w-xs leading-relaxed">Expert healthcare professional dedicated to the wellness of the Muzaffarpur community at Arogya Clinic. MBBS (SKMCH), MD General medicine (DMCH Darbhanga).</p>
           </div>
           <div className="space-y-4">
             <h4 className="font-bold text-blue-900 uppercase text-xs tracking-widest">Navigation</h4>
@@ -51,10 +51,11 @@ export default function Layout() {
           <div className="space-y-4">
             <h4 className="font-bold text-blue-900 uppercase text-xs tracking-widest">Arogya Clinic Location</h4>
             <p className="text-slate-500 leading-relaxed">
-              Main Road, Muzaffarpur,<br/>
-              Bihar - 842001<br/>
-              <span className="inline-block mt-2 font-semibold">Evening Clinic Starts: 8:30 PM</span><br/>
-              <span className="inline-block mt-1 font-semibold text-blue-900">+91 74888 78725</span>
+              <a href="https://www.google.com/maps/place/Dr+Deepak+kumar/@26.1500074,85.4007174,17z/data=!4m6!3m5!1s0x39ed110057681ebf:0xcc7a1deab9d79035!8m2!3d26.150109!4d85.400502!16s%2Fg%2F11z5t68_qr?entry=ttu&g_ep=EgoyMDI2MDQxOS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" className="hover:text-blue-900 transition-colors">
+                Saktidharamkata Bada Jagganath, near God Father Public School, 842004
+              </a><br/>
+              <span className="inline-block mt-2 font-semibold">Morning visit timinig 6:30am to 9am<br/>Evening vsit timing 3pm to 6pm</span><br/>
+              <span className="inline-block mt-1 font-semibold text-blue-900">9199943818</span>
             </p>
           </div>
         </div>

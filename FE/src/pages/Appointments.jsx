@@ -3,30 +3,30 @@ import emailjs from '@emailjs/browser';
 
 // ─── EmailJS config (public keys only) ────────────────────────────────────────
 const EMAILJS_CONFIG = {
-  serviceId:  import.meta.env.VITE_EMAILJS_SERVICE_ID,
+  serviceId: import.meta.env.VITE_EMAILJS_SERVICE_ID,
   templateId: import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-  publicKey:  import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+  publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
 };
 
 const TIME_SLOTS = [
-  { value: 'morning',       label: 'Morning (9 AM - 12 PM)' },
-  { value: 'afternoon',     label: 'Afternoon (2 PM - 5 PM)' },
-  { value: 'evening',       label: 'Evening Clinic (8:30 PM Onwards)' },
-  { value: 'teleconsult',   label: 'Teleconsultation' },
+  { value: 'morning', label: 'Morning (9 AM - 12 PM)' },
+  { value: 'afternoon', label: 'Afternoon (2 PM - 5 PM)' },
+  { value: 'evening', label: 'Evening Clinic (8:30 PM Onwards)' },
+  { value: 'teleconsult', label: 'Teleconsultation' },
 ];
 
 const INITIAL_FORM = {
-  full_name:       '',
-  phone:           '',
-  email:           '',
-  preferred_date:  '',
-  time_slot:       'evening',
+  full_name: '',
+  phone: '',
+  email: '',
+  preferred_date: '',
+  time_slot: 'evening',
   medical_concern: '',
 };
 
 export default function Appointments() {
-  const [form, setForm]       = useState(INITIAL_FORM);
-  const [status, setStatus]   = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
+  const [form, setForm] = useState(INITIAL_FORM);
+  const [status, setStatus] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
   const [errorMsg, setErrorMsg] = useState('');
 
   const handleChange = (e) => {
@@ -43,18 +43,18 @@ export default function Appointments() {
     // Template variables — synced with EmailJS template exactly
     const templateParams = {
       // Required by EmailJS template "From Name" and intro text
-      name:           form.full_name,
+      name: form.full_name,
       // Required by EmailJS template "Reply To" field
-      email:          form.email || '',
+      email: form.email || '',
 
       // Content variables
-      patient_name:   form.full_name,
-      phone:          form.phone,
-      patient_email:  form.email         || 'Not provided',
+      patient_name: form.full_name,
+      phone: form.phone,
+      patient_email: form.email || 'Not provided',
       preferred_date: form.preferred_date || 'Not specified',
-      time_slot:      slotLabel,
-      concern:        form.medical_concern || 'Not specified',
-      submitted_at:   new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+      time_slot: slotLabel,
+      concern: form.medical_concern || 'Not specified',
+      submitted_at: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
     };
 
     try {
@@ -90,7 +90,7 @@ export default function Appointments() {
                 </div>
                 <div>
                   <p className="font-headline font-bold text-primary">Clinic Location</p>
-                  <p className="text-on-surface-variant">Main Road, Opp. Civil Hospital<br/>Muzaffarpur, Bihar 842001</p>
+                  <p className="text-on-surface-variant">Saktidharamkata Bada Jagganath, near God Father Public School, 842004</p>
                 </div>
               </div>
               <div className="flex items-start gap-4 p-4 rounded-xl bg-surface-container-low transition-colors hover:bg-surface-container">
@@ -99,7 +99,7 @@ export default function Appointments() {
                 </div>
                 <div>
                   <p className="font-headline font-bold text-primary">Phone Number</p>
-                  <p className="text-on-surface-variant">+91 74888 78725</p>
+                  <p className="text-on-surface-variant">919994381893</p>
                 </div>
               </div>
               <div className="flex items-start gap-4 p-4 rounded-xl bg-surface-container-low transition-colors hover:bg-surface-container">
@@ -108,7 +108,7 @@ export default function Appointments() {
                 </div>
                 <div>
                   <p className="font-headline font-bold text-primary">Operating Hours</p>
-                  <p className="text-on-surface-variant">Evening Clinic: 8:30 PM</p>
+                  <p className="text-on-surface-variant">Morning visit timinig 6:30am to 9am<br />Evening vsit timing 3pm to 6pm</p>
                 </div>
               </div>
               <div className="flex items-start gap-4 p-4 rounded-xl bg-surface-container-low transition-colors hover:bg-surface-container">
@@ -122,7 +122,7 @@ export default function Appointments() {
               </div>
             </div>
             <div className="rounded-xl overflow-hidden shadow-sm h-64 relative group">
-              <img className="w-full h-full object-cover" alt="Map of Muzaffarpur clinic location" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbhfOZE7-iStuQMCwWuo6V8DTUc24azDU9tv8jRn_AVdTcCQrh3clQoNipvckFb0SeTSm--BJxfQSNipegv0WR7IsuyLEEExh8qNm_EWkU4xwEM4CVxMiIDg34rci0TMu0zcsZGPH6EE7h9wQdzRoohI-tXvy1BFHJNseOrHseUh1q9l2htL-04kxLGEBzEloLIEPgc-P8MUuPGToOWsXm_VEAYrGCHN5-qfY4FcrOXYt1S1c62n6x_n-p-MXsNkVuNmHuUM98sJY"/>
+              <img className="w-full h-full object-cover" alt="Map of Muzaffarpur clinic location" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbhfOZE7-iStuQMCwWuo6V8DTUc24azDU9tv8jRn_AVdTcCQrh3clQoNipvckFb0SeTSm--BJxfQSNipegv0WR7IsuyLEEExh8qNm_EWkU4xwEM4CVxMiIDg34rci0TMu0zcsZGPH6EE7h9wQdzRoohI-tXvy1BFHJNseOrHseUh1q9l2htL-04kxLGEBzEloLIEPgc-P8MUuPGToOWsXm_VEAYrGCHN5-qfY4FcrOXYt1S1c62n6x_n-p-MXsNkVuNmHuUM98sJY" />
               <div className="absolute inset-0 bg-primary/10 group-hover:bg-transparent transition-colors duration-300"></div>
             </div>
           </div>
@@ -181,7 +181,7 @@ export default function Appointments() {
                       value={form.phone}
                       onChange={handleChange}
                       className="w-full bg-surface-container-low border-none rounded-lg p-4 focus:ring-0 focus:bg-surface-container-lowest focus:border-b-2 focus:border-primary transition-all"
-                      placeholder="+91 00000 00000"
+                      placeholder="91 00000 00000"
                       type="tel"
                     />
                   </div>

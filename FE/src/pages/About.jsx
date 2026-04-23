@@ -50,8 +50,8 @@ export default function About() {
                 <div className="w-12 h-12 bg-secondary-container text-on-secondary-container flex items-center justify-center rounded-lg mb-6">
                   <span className="material-symbols-outlined">medical_services</span>
                 </div>
-                <h3 className="text-2xl font-headline font-bold text-primary mb-2">MD</h3>
-                <p className="text-on-surface-variant font-medium mb-4">Darbhanga Medical College (DMCH)</p>
+                <h3 className="text-2xl font-headline font-bold text-primary mb-2">MD General medicine</h3>
+                <p className="text-on-surface-variant font-medium mb-4">Darbhanga Medical College (DMCH Darbhanga)</p>
                 <p className="text-on-surface-variant leading-relaxed">Specialized training that honed his expertise in diagnostic precision and advanced therapeutic interventions.</p>
               </div>
             </div>
@@ -129,7 +129,7 @@ export default function About() {
                 <div className="w-4 h-4 rounded-full bg-secondary z-10 hidden md:block"></div>
                 <div className="md:w-1/2 order-1 md:order-2">
                   <h4 className="text-primary font-bold text-xl">Advanced Medicine</h4>
-                  <p className="text-on-surface-variant">Obtained MD from the prestigious Darbhanga Medical College.</p>
+                  <p className="text-on-surface-variant">Obtained MD General medicine from the prestigious Darbhanga Medical College.</p>
                 </div>
               </div>
               <div className="relative flex flex-col md:flex-row items-center gap-8">
