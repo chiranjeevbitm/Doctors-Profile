@@ -1,74 +1,47 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List
 from datetime import datetime
 import uuid
 
 router = APIRouter(prefix="/api/telemedicine", tags=["Telemedicine"])
 
-# ---------------------------------------------------------------------------
-# Models
-# ---------------------------------------------------------------------------
-class ConsultationRequest(BaseModel):
+class ConsultationLead(BaseModel):
     patient_name: str
     concern: str
     amount_paid: int = 199
-    # In reality, this would contain the payment screenshot URL from Supabase Storage
-    payment_proof_url: Optional[str] = None
 
-class ConsultationResponse(BaseModel):
+class LeadResponse(ConsultationLead):
     id: str
-    patient_name: str
-    concern: str
-    amount_paid: int
     status: str
     created_at: str
-    video_room_url: Optional[str] = None
 
-class StatusUpdateRequest(BaseModel):
-    status: str
+# In-Memory DB (Replace with Neon DB later)
+mock_leads_db = []
 
-# ---------------------------------------------------------------------------
-# In-Memory DB (Mocking Supabase)
-# ---------------------------------------------------------------------------
-mock_db = []
-
-@router.post("/requests", response_model=ConsultationResponse)
-async def create_consultation_request(req: ConsultationRequest):
+@router.post("/requests", response_model=LeadResponse)
+async def log_telemedicine_lead(req: ConsultationLead):
     """
-    Patient submits a new telemedicine request with symptoms and payment proof.
+    Logs a patient's intent to consult before redirecting them to WhatsApp.
+    Useful for analytics and tracking drop-offs.
     """
-    new_request = ConsultationResponse(
+    new_lead = LeadResponse(
         id=str(uuid.uuid4()),
         patient_name=req.patient_name,
         concern=req.concern,
         amount_paid=req.amount_paid,
-        status="pending",
+        status="redirected_to_whatsapp",
         created_at=datetime.utcnow().isoformat() + "Z"
     )
-    mock_db.append(new_request)
-    # Trigger Web Push Notification to Doctor here...
-    return new_request
+    mock_leads_db.append(new_lead)
+    
+    # Here you would insert the lead into Neon DB using SQLAlchemy
+    
+    return new_lead
 
-@router.get("/requests", response_model=List[ConsultationResponse])
-async def get_all_requests():
+@router.get("/requests", response_model=List[LeadResponse])
+async def get_all_leads():
     """
-    Doctor Dashboard fetches all requests.
+    Fetch all telemedicine leads.
     """
-    # Sort descending by creation date
-    return sorted(mock_db, key=lambda x: x.created_at, reverse=True)
-
-@router.put("/requests/{req_id}/status", response_model=ConsultationResponse)
-async def update_status(req_id: str, update: StatusUpdateRequest):
-    """
-    Doctor approves the request and generates a video link.
-    """
-    for req in mock_db:
-        if req.id == req_id:
-            req.status = update.status
-            if update.status == "approved":
-                # In production, call Daily.co or 100ms API to generate a unique room URL
-                req.video_room_url = f"https://arogya-clinic.daily.co/room_{req_id[:8]}"
-            return req
-            
-    raise HTTPException(status_code=404, detail="Request not found")
+    return sorted(mock_leads_db, key=lambda x: x.created_at, reverse=True)

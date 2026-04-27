@@ -1,32 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 
+const WA_PHONE_NUMBER = '918877556142'; // Dr. Deepak's WhatsApp
+
 export default function DoctorIn10Widget() {
   const { t, language } = useLanguage();
   const isHi = language === 'hi';
 
   const [open, setOpen] = useState(false);
-  const [step, setStep] = useState(1); // 1: Chat, 2: Payment, 3: Wait, 4: Approved, 5: Video
+  const [step, setStep] = useState(1); // 1: Chat, 2: Payment Handoff
   const [messages, setMessages] = useState([]);
   const [inputVal, setInputVal] = useState('');
   const [concern, setConcern] = useState('');
-  const [uploadStatus, setUploadStatus] = useState(null);
   const bottomRef = useRef(null);
-  const [timer, setTimer] = useState(0);
 
   // Auto-scroll chat
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, step]);
-
-  // Video call timer
-  useEffect(() => {
-    let id;
-    if (step === 5) {
-      id = setInterval(() => setTimer(s => s + 1), 1000);
-    }
-    return () => clearInterval(id);
-  }, [step]);
 
   const handleOpen = () => {
     setOpen(!open);
@@ -55,41 +46,42 @@ export default function DoctorIn10Widget() {
 
     setTimeout(() => {
       setMessages(m => [...m, { from: 'bot', text: isHi 
-        ? "समझ गया! चलिए 10 मिनट का वीडियो कंसल्टेशन बुक करते हैं।\n\nफीस: ₹199 — UPI द्वारा भुगतान करें।"
-        : "Got it! Let's book a quick 10-minute video consultation.\n\nConsultation fee: ₹199 only — pay via UPI." }]);
+        ? "समझ गया! चलिए 10 मिनट का वीडियो कंसल्टेशन बुक करते हैं।\n\nफीस: ₹199 — नीचे दी गई UPI ID पर भुगतान करें।"
+        : "Got it! Let's book a quick 10-minute video consultation.\n\nConsultation fee: ₹199 only — please pay via UPI below." }]);
       setTimeout(() => setStep(2), 2000);
     }, 800);
   };
 
-  const handleUpload = () => {
-    setUploadStatus(isHi ? '✅ स्क्रीनशॉट अपलोड हो गया!' : '✅ Screenshot uploaded!');
-  };
-
-  const submitPayment = () => {
-    setStep(3);
-  };
-
-  const simulateApproval = () => {
-    setStep(4);
-    if ('Notification' in window && Notification.permission === 'granted') {
-      new Notification('Dr. Deepak Kumar is Ready!', { body: 'Join your video call now.' });
+  const openWhatsApp = async () => {
+    // Optional: Send to backend analytics before redirecting
+    try {
+      await fetch('http://localhost:8000/api/telemedicine/requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          patient_name: 'WhatsApp Lead',
+          concern: concern,
+          amount_paid: 199
+        })
+      });
+    } catch (err) {
+      console.warn("Backend logging failed, but proceeding to WhatsApp");
     }
-  };
 
-  const joinCall = () => {
-    setStep(5);
+    const message = isHi 
+      ? `नमस्ते डॉक्टर, मुझे कंसल्टेशन चाहिए।\n\nसमस्या: ${concern}\n\nमेरा UPI पेमेंट का स्क्रीनशॉट: [कृपया यहाँ फोटो जोड़ें]`
+      : `Hello Doctor, I need a consultation.\n\nConcern: ${concern}\n\nMy UPI Payment Screenshot: [Please attach photo here]`;
+      
+    const waUrl = `https://wa.me/${WA_PHONE_NUMBER}?text=${encodeURIComponent(message)}`;
+    window.open(waUrl, '_blank');
+    
+    // Close widget and reset
+    setOpen(false);
+    setTimeout(() => {
+      setStep(1);
+      setMessages([]);
+    }, 500);
   };
-
-  const endCall = () => {
-    setStep(1);
-    setMessages(m => [...m, { from: 'bot', text: isHi
-      ? '✅ कंसल्टेशन पूरा हुआ! आपका डिजिटल प्रिस्क्रिप्शन भेज दिया गया है।'
-      : '✅ Consultation complete! Your digital prescription has been sent.'
-    }]);
-    setTimer(0);
-  };
-
-  const fmtTime = s => `${String(Math.floor(s / 60)).padStart(2,'0')}:${String(s % 60).padStart(2,'0')}`;
 
   const chips = [
     { text: isHi ? 'बुखार और सिरदर्द 🤒' : 'Fever & Headache 🤒' },
@@ -122,19 +114,17 @@ export default function DoctorIn10Widget() {
             <div className="w-10 h-10 rounded-full bg-[#25D366] flex items-center justify-center text-xl shrink-0">👨‍⚕️</div>
             <div className="flex-1">
               <h4 className="text-white font-semibold text-sm m-0">Dr. Deepak Kumar</h4>
-              <p className="text-white/70 text-xs m-0">
-                {step === 5 ? '🔴 Live Video Call' : '🟢 Available · Replies in ~10 min'}
-              </p>
+              <p className="text-white/70 text-xs m-0">🟢 Online · Replies instantly</p>
             </div>
-            {step > 1 && step < 5 && (
-              <button onClick={() => setStep(1)} className="text-white/70 hover:text-white text-xs">Reset</button>
+            {step > 1 && (
+              <button onClick={() => { setStep(1); setMessages([]); handleOpen(); handleOpen(); }} className="text-white/70 hover:text-white text-xs">Reset</button>
             )}
           </div>
 
-          {/* STEP 1: Chat */}
+          {/* Chat Flow */}
           {step === 1 && (
             <>
-              <div className="flex-1 p-4 overflow-y-auto flex flex-col gap-3" style={{ background: '#111b21', backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.02\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }}>
+              <div className="flex-1 p-4 overflow-y-auto flex flex-col gap-3" style={{ background: '#111b21' }}>
                 {messages.map((msg, i) => (
                   <div key={i} className={`flex ${msg.from === 'user' ? 'justify-end' : 'justify-start'}`}>
                     <div className={`max-w-[85%] p-2.5 rounded-xl text-sm leading-relaxed ${msg.from === 'user' ? 'bg-[#005c4b] text-white rounded-tr-sm' : 'bg-[#1e2d36] text-[#e8edf5] rounded-tl-sm'}`}>
@@ -146,7 +136,6 @@ export default function DoctorIn10Widget() {
                 <div ref={bottomRef} />
               </div>
               
-              {/* Chips */}
               <div className="bg-[#111b21] p-3 border-t border-[#1e2840]">
                 <div className="flex flex-wrap gap-2 mb-2">
                   {chips.map((c, i) => (
@@ -157,14 +146,13 @@ export default function DoctorIn10Widget() {
                 </div>
               </div>
 
-              {/* Input Area */}
               <div className="bg-[#202c33] p-2 flex items-center gap-2 border-t border-[#2a3942]">
                 <input
                   type="text"
                   value={inputVal}
                   onChange={e => setInputVal(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && handleSend(e)}
-                  placeholder="Type your concern..."
+                  placeholder={isHi ? "अपनी समस्या लिखें..." : "Type your concern..."}
                   className="flex-1 bg-[#2a3942] border-none rounded-full px-4 py-2.5 text-sm text-white focus:outline-none placeholder:text-[#8696a0]"
                 />
                 <button onClick={handleSend} className="w-10 h-10 rounded-full bg-[#128C7E] flex items-center justify-center text-white shrink-0 hover:bg-[#25D366] transition-colors">
@@ -174,100 +162,31 @@ export default function DoctorIn10Widget() {
             </>
           )}
 
-          {/* STEP 2: Payment */}
+          {/* Step 2: Payment & WhatsApp Handoff */}
           {step === 2 && (
-            <div className="flex-1 bg-[#111b21] p-4 overflow-y-auto">
-              <div className="bg-[#1e2d36] rounded-xl p-4 mb-4">
-                <h4 className="text-white text-sm font-semibold mb-1">💊 Consultation Summary</h4>
-                <p className="text-[#8696a0] text-xs">Your concern has been received. Book your slot now:</p>
-                <div className="text-3xl font-bold text-[#25D366] my-3">₹199</div>
-                <p className="text-[#e0e0e0] text-sm">Video consultation · 10-15 min</p>
-              </div>
-              
-              <div className="mb-4">
-                <p className="text-[#8696a0] text-xs mb-2">📸 Upload payment screenshot (UPI):</p>
-                <div onClick={handleUpload} className="border-2 border-dashed border-[#2a3942] rounded-xl p-5 text-center cursor-pointer hover:border-[#25D366] hover:bg-[#25D366]/5 transition-colors">
-                  <p className="text-[#e0e0e0] text-sm mb-1">{uploadStatus || '📂 Tap to upload screenshot'}</p>
-                  {!uploadStatus && <span className="text-[#8696a0] text-[10px]">UPI · PhonePe · GPay accepted</span>}
-                </div>
+            <div className="flex-1 bg-[#111b21] p-5 flex flex-col items-center text-center justify-center">
+              <div className="bg-[#1e2d36] rounded-xl p-5 mb-6 w-full shadow-lg">
+                <h4 className="text-white text-sm font-semibold mb-2">💊 {isHi ? 'कंसल्टेशन फीस' : 'Consultation Fee'}</h4>
+                <div className="text-4xl font-bold text-[#25D366] my-2">₹199</div>
+                <p className="text-[#8696a0] text-xs mt-2">10-15 Min Video Call</p>
               </div>
 
-              <div className="bg-[#1e2d36] rounded-xl p-3 mb-4 text-xs text-[#8696a0]">
-                💳 UPI ID: <b className="text-white">deepakkumar@upi</b><br/>
-                <span>Pay ₹199 and upload screenshot above</span>
+              <div className="bg-[#1e2d36] rounded-xl p-4 mb-6 w-full text-sm text-[#8696a0] border border-[#2a3942]">
+                <p className="mb-2">💳 UPI ID:</p>
+                <p className="text-white font-mono text-lg font-bold select-all tracking-wider">deepakkumar@upi</p>
               </div>
 
-              <button onClick={submitPayment} disabled={!uploadStatus} className={`w-full py-3 rounded-lg font-bold text-sm transition-colors ${uploadStatus ? 'bg-[#25D366] text-black hover:bg-[#1fb358]' : 'bg-[#2a3942] text-[#8696a0] cursor-not-allowed'}`}>
-                ✅ Submit & Request Doctor
+              <p className="text-[#e0e0e0] text-sm mb-4">
+                {isHi ? '1. ₹199 का भुगतान करें' : '1. Pay ₹199 using any UPI app'}<br/>
+                {isHi ? '2. WhatsApp पर पेमेंट स्क्रीनशॉट भेजें' : '2. Send the screenshot on WhatsApp'}
+              </p>
+
+              <button onClick={openWhatsApp} className="w-full bg-[#25D366] text-black font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 hover:bg-[#1fb358] transition-colors shadow-[0_4px_14px_rgba(37,211,102,0.3)]">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                </svg>
+                {isHi ? 'WhatsApp पर स्क्रीनशॉट भेजें' : 'Send Screenshot on WhatsApp'}
               </button>
-            </div>
-          )}
-
-          {/* STEP 3: Waiting */}
-          {step === 3 && (
-            <div className="flex-1 bg-[#111b21] p-6 text-center flex flex-col justify-center">
-              <div className="text-5xl mb-4 animate-spin w-12 h-12 mx-auto border-4 border-[#25D366] border-t-transparent rounded-full"></div>
-              <h4 className="text-white text-lg font-semibold mb-2">Request Sent!</h4>
-              <p className="text-[#8696a0] text-sm mb-6">Dr. Deepak Kumar is reviewing your request</p>
-              
-              <div className="inline-flex items-center gap-2 bg-yellow-500/10 text-yellow-500 border border-yellow-500/30 px-4 py-1.5 rounded-full text-xs font-bold mx-auto mb-6">
-                🟡 Pending Approval
-              </div>
-
-              <div className="bg-[#1e2d36] rounded-xl p-4 text-left mb-6">
-                <p className="text-[#8696a0] text-xs mb-1">📋 Your request:</p>
-                <p className="text-white text-sm">{concern}</p>
-                <p className="text-[#25D366] text-[10px] mt-2">💰 Payment: Verified ✓</p>
-              </div>
-
-              {/* Dev Simulation Button */}
-              <button onClick={simulateApproval} className="mt-auto text-[#8696a0] text-xs hover:text-white underline">
-                [Dev Simulate: Doctor Approves]
-              </button>
-            </div>
-          )}
-
-          {/* STEP 4: Approved */}
-          {step === 4 && (
-            <div className="flex-1 bg-[#111b21] p-6 text-center flex flex-col justify-center">
-              <div className="text-6xl mb-4 animate-bounce">🟢</div>
-              <h4 className="text-[#25D366] text-xl font-bold mb-2">Doctor is Ready!</h4>
-              <p className="text-[#8696a0] text-sm mb-6">Dr. Deepak has approved your request</p>
-              
-              <div className="bg-[#25D366]/10 border border-[#25D366]/30 rounded-xl p-4 mb-6">
-                <p className="text-[#e0e0e0] text-xs">📱 Video call is ready. Join within <b className="text-[#25D366]">5 minutes</b>.</p>
-              </div>
-
-              <button onClick={joinCall} className="w-full bg-[#25D366] text-black font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(37,211,102,0.3)] hover:scale-[1.02] transition-transform">
-                📹 Join Video Call Now
-              </button>
-            </div>
-          )}
-
-          {/* STEP 5: Video Call */}
-          {step === 5 && (
-            <div className="flex-1 bg-[#111b21] flex flex-col">
-              <div className="flex-1 bg-black relative flex items-center justify-center">
-                <div className="text-center">
-                  <div className="text-6xl mb-2">👨‍⚕️</div>
-                  <p className="text-[#8696a0] text-xs">Dr. Deepak Kumar</p>
-                </div>
-                {/* PIP User Video */}
-                <div className="absolute bottom-4 right-4 w-20 h-28 bg-[#1a1a2e] border-2 border-[#2a3942] rounded-lg flex items-center justify-center text-3xl">🧑</div>
-                {/* Live Tag */}
-                <div className="absolute top-4 left-4 bg-black/60 rounded px-2 py-1 text-[10px] text-[#25D366] font-mono">
-                  ● LIVE · {fmtTime(timer)}
-                </div>
-              </div>
-              
-              <div className="p-4 bg-[#111b21]">
-                <div className="flex justify-center gap-4 mb-3">
-                  <button className="w-12 h-12 rounded-full bg-[#1e2d36] text-white flex items-center justify-center border border-[#2a3942]">🎙️</button>
-                  <button className="w-12 h-12 rounded-full bg-[#1e2d36] text-white flex items-center justify-center border border-[#2a3942]">📷</button>
-                  <button onClick={endCall} className="w-12 h-12 rounded-full bg-red-500 text-white flex items-center justify-center shadow-lg hover:bg-red-600 transition-colors">📵</button>
-                </div>
-                <p className="text-center text-[10px] text-[#8696a0]">End-to-end encrypted video consultation</p>
-              </div>
             </div>
           )}
 

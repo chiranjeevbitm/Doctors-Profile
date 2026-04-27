@@ -30,7 +30,7 @@
 - 👨‍⚕️ **About Page** — Doctor biography, qualifications, and philosophy of care
 - 🩺 **Services Page** — Detailed cards for all specializations (Diabetes, BP, Thyroid, Asthma, COPD, Abdominal diseases)
 - 📅 **Appointments Page** — Patient appointment form powered by **EmailJS** (no backend required)
-- 💬 **WhatsApp Button** — Floating contact button on every page, opens WhatsApp with a pre-filled appointment message
+- 💬 **Telemedicine Widget** — "Doctor in 10 Minutes" floating widget for instant WhatsApp video consultations.
 - 🔒 **Reserve/Dashboard** — Internal page for clinic staff
 - 📱 Fully **responsive** layout for mobile, tablet, and desktop
 
@@ -247,18 +247,16 @@ Appointments are handled **100% on the frontend** using [EmailJS](https://www.em
 
 ---
 
-## 💬 WhatsApp Integration
+## 💬 WhatsApp Integration & Telemedicine
 
-A floating **WhatsApp button** is embedded on every page via `WhatsAppButton.jsx`:
+The application features a deeply integrated **"Doctor in 10 Minutes"** telemedicine widget (`DoctorIn10Widget.jsx`) floating on every page:
 
-```
-Phone: +91 95465 19953
-Pre-filled message: "Hi, I came from your website, I want to book an appointment"
-```
+1. **Instant Chat**: Patients can select their symptoms (e.g., Fever, Stomach Pain).
+2. **Payment Handoff**: Displays a ₹199 consultation fee with the clinic's UPI ID.
+3. **Deep Linking**: Clicking the "Send Screenshot" button redirects the patient directly to the Doctor's native WhatsApp app (`wa.me`) with a pre-filled message detailing their symptoms.
+4. **Video Call**: The doctor verifies the UPI screenshot on WhatsApp and initiates a native WhatsApp video call, removing the need for complex external video SDKs.
 
-Clicking the button opens WhatsApp (mobile app or web) with the message pre-filled, so the patient can immediately reach the doctor.
-
-**Component:** `FE/src/components/WhatsAppButton.jsx`
+**Component:** `FE/src/components/DoctorIn10Widget.jsx`
 
 ---
 
