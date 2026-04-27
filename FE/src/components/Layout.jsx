@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink, Link, Outlet } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import DrDeeepakWidget from './DrDeeepakWidget';
+import DoctorIn10Widget from './DoctorIn10Widget';
 
 export default function Layout() {
   const { t } = useLanguage();
@@ -105,7 +105,7 @@ export default function Layout() {
       </footer>
 
       {/* Pre-consultation WhatsApp Chat Widget - visible on all pages */}
-      <DrDeeepakWidget />
+      <DoctorIn10Widget />
     </div>
   );
 }
