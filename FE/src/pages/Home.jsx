@@ -9,15 +9,15 @@ export default function Home() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative min-h-[870px] flex items-center overflow-hidden bg-surface">
-        <div className="max-w-7xl mx-auto px-8 w-full grid md:grid-cols-12 gap-12 items-center">
+      <section className="relative min-h-screen pt-28 pb-16 md:py-0 md:min-h-[870px] flex items-center overflow-hidden bg-surface">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 w-full grid md:grid-cols-12 gap-8 md:gap-12 items-center">
           <div className="md:col-span-7 space-y-8 z-10">
             <a href="https://www.google.com/maps/place/Dr+Deepak+kumar/@26.1500074,85.4007174,17z/data=!4m6!3m5!1s0x39ed110057681ebf:0xcc7a1deab9d79035!8m2!3d26.150109!4d85.400502!16s%2Fg%2F11z5t68_qr?entry=ttu&g_ep=EgoyMDI2MDQxOS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-tertiary-fixed text-on-tertiary-fixed px-4 py-1.5 rounded-full text-sm font-medium hover:bg-tertiary hover:text-white transition-colors cursor-pointer">
               <span className="material-symbols-outlined text-sm">location_on</span>
               {t('location')}
             </a>
-            <h1 className="text-5xl md:text-7xl font-extrabold text-primary leading-[1.1] tracking-tight">
-              {t('welcome')} <br /><span className="text-secondary">{t('tagline')}</span>
+            <h1 className="text-4xl md:text-7xl font-extrabold text-primary leading-[1.1] tracking-tight">
+              {t('welcome')} <br className="hidden sm:block" /><span className="text-secondary">{t('tagline')}</span>
             </h1>
             <p className="text-xl text-on-surface-variant max-w-xl leading-relaxed">
               {t('welcome')} <strong>Arogya Clinic</strong>. {t('heroDesc')}
@@ -31,7 +31,7 @@ export default function Home() {
                 {t('viewServices')}
               </Link>
             </div>
-            <div className="grid grid-cols-2 gap-8 pt-8 border-t border-outline-variant/10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 pt-8 border-t border-outline-variant/10">
               <div>
                 <p className="text-sm font-bold uppercase tracking-widest text-outline">{t('education')}</p>
                 <p className="text-lg font-bold text-primary">{t('educationDetail')}</p>
@@ -55,9 +55,9 @@ export default function Home() {
       </section>
 
       {/* Why Choose Us - Asymmetric Bento Grid */}
-      <section className="py-24 bg-surface-container-low">
-        <div className="max-w-7xl mx-auto px-8">
-          <div className="mb-16">
+      <section className="py-16 md:py-24 bg-surface-container-low">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
+          <div className="mb-10 md:mb-16">
             <h2 className="text-4xl font-extrabold text-primary mb-4">{t('whyChooseTitle')}</h2>
             <p className="text-on-surface-variant text-lg max-w-2xl">{t('whyChooseDesc')}</p>
           </div>
@@ -102,9 +102,9 @@ export default function Home() {
       </section>
 
       {/* Core Services */}
-      <section className="py-24 bg-surface">
-        <div className="max-w-7xl mx-auto px-8">
-          <div className="text-center mb-16">
+      <section className="py-16 md:py-24 bg-surface">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
+          <div className="text-center mb-10 md:mb-16">
             <h2 className="text-4xl font-extrabold text-primary mb-4">{t('coreServicesTitle')}</h2>
             <p className="text-on-surface-variant text-lg max-w-2xl mx-auto">{t('coreServicesDesc')}</p>
           </div>
@@ -140,8 +140,8 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 px-8">
-        <div className="max-w-7xl mx-auto bg-primary rounded-[3rem] p-12 md:p-20 relative overflow-hidden shadow-2xl">
+      <section className="py-16 px-4 md:px-8">
+        <div className="max-w-7xl mx-auto bg-primary rounded-[2.5rem] md:rounded-[3rem] p-8 md:p-20 relative overflow-hidden shadow-2xl">
           <div className="absolute inset-0 opacity-10 pointer-events-none">
             <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
               <path d="M0,0 L100,0 L100,100 L0,100 Z" fill="url(#grad1)"></path>
