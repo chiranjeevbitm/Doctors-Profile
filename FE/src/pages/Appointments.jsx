@@ -130,8 +130,14 @@ export default function Appointments() {
               </div>
             </div>
             <div className="rounded-xl overflow-hidden shadow-sm h-64 relative group">
-              <img className="w-full h-full object-cover" alt="Map of Muzaffarpur clinic location" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbhfOZE7-iStuQMCwWuo6V8DTUc24azDU9tv8jRn_AVdTcCQrh3clQoNipvckFb0SeTSm--BJxfQSNipegv0WR7IsuyLEEExh8qNm_EWkU4xwEM4CVxMiIDg34rci0TMu0zcsZGPH6EE7h9wQdzRoohI-tXvy1BFHJNseOrHseUh1q9l2htL-04kxLGEBzEloLIEPgc-P8MUuPGToOWsXm_VEAYrGCHN5-qfY4FcrOXYt1S1c62n6x_n-p-MXsNkVuNmHuUM98sJY" />
-              <div className="absolute inset-0 bg-primary/10 group-hover:bg-transparent transition-colors duration-300"></div>
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3581.4764363879235!2d85.40255507520176!3d26.14860879250995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjbCsDA4JzU1LjAiTiA4NcKwMjQnMTguNSJF!5e0!3m2!1sen!2sin!4v1777266209528!5m2!1sen!2sin"
+                className="w-full h-full"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
             </div>
           </div>
 
