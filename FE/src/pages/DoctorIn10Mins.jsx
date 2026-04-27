@@ -52,6 +52,7 @@ export default function DoctorIn10Mins() {
   const [activeFaq, setActiveFaq]   = useState(null);
   const [testIdx, setTestIdx]       = useState(0);
   const [timer, setTimer]           = useState(0);
+  const [showLearnMore, setShowLearnMore] = useState(false);
 
   // Rotating testimonials
   useEffect(() => {
@@ -147,10 +148,10 @@ export default function DoctorIn10Mins() {
           <p className="text-slate-500 mb-10">{t('doctorIn10SpecSub')}</p>
           <div className="flex flex-wrap justify-center gap-4">
             {SPECIALTIES.map(s => (
-              <div key={s.key} className="flex items-center gap-2 bg-white border border-slate-200 rounded-full px-5 py-3 shadow-sm hover:border-green-400 hover:shadow-md transition-all">
+              <button key={s.key} onClick={openWidget} className="flex items-center gap-2 bg-white border border-slate-200 rounded-full px-5 py-3 shadow-sm hover:border-green-400 hover:shadow-md transition-all">
                 <span className="text-2xl">{s.icon}</span>
                 <span className="font-semibold text-slate-700 text-sm">{t(s.key)}</span>
-              </div>
+              </button>
             ))}
           </div>
         </div>
@@ -171,8 +172,20 @@ export default function DoctorIn10Mins() {
               <div className="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center text-2xl">💬</div>
               <h3 className="text-xl font-bold text-slate-900">{t('doctorIn10WAFirst')}</h3>
               <p className="text-slate-500 leading-relaxed">{t('doctorIn10WAFirstDesc')}</p>
-              <button onClick={openWidget} className="text-[#25D366] font-semibold text-sm hover:underline flex items-center gap-1">
-                {t('doctorIn10LearnHow')}
+              
+              {showLearnMore && (
+                <div className="bg-green-50 p-4 rounded-xl text-sm text-green-800 border border-green-200 mt-2 mb-2 animate-fade-in">
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>{isHi ? 'विजेट में अपनी समस्या चुनें' : 'Select your concern in the widget'}</li>
+                    <li>{isHi ? '₹199 का UPI भुगतान करें' : 'Make a ₹199 UPI payment'}</li>
+                    <li>{isHi ? 'WhatsApp पर स्क्रीनशॉट भेजें' : 'Send the screenshot on WhatsApp'}</li>
+                    <li>{isHi ? 'डॉक्टर से सीधा वीडियो कॉल' : 'Direct video call with the doctor'}</li>
+                  </ul>
+                </div>
+              )}
+
+              <button onClick={() => setShowLearnMore(!showLearnMore)} className="text-[#25D366] font-semibold text-sm hover:underline flex items-center gap-1">
+                {showLearnMore ? (isHi ? 'कम दिखाएं' : 'Show less') : t('doctorIn10LearnHow')}
               </button>
             </div>
             {/* 42°C warning card — dark navy */}
@@ -383,9 +396,9 @@ export default function DoctorIn10Mins() {
           <div className="bg-amber-50 border border-amber-200 rounded-3xl p-8 text-center space-y-3">
             <h3 className="text-xl font-extrabold text-amber-800">⚠️ {t('doctorIn10Emergency')}</h3>
             <p className="text-amber-700 text-sm leading-relaxed">{t('doctorIn10EmergencyDesc')}</p>
-            <div className="inline-flex items-center gap-2 bg-red-600 text-white font-bold px-6 py-3 rounded-full text-sm mt-2">
-              {t('doctorIn10Ambulance')}
-            </div>
+            <a href="tel:108" className="inline-flex items-center gap-2 bg-red-600 text-white font-bold px-6 py-3 rounded-full text-sm mt-2 hover:bg-red-700 transition-colors shadow-lg">
+              📞 {t('doctorIn10Ambulance')}
+            </a>
           </div>
         </div>
       </section>

@@ -93,6 +93,7 @@ export default function DoctorIn10Widget() {
     <>
       {/* Floating Button */}
       <button
+        id="dr-deepak-widget-launcher"
         onClick={handleOpen}
         className="fixed bottom-6 right-6 w-16 h-16 rounded-full flex items-center justify-center text-white text-3xl shadow-xl z-[9999] hover:scale-110 transition-transform"
         style={{
