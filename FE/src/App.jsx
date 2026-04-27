@@ -8,6 +8,8 @@ import About from './pages/About';
 import Services from './pages/Services';
 import Appointments from './pages/Appointments';
 import Reserve from './pages/Reserve';
+import DoctorIn10Mins from './pages/DoctorIn10Mins';
+
 
 export default function App() {
   return (
@@ -20,6 +22,8 @@ export default function App() {
             <Route path="services" element={<Services />} />
             <Route path="appointments" element={<Appointments />} />
             <Route path="reserve" element={<Reserve />} />
+            <Route path="doctor-in-10-mins" element={<DoctorIn10Mins />} />
+
           </Route>
         </Routes>
         <LanguageToggle />

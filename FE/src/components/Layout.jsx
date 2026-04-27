@@ -23,6 +23,13 @@ export default function Layout() {
             <NavLink className={getNavLinkClass} to="/about">{t('about')}</NavLink>
             <NavLink className={getNavLinkClass} to="/services">{t('services')}</NavLink>
             <NavLink className={getNavLinkClass} to="/appointments">{t('appointments')}</NavLink>
+            <NavLink className={getNavLinkClass} to="/doctor-in-10-mins">
+              <span className="flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse inline-block" />
+                {t('doctorIn10NavLabel')}
+              </span>
+            </NavLink>
+
           </div>
           <Link to="/appointments" className="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded-xl font-semibold hover:opacity-90 active:scale-95 transition-all">
             {t('appointments')}
@@ -49,6 +56,8 @@ export default function Layout() {
               <li><Link className="text-slate-500 hover:text-blue-900 transition-colors" to="/appointments">{t('patientPortal')}</Link></li>
               <li><Link className="text-slate-500 hover:text-blue-900 transition-colors" to="/services">{t('services')}</Link></li>
               <li><Link className="text-slate-500 hover:text-blue-900 transition-colors" to="/reserve">{t('reserve')}</Link></li>
+              <li><Link className="text-slate-500 hover:text-green-700 font-semibold transition-colors" to="/doctor-in-10-mins">{t('doctorIn10NavLabel')} ⚡</Link></li>
+
             </ul>
           </div>
           <div className="space-y-4">

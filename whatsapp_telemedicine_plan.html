@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WhatsApp Telemedicine — Integration Plan & Prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0d14;
+  --surface: #111520;
+  --card: #161b28;
+  --card2: #1c2235;
+  --wa: #25D366;
+  --wa-dark: #128C7E;
+  --wa-light: #DCF8C6;
+  --accent: #4f8ef7;
+  --purple: #7c3aed;
+  --orange: #f97316;
+  --red: #ef4444;
+  --yellow: #eab308;
+  --text: #e8edf5;
+  --muted: #7480a0;
+  --border: #1e2840;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden}
+
+/* ===================== NAV ===================== */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  background:rgba(10,13,20,.92);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:0;
+  padding:0 24px;height:60px;
+}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--wa);margin-right:auto}
+.nav-tab{
+  padding:8px 16px;font-size:.82rem;cursor:pointer;color:var(--muted);
+  border-bottom:2px solid transparent;transition:.2s;white-space:nowrap;
+}
+.nav-tab.active,.nav-tab:hover{color:var(--text);border-bottom-color:var(--wa)}
+
+/* ===================== HERO ===================== */
+.hero{
+  padding:110px 32px 60px;
+  background:
+    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(37,211,102,.08) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 50% at 20% 80%, rgba(79,142,247,.07) 0%, transparent 70%),
+    var(--bg);
+  text-align:center;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.3);
+  border-radius:100px;padding:6px 16px;font-size:.78rem;color:var(--wa);margin-bottom:20px;
+}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:800;line-height:1.1;margin-bottom:16px}
+.hero h1 span{color:var(--wa)}
+.hero p{color:var(--muted);font-size:1rem;max-width:600px;margin:0 auto 32px;line-height:1.7}
+
+/* ===================== SECTIONS ===================== */
+.section{display:none;padding:80px 0 60px;min-height:100vh}
+.section.active{display:block}
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+.section-head{text-align:center;margin-bottom:48px}
+.section-head h2{font-family:'Syne',sans-serif;font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800;margin-bottom:8px}
+.section-head p{color:var(--muted);font-size:.9rem;max-width:550px;margin:0 auto}
+
+/* ===================== CARDS ===================== */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px}
+.card h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:8px}
+.card p{color:var(--muted);font-size:.83rem;line-height:1.6}
+.tag{display:inline-block;font-size:.7rem;font-weight:600;padding:3px 10px;border-radius:20px;margin-bottom:10px}
+
+/* ===================== WHATSAPP WIDGET DEMO ===================== */
+.demo-wrapper{
+  position:fixed;bottom:24px;right:24px;z-index:300;
+}
+.wa-fab{
+  width:60px;height:60px;border-radius:50%;
+  background:var(--wa);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;box-shadow:0 8px 32px rgba(37,211,102,.4);
+  font-size:1.6rem;transition:.3s;
+  border:none;color:white;
+  animation:pulse-wa 2s infinite;
+}
+@keyframes pulse-wa{
+  0%,100%{box-shadow:0 8px 32px rgba(37,211,102,.4)}
+  50%{box-shadow:0 8px 48px rgba(37,211,102,.7),0 0 0 8px rgba(37,211,102,.1)}
+}
+.wa-fab:hover{transform:scale(1.08)}
+.wa-badge{
+  position:absolute;top:-4px;right:-4px;
+  background:var(--red);color:#fff;font-size:.65rem;font-weight:700;
+  width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--bg);
+}
+.wa-window{
+  position:absolute;bottom:74px;right:0;
+  width:360px;
+  background:#0d1117;border-radius:16px;
+  box-shadow:0 24px 80px rgba(0,0,0,.7);
+  border:1px solid #1e2840;
+  overflow:hidden;
+  display:none;
+  flex-direction:column;
+}
+.wa-window.open{display:flex}
+
+/* WA Header */
+.wa-header{
+  background:var(--wa-dark);padding:14px 16px;
+  display:flex;align-items:center;gap:12px;
+}
+.wa-avatar{width:38px;height:38px;border-radius:50%;background:var(--wa);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.wa-header-info h4{font-size:.9rem;font-weight:600;color:#fff;margin-bottom:1px}
+.wa-header-info span{font-size:.72rem;color:rgba(255,255,255,.7)}
+.wa-close{margin-left:auto;background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:1.1rem;padding:4px}
+
+/* WA Steps */
+.wa-step{display:none;flex-direction:column;height:100%}
+.wa-step.active{display:flex}
+
+/* WA Messages area */
+.wa-msgs{
+  flex:1;padding:14px;overflow-y:auto;
+  background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
+  #111b21;
+  max-height:260px;
+  min-height:180px;
+}
+.msg{margin-bottom:10px;display:flex;flex-direction:column}
+.msg.bot{align-items:flex-start}
+.msg.user{align-items:flex-end}
+.msg-bubble{
+  max-width:85%;padding:8px 12px;border-radius:10px;
+  font-size:.8rem;line-height:1.5;
+}
+.msg.bot .msg-bubble{background:#1e2d36;color:var(--text);border-top-left-radius:2px}
+.msg.user .msg-bubble{background:#005c4b;color:#fff;border-top-right-radius:2px}
+.msg-time{font-size:.62rem;color:var(--muted);margin-top:3px;padding:0 4px}
+
+/* WA Input */
+.wa-input-area{
+  padding:10px 12px;background:#202c33;
+  display:flex;align-items:center;gap:8px;border-top:1px solid #2a3942;
+}
+.wa-input{
+  flex:1;background:#2a3942;border:none;border-radius:20px;
+  padding:9px 14px;color:#fff;font-size:.82rem;outline:none;
+}
+.wa-input::placeholder{color:#8696a0}
+.wa-send{
+  width:36px;height:36px;border-radius:50%;background:var(--wa-dark);
+  border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:.9rem;flex-shrink:0;
+}
+
+/* Payment Step */
+.wa-pay-area{padding:14px;background:#111b21;flex:1}
+.wa-pay-card{background:#1e2d36;border-radius:12px;padding:14px;margin-bottom:10px}
+.wa-pay-card h4{font-size:.82rem;font-weight:600;color:#fff;margin-bottom:4px}
+.wa-pay-card p{font-size:.75rem;color:#8696a0}
+.wa-pay-amount{font-size:1.4rem;font-weight:700;color:var(--wa);margin:8px 0}
+.wa-btn{
+  width:100%;padding:11px;border-radius:8px;border:none;
+  font-size:.85rem;font-weight:600;cursor:pointer;transition:.2s;
+}
+.wa-btn-primary{background:var(--wa);color:#000}
+.wa-btn-primary:hover{background:#1fb358}
+.wa-btn-secondary{background:#2a3942;color:#fff;margin-top:8px}
+
+/* Upload area */
+.upload-zone{
+  border:2px dashed #2a3942;border-radius:8px;padding:20px;text-align:center;
+  cursor:pointer;margin-bottom:10px;transition:.2s;
+}
+.upload-zone:hover{border-color:var(--wa);background:rgba(37,211,102,.04)}
+.upload-zone p{font-size:.78rem;color:#8696a0}
+
+/* Status badges */
+.status-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 14px;border-radius:100px;font-size:.75rem;font-weight:600;
+}
+.status-pill.pending{background:rgba(234,179,8,.1);color:var(--yellow);border:1px solid rgba(234,179,8,.3)}
+.status-pill.approved{background:rgba(37,211,102,.1);color:var(--wa);border:1px solid rgba(37,211,102,.3)}
+.status-pill.calling{background:rgba(79,142,247,.1);color:var(--accent);border:1px solid rgba(79,142,247,.3)}
+
+/* ===================== FLOW DIAGRAM ===================== */
+.flow{display:flex;flex-direction:column;gap:0}
+.flow-item{
+  display:flex;align-items:flex-start;gap:20px;
+  padding:20px 0;border-left:2px solid var(--border);margin-left:20px;
+  position:relative;
+}
+.flow-item:first-child{padding-top:0}
+.flow-dot{
+  width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;flex-shrink:0;margin-left:-21px;
+  border:2px solid var(--bg);
+}
+.flow-content{flex:1;padding-top:6px}
+.flow-content h4{font-size:.95rem;font-weight:600;margin-bottom:4px}
+.flow-content p{font-size:.82rem;color:var(--muted);line-height:1.5}
+.flow-duration{font-size:.7rem;color:var(--wa);font-weight:600;margin-top:4px}
+
+/* ===================== TECH STACK ===================== */
+.tech-item{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:14px;display:flex;gap:12px;align-items:flex-start;
+}
+.tech-icon{font-size:1.4rem;flex-shrink:0}
+.tech-info h4{font-size:.85rem;font-weight:600;margin-bottom:3px}
+.tech-info p{font-size:.78rem;color:var(--muted);line-height:1.4}
+.tech-badge{font-size:.65rem;background:rgba(79,142,247,.1);color:var(--accent);padding:2px 7px;border-radius:10px;font-weight:600}
+
+/* ===================== OUT OF BOX IDEAS ===================== */
+.idea-card{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:22px;position:relative;overflow:hidden;
+  transition:.2s;
+}
+.idea-card:hover{border-color:var(--wa);transform:translateY(-2px)}
+.idea-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+}
+.idea-card .idea-num{
+  font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;
+  position:absolute;right:16px;top:12px;
+  color:rgba(255,255,255,.04);line-height:1;
+}
+.idea-card h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:6px}
+.idea-card p{font-size:.82rem;color:var(--muted);line-height:1.5;margin-bottom:10px}
+.idea-features{display:flex;flex-wrap:wrap;gap:5px}
+.idea-feature{font-size:.7rem;background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:3px 9px;color:var(--muted)}
+
+/* ===================== REVENUE TABLE ===================== */
+.rev-table{width:100%;border-collapse:collapse}
+.rev-table th{background:var(--card2);padding:12px 16px;text-align:left;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.rev-table td{padding:12px 16px;border-bottom:1px solid var(--border);font-size:.85rem}
+.rev-table tr:hover td{background:var(--card2)}
+
+/* ===================== TIMELINE ===================== */
+.timeline-row{display:grid;grid-template-columns:100px 1fr;gap:16px;margin-bottom:12px}
+.timeline-phase{
+  background:var(--card2);border-radius:8px;padding:8px;
+  text-align:center;font-size:.72rem;font-weight:600;
+  display:flex;align-items:center;justify-content:center;
+}
+.timeline-tasks{background:var(--card);border-radius:8px;padding:12px 16px}
+.timeline-tasks ul{list-style:none}
+.timeline-tasks ul li{font-size:.82rem;color:var(--muted);padding:2px 0;display:flex;gap:6px}
+.timeline-tasks ul li::before{content:'→';color:var(--wa);flex-shrink:0}
+
+/* ===================== HIGHLIGHT BOX ===================== */
+.highlight{
+  background:linear-gradient(135deg,rgba(37,211,102,.08),rgba(79,142,247,.06));
+  border:1px solid rgba(37,211,102,.2);border-radius:12px;
+  padding:20px 24px;margin:20px 0;
+}
+.highlight p{font-size:.88rem;line-height:1.7;color:#c8deff}
+
+@media(max-width:768px){
+  .grid2,.grid3{grid-template-columns:1fr}
+  nav{overflow-x:auto;gap:0}
+  .nav-tab{font-size:.75rem;padding:8px 10px}
+  .wa-window{width:320px}
+  .hero{padding:90px 16px 40px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">🏥 Dr. Deepak × WhatsApp</div>
+  <div class="nav-tab active" onclick="showTab('overview')">📋 Overview</div>
+  <div class="nav-tab" onclick="showTab('demo')">📱 Live Demo</div>
+  <div class="nav-tab" onclick="showTab('flow')">🔄 Flow</div>
+  <div class="nav-tab" onclick="showTab('tech')">⚙️ Tech</div>
+  <div class="nav-tab" onclick="showTab('ideas')">💡 Out-of-Box</div>
+  <div class="nav-tab" onclick="showTab('revenue')">💰 Revenue</div>
+  <div class="nav-tab" onclick="showTab('timeline')">🗺️ Timeline</div>
+</nav>
+
+<!-- FLOATING WA WIDGET (always visible) -->
+<div class="demo-wrapper" id="waWidget">
+  <div class="wa-window" id="waWindow">
+    <div class="wa-header">
+      <div class="wa-avatar">👨‍⚕️</div>
+      <div class="wa-header-info">
+        <h4>Dr. Deepak Kumar</h4>
+        <span id="waStatus">🟢 Available · Replies in ~10 min</span>
+      </div>
+      <button class="wa-close" onclick="toggleWA()">✕</button>
+    </div>
+    <!-- STEP 1: Chat -->
+    <div class="wa-step active" id="step1">
+      <div class="wa-msgs" id="msgArea">
+        <div class="msg bot">
+          <div class="msg-bubble">👋 नमस्ते! मैं Dr. Deepak Kumar हूँ। आपकी क्या समस्या है? <br><br>Hello! I'm Dr. Deepak Kumar. What health concern can I help you with today?</div>
+          <div class="msg-time">Just now</div>
+        </div>
+        <div class="msg bot">
+          <div class="msg-bubble">कृपया अपनी समस्या बताएं और हम <b>10 मिनट</b> में वीडियो कॉल पर बात कर सकते हैं।<br><br>Please describe your concern — we can connect via video call in <b>10 minutes</b>.</div>
+          <div class="msg-time">Just now</div>
+        </div>
+        <div class="msg bot">
+          <div class="msg-bubble">
+            🌡️ <b>Today's Heatwave Advisory:</b><br>
+            No need to step outside in this heat! Consult from home safely. Consultation fee: <b>₹199 only</b>
+          </div>
+          <div class="msg-time">Just now</div>
+        </div>
+      </div>
+      <div style="padding:10px 12px;background:#111b21;border-top:1px solid #1e2840">
+        <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+          <button onclick="sendQuick('I have fever and headache 🤒')" style="background:#1e2d36;border:1px solid #2a3942;color:#e0e0e0;border-radius:16px;padding:5px 10px;font-size:.72rem;cursor:pointer">Fever & Headache 🤒</button>
+          <button onclick="sendQuick('Stomach pain and vomiting 🤢')" style="background:#1e2d36;border:1px solid #2a3942;color:#e0e0e0;border-radius:16px;padding:5px 10px;font-size:.72rem;cursor:pointer">Stomach Pain 🤢</button>
+          <button onclick="sendQuick('Heatstroke symptoms ☀️')" style="background:#1e2d36;border:1px solid #2a3942;color:#e0e0e0;border-radius:16px;padding:5px 10px;font-size:.72rem;cursor:pointer">Heatstroke ☀️</button>
+        </div>
+      </div>
+      <div class="wa-input-area">
+        <input class="wa-input" id="userInput" placeholder="Type your concern..." onkeydown="if(event.key==='Enter')sendMsg()">
+        <button class="wa-send" onclick="sendMsg()">➤</button>
+      </div>
+    </div>
+    <!-- STEP 2: Payment -->
+    <div class="wa-step" id="step2">
+      <div class="wa-pay-area">
+        <div class="wa-pay-card">
+          <h4>💊 Consultation Summary</h4>
+          <p style="margin-top:6px;color:#e0e0e0;font-size:.82rem">Your concern has been received. Book your slot now:</p>
+          <div class="wa-pay-amount">₹199</div>
+          <p>Video consultation · 10-15 min · Dr. Deepak Kumar</p>
+          <p style="margin-top:6px;color:var(--wa);font-size:.75rem">🌡️ Heatwave special — No travel needed!</p>
+        </div>
+        <div style="margin-bottom:10px">
+          <p style="font-size:.78rem;color:#8696a0;margin-bottom:8px">📸 Upload payment screenshot (UPI/PhonePe/GPay):</p>
+          <div class="upload-zone" onclick="simulateUpload()">
+            <div id="uploadStatus">📂 Tap to upload screenshot<br><span style="font-size:.7rem">UPI · PhonePe · GPay · Paytm accepted</span></div>
+          </div>
+        </div>
+        <div style="background:#1e2d36;border-radius:8px;padding:10px;margin-bottom:10px;font-size:.78rem;color:#8696a0">
+          💳 UPI ID: <b style="color:#fff">deepakkumar@upi</b><br>
+          <span style="font-size:.72rem">Pay ₹199 and upload screenshot above</span>
+        </div>
+        <button class="wa-btn wa-btn-primary" onclick="submitPayment()">✅ Submit & Request Doctor</button>
+        <button class="wa-btn wa-btn-secondary" onclick="showStep(1)">← Back</button>
+      </div>
+    </div>
+    <!-- STEP 3: Waiting -->
+    <div class="wa-step" id="step3">
+      <div class="wa-pay-area">
+        <div style="text-align:center;padding:20px 0">
+          <div style="font-size:3rem;margin-bottom:12px;animation:spin 3s linear infinite">⏳</div>
+          <h4 style="font-size:1rem;margin-bottom:6px">Request Sent to Doctor!</h4>
+          <p style="font-size:.8rem;color:#8696a0;margin-bottom:16px">Dr. Deepak Kumar is reviewing your request</p>
+          <div class="status-pill pending">🟡 Pending Approval</div>
+          <div style="margin-top:20px;background:#1e2d36;border-radius:8px;padding:12px;text-align:left">
+            <p style="font-size:.78rem;color:#8696a0;margin-bottom:6px">📋 Your request:</p>
+            <p style="font-size:.82rem;color:#fff" id="reqSummary">Fever & headache since morning</p>
+            <p style="font-size:.72rem;color:var(--wa);margin-top:4px">💰 Payment: Verified ✓</p>
+          </div>
+          <div style="margin-top:16px;font-size:.78rem;color:#8696a0">
+            Estimated wait: <b style="color:var(--wa)">~5-10 minutes</b>
+          </div>
+          <button class="wa-btn wa-btn-primary" style="margin-top:16px" onclick="simulateDoctorApproval()">
+            🔔 Simulate: Doctor Approves
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- STEP 4: Approved - Join Call -->
+    <div class="wa-step" id="step4">
+      <div class="wa-pay-area">
+        <div style="text-align:center;padding:16px 0">
+          <div style="font-size:3rem;margin-bottom:8px;animation:bounce .6s infinite alternate">🟢</div>
+          <h4 style="font-size:1.1rem;margin-bottom:6px;color:var(--wa)">Doctor is Ready!</h4>
+          <p style="font-size:.82rem;color:#8696a0;margin-bottom:12px">Dr. Deepak Kumar has approved your request</p>
+          <div class="status-pill approved" style="margin-bottom:16px">✅ Approved · Join Now</div>
+          <div style="background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.2);border-radius:10px;padding:12px;margin-bottom:16px">
+            <p style="font-size:.8rem;color:#e0e0e0">📱 Video call is ready. Join within <b style="color:var(--wa)">5 minutes</b> or your slot will be released.</p>
+          </div>
+          <button class="wa-btn wa-btn-primary" onclick="joinCall()" style="font-size:.9rem;padding:14px">
+            📹 Join Video Call Now
+          </button>
+          <p style="font-size:.72rem;color:#8696a0;margin-top:10px">Powered by secure video · End-to-end encrypted</p>
+        </div>
+      </div>
+    </div>
+    <!-- STEP 5: Video Call -->
+    <div class="wa-step" id="step5">
+      <div style="background:#000;height:220px;position:relative;display:flex;align-items:center;justify-content:center">
+        <div style="text-align:center">
+          <div style="font-size:3.5rem">👨‍⚕️</div>
+          <p style="font-size:.8rem;color:#8696a0;margin-top:6px">Dr. Deepak Kumar</p>
+          <div style="margin-top:8px;display:flex;gap:6px;justify-content:center">
+            <div style="width:6px;height:6px;border-radius:50%;background:var(--wa);animation:pulse-wa .6s infinite"></div>
+            <div style="width:6px;height:6px;border-radius:50%;background:var(--wa);animation:pulse-wa .6s .2s infinite"></div>
+            <div style="width:6px;height:6px;border-radius:50%;background:var(--wa);animation:pulse-wa .6s .4s infinite"></div>
+          </div>
+        </div>
+        <div style="position:absolute;bottom:10px;right:10px;width:70px;height:55px;background:#1a1a2e;border-radius:8px;display:flex;align-items:center;justify-content:center;border:2px solid #2a3942;font-size:1.4rem">🧑</div>
+        <div style="position:absolute;top:10px;left:10px;background:rgba(0,0,0,.6);border-radius:6px;padding:4px 8px;font-size:.7rem;color:var(--wa)">● LIVE · 00:02:14</div>
+      </div>
+      <div class="wa-pay-area" style="padding:12px">
+        <div style="display:flex;gap:8px;justify-content:center;margin-bottom:10px">
+          <button style="background:#1e2d36;border:1px solid #2a3942;color:#fff;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:1.1rem" title="Mute">🎙️</button>
+          <button style="background:#1e2d36;border:1px solid #2a3942;color:#fff;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:1.1rem" title="Camera">📷</button>
+          <button style="background:#ef4444;border:none;color:#fff;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:1.1rem" onclick="endCall()" title="End">📵</button>
+          <button style="background:#1e2d36;border:1px solid #2a3942;color:#fff;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:1.1rem" title="Chat">💬</button>
+        </div>
+        <p style="font-size:.72rem;color:#8696a0;text-align:center">Consultation in progress · Dr. Kumar can now write a digital prescription</p>
+      </div>
+    </div>
+  </div>
+  <button class="wa-fab" onclick="toggleWA()" id="waFab">
+    💬
+    <div class="wa-badge">1</div>
+  </button>
+</div>
+
+<!-- ============== HERO ============== -->
+<div id="tab-overview" class="section active" style="display:block;padding:0">
+  <div class="hero">
+    <div class="hero-badge">🌡️ Built for Bihar Heatwave Season</div>
+    <h1>WhatsApp-First<br><span>Telemedicine</span> for<br>Dr. Deepak Kumar</h1>
+    <p>A complete integration plan: from the WhatsApp chat widget on your website to payment verification, doctor approval, and live video consultation — all in under 10 minutes.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <button onclick="showTab('demo');toggleWA()" style="background:var(--wa);color:#000;border:none;padding:14px 28px;border-radius:100px;font-weight:700;cursor:pointer;font-size:.9rem">Try Live Demo →</button>
+      <button onclick="showTab('flow')" style="background:var(--card);color:var(--text);border:1px solid var(--border);padding:14px 28px;border-radius:100px;font-weight:600;cursor:pointer;font-size:.9rem">See Full Flow →</button>
+    </div>
+  </div>
+
+  <div class="container" style="padding-bottom:60px">
+    <!-- STAT ROW -->
+    <div class="grid3" style="margin-bottom:40px">
+      <div class="card" style="text-align:center;border-color:rgba(37,211,102,.3)">
+        <div style="font-size:2.5rem;font-weight:800;color:var(--wa);font-family:'Syne',sans-serif">10 min</div>
+        <div style="color:var(--muted);font-size:.85rem;margin-top:4px">Patient → Doctor Connection</div>
+      </div>
+      <div class="card" style="text-align:center;border-color:rgba(79,142,247,.3)">
+        <div style="font-size:2.5rem;font-weight:800;color:var(--accent);font-family:'Syne',sans-serif">₹199</div>
+        <div style="color:var(--muted);font-size:.85rem;margin-top:4px">Consultation Fee (suggested)</div>
+      </div>
+      <div class="card" style="text-align:center;border-color:rgba(239,68,68,.3)">
+        <div style="font-size:2.5rem;font-weight:800;color:var(--red);font-family:'Syne',sans-serif">0°C</div>
+        <div style="color:var(--muted);font-size:.85rem;margin-top:4px">Travel required (from home!)</div>
+      </div>
+    </div>
+
+    <!-- KEY FEATURES -->
+    <h2 style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:20px;text-align:center">Core Features to Build</h2>
+    <div class="grid2">
+      <div class="card">
+        <div class="tag" style="background:rgba(37,211,102,.1);color:var(--wa)">In-Website Widget</div>
+        <h3>💬 WhatsApp-Style Chat Overlay</h3>
+        <p>A floating WhatsApp button on your site that opens a full chat window — no redirect to WhatsApp app needed. Patients can type their concern right on the website.</p>
+      </div>
+      <div class="card">
+        <div class="tag" style="background:rgba(79,142,247,.1);color:var(--accent)">Payments</div>
+        <h3>💳 UPI Payment + Screenshot Upload</h3>
+        <p>Show your UPI QR inside the widget. Patient pays ₹199, uploads the screenshot, and the request is auto-queued for doctor approval.</p>
+      </div>
+      <div class="card">
+        <div class="tag" style="background:rgba(234,179,8,.1);color:var(--yellow)">Doctor Dashboard</div>
+        <h3>📋 Real-Time Request Dashboard</h3>
+        <p>Doctor sees an incoming request on a simple web dashboard: patient name, complaint, payment screenshot. One click to approve and send the "Join Call" ping.</p>
+      </div>
+      <div class="card">
+        <div class="tag" style="background:rgba(239,68,68,.1);color:var(--red)">Video Call</div>
+        <h3>📹 Instant Video Connection</h3>
+        <p>Once doctor approves, patient gets a notification + Join button in the same chat window. Doctor and patient connect on a secure video call, right there.</p>
+      </div>
+    </div>
+
+    <div class="highlight" style="margin-top:32px">
+      <p><b>🌡️ Bihar Heatwave Context:</b> Bihar is experiencing severe heatwave conditions (45°C+). Patients — especially elderly and children — are at high risk if they travel to clinics. This system lets Dr. Deepak Kumar serve 3x more patients per day without requiring anyone to step outside. <b>This is not just convenient — it's life-saving this season.</b></p>
+    </div>
+  </div>
+</div>
+
+<!-- ============== DEMO TAB ============== -->
+<div id="tab-demo" class="section">
+  <div class="container">
+    <div class="section-head">
+      <h2>Live Prototype Demo</h2>
+      <p>Click the WhatsApp button (bottom-right corner) to experience the full patient journey — chat → payment → doctor approval → video call</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start">
+      <div>
+        <h3 style="font-family:'Syne',sans-serif;margin-bottom:16px;font-size:1.1rem">🧑 Patient Journey</h3>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="tech-item" style="cursor:pointer" onclick="toggleWA();document.getElementById('userInput').focus()">
+            <div class="tech-icon">1️⃣</div>
+            <div class="tech-info"><h4>Click WhatsApp Button →</h4><p>Open the chat widget (bottom right)</p></div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">2️⃣</div>
+            <div class="tech-info"><h4>Type your health concern</h4><p>Or tap a quick-reply button (fever, stomach, heatstroke)</p></div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">3️⃣</div>
+            <div class="tech-info"><h4>See payment screen</h4><p>₹199 fee shown with UPI details & upload zone</p></div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">4️⃣</div>
+            <div class="tech-info"><h4>Submit request</h4><p>Doctor receives notification on dashboard</p></div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">5️⃣</div>
+            <div class="tech-info"><h4>Click "Simulate: Doctor Approves"</h4><p>See the approval flow + Join Call button appear</p></div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">6️⃣</div>
+            <div class="tech-info"><h4>Join Video Call</h4><p>Experience the in-browser video consultation UI</p></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-family:'Syne',sans-serif;margin-bottom:16px;font-size:1.1rem">👨‍⚕️ Doctor Dashboard (Preview)</h3>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border)">
+            <div style="font-size:1.5rem">🩺</div>
+            <div><div style="font-weight:600;font-size:.9rem">Dr. Deepak's Dashboard</div><div style="font-size:.75rem;color:var(--muted)">2 incoming requests</div></div>
+            <div style="margin-left:auto;background:rgba(239,68,68,.1);color:var(--red);border-radius:100px;padding:4px 10px;font-size:.72rem;font-weight:700">2 NEW</div>
+          </div>
+          <!-- Request card -->
+          <div style="background:#111b21;border-radius:10px;padding:14px;margin-bottom:10px;border-left:3px solid var(--wa)">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+              <div>
+                <div style="font-size:.85rem;font-weight:600">Ramesh Kumar, 45</div>
+                <div style="font-size:.75rem;color:var(--muted)">Fever + headache · 2 min ago</div>
+              </div>
+              <div style="background:rgba(37,211,102,.1);color:var(--wa);border-radius:6px;padding:3px 8px;font-size:.7rem;font-weight:600">₹199 Paid ✓</div>
+            </div>
+            <p style="font-size:.78rem;color:#ccc;margin-bottom:10px">"High fever since morning, headache and feeling very weak. Body temperature 102°F"</p>
+            <div style="display:flex;gap:6px">
+              <button onclick="showApprovalFlow()" style="flex:1;background:var(--wa);color:#000;border:none;border-radius:6px;padding:8px;font-size:.78rem;font-weight:600;cursor:pointer">✅ Approve & Call</button>
+              <button style="background:#1e2d36;color:var(--muted);border:1px solid var(--border);border-radius:6px;padding:8px;font-size:.78rem;cursor:pointer">🔍 View Screenshot</button>
+            </div>
+          </div>
+          <div style="background:#111b21;border-radius:10px;padding:14px;border-left:3px solid var(--yellow)">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+              <div>
+                <div style="font-size:.85rem;font-weight:600">Sunita Devi, 32</div>
+                <div style="font-size:.75rem;color:var(--muted)">Heatstroke · 5 min ago</div>
+              </div>
+              <div style="background:rgba(234,179,8,.1);color:var(--yellow);border-radius:6px;padding:3px 8px;font-size:.7rem;font-weight:600">Pending ⏳</div>
+            </div>
+            <p style="font-size:.78rem;color:#ccc">"Dizziness, nausea, excessive sweating — came in from outside in the heat"</p>
+          </div>
+          <div id="approvalMsg" style="display:none;margin-top:12px;background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.2);border-radius:8px;padding:10px;text-align:center">
+            <p style="font-size:.82rem;color:var(--wa)">✅ Approved! Patient has been notified. Video call starting...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============== FLOW TAB ============== -->
+<div id="tab-flow" class="section">
+  <div class="container">
+    <div class="section-head">
+      <h2>Complete Patient→Doctor Flow</h2>
+      <p>Every step of the 10-minute consultation journey</p>
+    </div>
+    <div class="grid2" style="align-items:start">
+      <div>
+        <h3 style="color:var(--wa);font-family:'Syne',sans-serif;margin-bottom:20px;font-size:1rem">🧑 Patient Side</h3>
+        <div class="flow">
+          <div class="flow-item">
+            <div class="flow-dot" style="background:var(--wa)">💬</div>
+            <div class="flow-content">
+              <h4>Opens WhatsApp Widget</h4>
+              <p>Patient clicks green WhatsApp button on doctors-profile-chi.vercel.app. An in-browser chat window opens instantly.</p>
+              <div class="flow-duration">⏱ 0:00 — Instant</div>
+            </div>
+          </div>
+          <div class="flow-item">
+            <div class="flow-dot" style="background:var(--accent)">📝</div>
+            <div class="flow-content">
+              <h4>Describes Symptoms</h4>
+              <p>Patient types their concern, selects quick replies (fever/headache/heatstroke), or sends a voice note. AI pre-fills a structured summary.</p>
+              <div class="flow-duration">⏱ 0:30–2:00</div>
+            </div>
+          </div>
+          <div class="flow-item">
+            <div class="flow-dot" style="background:var(--purple)">💳</div>
+            <div class="flow-content">
+              <h4>Sees Payment Screen</h4>
+              <p>Widget shows ₹199 fee, UPI QR/ID. Patient pays via PhonePe/GPay/Paytm and uploads screenshot directly in the chat window.</p>
+              <div class="flow-duration">⏱ 2:00–4:00</div>
+            </div>
+          </div>
+          <div class="flow-item">
+            <div class="flow-dot" style="background:var(--yellow)">⏳</div>
+            <div class="flow-content">
+              <h4>Waits for Approval</h4>
+              <p>Live status indicator shows "Doctor reviewing your request". Patient sees estimated wait time (5-7 min). Can browse the website meanwhile.</p>
+              <div class="flow-duration">⏱ 4:00–8:00</div>
+            </div>
+          </div>
+          <div class="flow-item">
+            <div class="flow-dot" style="background:var(--wa)">🔔</div>
+            <div class="flow-content">
+              <h4>Gets "Doctor Ready" Ping</h4>
+              <p>Browser notification + widget blinks: "Dr. Deepak Kumar is ready for your call!" Green Join button appears.</p>
+              <div class="flow-duration">⏱ 8:00–9:00</div>
+            </div>
+          </div>
+          <div class="flow-item" style="border-left:2px solid var(--wa)">
+            <div class="flow-dot" style="background:var(--wa);border-color:var(--wa)">📹</div>
+            <div class="flow-content">
+              <h4>Joins Video Call</h4>
+              <p>One-click join. Video consultation happens in the widget or full screen. Doctor can share prescription digitally at the end.</p>
+              <div class="flow-duration" style="color:var(--wa)">⏱ Total: ~10 Minutes ✓</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 style="color:var(--accent);font-family:'Syne',sans-serif;margin-bottom:20px;font-size:1rem">👨‍⚕️ Doctor Side</h3>
+        <div class="flow">
+          <div class="flow-item">
+            <div class="flow-dot" style="background:#1e3a5f">🔔</div>
+            <div class="flow-content">
+              <h4>Receives Push Notification</h4>
+              <p>Doctor's dashboard (on phone/desktop) buzzes with: Patient name + age + symptom summary + payment status.</p>
+              <div class="flow-duration">⏱ Auto — as soon as patient submits</div>
+            </div>
+          </div>
+          <div class="flow-item">
+            <div class="flow-dot" style="background:#1e3a5f">📋</div>
+            <div class="flow-content">
+              <h4>Reviews Request</h4>
+              <p>Dashboard shows patient complaint, payment screenshot preview, patient's location, urgency level (AI-tagged: "Heatstroke — High Priority").</p>
+              <div class="flow-duration">⏱ 1–2 minutes</div>
+            </div>
+          </div>
+          <div class="flow-item">
+            <div class="flow-dot" style="background:var(--wa)">✅</div>
+            <div class="flow-content">
+              <h4>Approves + Sets Status</h4>
+              <p>One-click "Approve & Call" button. System auto-notifies patient, creates video room, sends joining link to both sides.</p>
+              <div class="flow-duration">⏱ 10 seconds</div>
+            </div>
+          </div>
+          <div class="flow-item">
+            <div class="flow-dot" style="background:var(--accent)">📹</div>
+            <div class="flow-content">
+              <h4>Joins Video Call</h4>
+              <p>Doctor joins from dashboard. Both are in a secure, encrypted video room. Doctor can view patient history if returning patient.</p>
+              <div class="flow-duration">⏱ Whenever ready</div>
+            </div>
+          </div>
+          <div class="flow-item" style="border-left:2px solid var(--accent)">
+            <div class="flow-dot" style="background:var(--purple)">💊</div>
+            <div class="flow-content">
+              <h4>Sends Digital Prescription</h4>
+              <p>After consultation, doctor generates PDF prescription, sends it via the widget to the patient. Auto-saves to patient record.</p>
+              <div class="flow-duration">⏱ Post-consultation</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============== TECH TAB ============== -->
+<div id="tab-tech" class="section">
+  <div class="container">
+    <div class="section-head">
+      <h2>Technical Integration Plan</h2>
+      <p>Exact tech stack to integrate into doctors-profile-chi.vercel.app</p>
+    </div>
+
+    <div class="highlight">
+      <p><b>Your site is on Vercel (Next.js/React likely).</b> All integrations below are plug-and-play with Vercel's serverless architecture. Total integration time: 3-4 weeks for a developer.</p>
+    </div>
+
+    <h3 style="font-family:'Syne',sans-serif;margin:24px 0 14px;font-size:1rem;color:var(--wa)">Frontend (Your Website)</h3>
+    <div style="display:grid;gap:10px;margin-bottom:28px">
+      <div class="tech-item">
+        <div class="tech-icon">💬</div>
+        <div class="tech-info">
+          <h4>Custom WhatsApp Widget <span class="tech-badge">Build from scratch</span></h4>
+          <p>A floating React component with chat UI, payment step, status polling, and video join. Styled exactly like WhatsApp. No third-party chat SDK needed — full control.</p>
+        </div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-icon">🔔</div>
+        <div class="tech-info">
+          <h4>Browser Push Notifications <span class="tech-badge">Web Push API</span></h4>
+          <p>When doctor approves, patient gets a browser notification even if they've minimized the tab. Uses the Web Notification API — free, no library needed.</p>
+        </div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-icon">⚡</div>
+        <div class="tech-info">
+          <h4>Real-time Status Updates <span class="tech-badge">Supabase Realtime / Firebase</span></h4>
+          <p>Patient sees live status changes (Pending → Approved → Calling) without refreshing. WebSocket subscription updates the widget in real-time.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Syne',sans-serif;margin:0 0 14px;font-size:1rem;color:var(--accent)">Backend & Database</h3>
+    <div style="display:grid;gap:10px;margin-bottom:28px">
+      <div class="tech-item">
+        <div class="tech-icon">🗄️</div>
+        <div class="tech-info">
+          <h4>Supabase (Free Tier) <span class="tech-badge">Database + Auth + Storage</span></h4>
+          <p>Stores consultations, payment screenshots, prescriptions. Row-level security ensures HIPAA-style data privacy. Realtime subscriptions built-in. Free up to 500MB.</p>
+        </div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-icon">⚙️</div>
+        <div class="tech-info">
+          <h4>Vercel Serverless Functions <span class="tech-badge">Already on your platform</span></h4>
+          <p>API routes for: receiving payment submissions, verifying UPI (Razorpay API), notifying doctor, creating video rooms. No separate server needed.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Syne',sans-serif;margin:0 0 14px;font-size:1rem;color:var(--purple)">Video Calling</h3>
+    <div style="display:grid;gap:10px;margin-bottom:28px">
+      <div class="tech-item">
+        <div class="tech-icon">📹</div>
+        <div class="tech-info">
+          <h4>Daily.co or 100ms.live <span class="tech-badge">Recommended — Free tier available</span></h4>
+          <p>Embed a video call room directly in the chat widget. Daily.co: 10,000 free participant-minutes/month. 100ms: 10,000 mins/month free. Both have React SDKs.</p>
+        </div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-icon">🔗</div>
+        <div class="tech-info">
+          <h4>Alternative: Jitsi Meet (Self-hosted) <span class="tech-badge">100% Free</span></h4>
+          <p>Open-source video. Host on DigitalOcean ($6/month). No per-minute charges. Good for scale. IFrame embed works cleanly inside the widget.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Syne',sans-serif;margin:0 0 14px;font-size:1rem;color:var(--orange)">Payment Verification</h3>
+    <div style="display:grid;gap:10px;margin-bottom:28px">
+      <div class="tech-item">
+        <div class="tech-icon">💳</div>
+        <div class="tech-info">
+          <h4>Razorpay Payment Links <span class="tech-badge">Easiest to start with</span></h4>
+          <p>Generate a ₹199 payment link. Patient pays and gets auto-redirected back. Razorpay webhook confirms payment to your backend — no manual screenshot verification needed eventually.</p>
+        </div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-icon">📸</div>
+        <div class="tech-info">
+          <h4>Phase 1: Manual Screenshot Upload <span class="tech-badge">Quick to implement</span></h4>
+          <p>Patient uploads UPI payment screenshot → stored in Supabase Storage → doctor reviews in dashboard. Simple, reliable. Upgrade to automated Razorpay later.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Syne',sans-serif;margin:0 0 14px;font-size:1rem;color:var(--yellow)">Doctor Dashboard</h3>
+    <div style="display:grid;gap:10px">
+      <div class="tech-item">
+        <div class="tech-icon">📱</div>
+        <div class="tech-info">
+          <h4>Progressive Web App (PWA) Dashboard <span class="tech-badge">Works on phone as app</span></h4>
+          <p>A separate /doctor route on your Vercel site, password-protected. Doctor adds it to phone home screen like an app. Receives push notifications, views requests, approves with 1 tap.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============== OUT-OF-BOX IDEAS ============== -->
+<div id="tab-ideas" class="section">
+  <div class="container">
+    <div class="section-head">
+      <h2>💡 Out-of-Box Innovations</h2>
+      <p>10 ideas that go beyond basic telemedicine — built around Bihar's unique context</p>
+    </div>
+    <div class="grid2">
+
+      <div class="idea-card" style="border-top-color:var(--wa)">
+        <div class="idea-card::before" style="background:var(--wa)"></div>
+        <div class="idea-num">01</div>
+        <div class="tag" style="background:rgba(37,211,102,.1);color:var(--wa)">🌡️ Seasonal</div>
+        <h3>AI Heatwave Triage Bot</h3>
+        <p>Before connecting to doctor, an AI chatbot asks 5 questions and classifies: mild (home care tips), moderate (video consult), severe (call ambulance). Saves doctor time for real emergencies.</p>
+        <div class="idea-features">
+          <span class="idea-feature">Chatbot</span><span class="idea-feature">AI Triage</span><span class="idea-feature">Emergency routing</span>
+        </div>
+      </div>
+
+      <div class="idea-card" style="border-top-color:var(--accent)">
+        <div class="idea-num">02</div>
+        <div class="tag" style="background:rgba(79,142,247,.1);color:var(--accent)">👨‍👩‍👧 Family</div>
+        <h3>Family Health Wallet</h3>
+        <p>One account, 5 family members. Pre-paid consultation credits (buy 5 for ₹799). When any family member needs a doctor, credits auto-deduct. Track everyone's health history in one dashboard.</p>
+        <div class="idea-features">
+          <span class="idea-feature">Subscription</span><span class="idea-feature">Family plan</span><span class="idea-feature">Credits system</span>
+        </div>
+      </div>
+
+      <div class="idea-card" style="border-top-color:var(--purple)">
+        <div class="idea-num">03</div>
+        <div class="tag" style="background:rgba(124,58,237,.1);color:var(--purple)">💊 Follow-up</div>
+        <h3>Auto Follow-Up WhatsApp Bot</h3>
+        <p>After consultation, auto-send: Day 1 "How are you feeling?" → Day 3 "Are medicines helping?" → Day 7 "Book a follow-up?". Increases retention and shows patients you care. 100% automated.</p>
+        <div class="idea-features">
+          <span class="idea-feature">WhatsApp API</span><span class="idea-feature">Automation</span><span class="idea-feature">Retention</span>
+        </div>
+      </div>
+
+      <div class="idea-card" style="border-top-color:var(--orange)">
+        <div class="idea-num">04</div>
+        <div class="tag" style="background:rgba(249,115,22,.1);color:var(--orange)">📊 Health</div>
+        <h3>Digital Health Locker Per Patient</h3>
+        <p>Every patient gets a personal health profile: past consultations, prescriptions, reports. QR code they can show at any physical clinic too. Makes Dr. Deepak indispensable as their primary doctor.</p>
+        <div class="idea-features">
+          <span class="idea-feature">ABDM integration</span><span class="idea-feature">Health ID</span><span class="idea-feature">QR code</span>
+        </div>
+      </div>
+
+      <div class="idea-card" style="border-top-color:var(--yellow)">
+        <div class="idea-num">05</div>
+        <div class="tag" style="background:rgba(234,179,8,.1);color:var(--yellow)">🏘️ Community</div>
+        <h3>Village Health Camp via WhatsApp</h3>
+        <p>Partner with 1 ASHA worker per village. ASHA collects patients, sets up a shared tablet. Dr. Deepak does 10-minute rapid consults back-to-back. ₹50/patient, 30 patients = ₹1500/camp session.</p>
+        <div class="idea-features">
+          <span class="idea-feature">ASHA network</span><span class="idea-feature">Group sessions</span><span class="idea-feature">Rural reach</span>
+        </div>
+      </div>
+
+      <div class="idea-card" style="border-top-color:var(--red)">
+        <div class="idea-num">06</div>
+        <div class="tag" style="background:rgba(239,68,68,.1);color:var(--red)">🚨 Emergency</div>
+        <h3>Emergency Red Button</h3>
+        <p>One big red "EMERGENCY" button on the website. Instantly calls an available doctor (not just Dr. Deepak). If no one available, auto-dials 108. Also sends patient's GPS to family. Could literally save lives.</p>
+        <div class="idea-features">
+          <span class="idea-feature">WebRTC calling</span><span class="idea-feature">GPS</span><span class="idea-feature">108 integration</span>
+        </div>
+      </div>
+
+      <div class="idea-card" style="border-top-color:var(--wa)">
+        <div class="idea-num">07</div>
+        <div class="tag" style="background:rgba(37,211,102,.1);color:var(--wa)">💊 Pharmacy</div>
+        <h3>Digital Prescription → Home Delivery</h3>
+        <p>After video call, doctor sends e-prescription. System auto-sends it to nearest pharmacy (partner with 3 in each district). Medicines delivered home in 30-60 min. Doctor earns referral commission.</p>
+        <div class="idea-features">
+          <span class="idea-feature">E-prescription</span><span class="idea-feature">Pharmacy API</span><span class="idea-feature">Commission</span>
+        </div>
+      </div>
+
+      <div class="idea-card" style="border-top-color:var(--accent)">
+        <div class="idea-num">08</div>
+        <div class="tag" style="background:rgba(79,142,247,.1);color:var(--accent)">🤖 AI</div>
+        <h3>AI Symptom Photo Analysis</h3>
+        <p>Patient uploads a photo of a rash, wound, or medicine packaging. AI analyzes it before the doctor sees the patient. Doctor walks in already knowing what they're looking at. Faster, smarter consultations.</p>
+        <div class="idea-features">
+          <span class="idea-feature">Vision AI</span><span class="idea-feature">GPT-4o</span><span class="idea-feature">Pre-analysis</span>
+        </div>
+      </div>
+
+      <div class="idea-card" style="border-top-color:var(--purple)">
+        <div class="idea-num">09</div>
+        <div class="tag" style="background:rgba(124,58,237,.1);color:var(--purple)">📅 Preventive</div>
+        <h3>Monthly Health Subscription</h3>
+        <p>₹299/month: 2 consultations + unlimited chat Q&A + health check reminders. Sends automated monthly "How's your health?" with a 5-question quiz. Creates predictable recurring revenue for the doctor.</p>
+        <div class="idea-features">
+          <span class="idea-feature">SaaS revenue</span><span class="idea-feature">Recurring</span><span class="idea-feature">Preventive care</span>
+        </div>
+      </div>
+
+      <div class="idea-card" style="border-top-color:var(--orange)">
+        <div class="idea-num">10</div>
+        <div class="tag" style="background:rgba(249,115,22,.1);color:var(--orange)">🏭 B2B</div>
+        <h3>Factory/Office Doctor Partnership</h3>
+        <p>Brick kilns, factories, schools in Bihar can subscribe for ₹5,000/month. Employees get unlimited telemedicine access to Dr. Deepak. Bihar has 10,000+ unorganized workplaces — massive B2B market.</p>
+        <div class="idea-features">
+          <span class="idea-feature">B2B contract</span><span class="idea-feature">Corporate health</span><span class="idea-feature">Bulk billing</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============== REVENUE TAB ============== -->
+<div id="tab-revenue" class="section">
+  <div class="container">
+    <div class="section-head">
+      <h2>Revenue Projections 💰</h2>
+      <p>Conservative estimates — based on Bihar market and Dr. Deepak working 4 hours/day on telemedicine</p>
+    </div>
+
+    <div class="grid3" style="margin-bottom:32px">
+      <div class="card" style="text-align:center;border-color:rgba(37,211,102,.3)">
+        <div style="font-size:2rem;font-weight:800;color:var(--wa);font-family:'Syne',sans-serif">₹30K</div>
+        <div style="color:var(--muted);font-size:.8rem;margin-top:4px">Month 1-2</div>
+        <div style="font-size:.75rem;color:var(--text);margin-top:2px">~5 consults/day × ₹199</div>
+      </div>
+      <div class="card" style="text-align:center;border-color:rgba(79,142,247,.3)">
+        <div style="font-size:2rem;font-weight:800;color:var(--accent);font-family:'Syne',sans-serif">₹1.2L</div>
+        <div style="color:var(--muted);font-size:.8rem;margin-top:4px">Month 4-6</div>
+        <div style="font-size:.75rem;color:var(--text);margin-top:2px">20 consults/day + subscriptions</div>
+      </div>
+      <div class="card" style="text-align:center;border-color:rgba(124,58,237,.3)">
+        <div style="font-size:2rem;font-weight:800;color:var(--purple);font-family:'Syne',sans-serif">₹4L+</div>
+        <div style="color:var(--muted);font-size:.8rem;margin-top:4px">Month 10-12</div>
+        <div style="font-size:.75rem;color:var(--text);margin-top:2px">B2B + subscriptions + pharma</div>
+      </div>
+    </div>
+
+    <div style="overflow-x:auto;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden">
+      <table class="rev-table">
+        <thead>
+          <tr>
+            <th>Revenue Stream</th>
+            <th>Price</th>
+            <th>Volume (Month 6)</th>
+            <th>Monthly Revenue</th>
+            <th>Difficulty</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>💬 Per-consultation (₹199)</td>
+            <td>₹199</td>
+            <td>300/month</td>
+            <td style="color:var(--wa);font-weight:600">₹59,700</td>
+            <td><span style="color:var(--wa)">Easy</span></td>
+          </tr>
+          <tr>
+            <td>👨‍👩‍👧 Family plan (₹799 for 5 consults)</td>
+            <td>₹799</td>
+            <td>50 families</td>
+            <td style="color:var(--wa);font-weight:600">₹39,950</td>
+            <td><span style="color:var(--wa)">Easy</span></td>
+          </tr>
+          <tr>
+            <td>📅 Monthly subscription (₹299)</td>
+            <td>₹299</td>
+            <td>100 subscribers</td>
+            <td style="color:var(--accent);font-weight:600">₹29,900</td>
+            <td><span style="color:var(--yellow)">Medium</span></td>
+          </tr>
+          <tr>
+            <td>💊 Pharmacy referral commission (10%)</td>
+            <td>10% of order</td>
+            <td>₹2L pharmacy orders</td>
+            <td style="color:var(--accent);font-weight:600">₹20,000</td>
+            <td><span style="color:var(--yellow)">Medium</span></td>
+          </tr>
+          <tr>
+            <td>🏭 B2B factory/school contract</td>
+            <td>₹5,000/org</td>
+            <td>5 organizations</td>
+            <td style="color:var(--purple);font-weight:600">₹25,000</td>
+            <td><span style="color:var(--red)">Hard</span></td>
+          </tr>
+          <tr>
+            <td>🏘️ ASHA village camp sessions</td>
+            <td>₹50/patient</td>
+            <td>8 camps × 25 patients</td>
+            <td style="color:var(--purple);font-weight:600">₹10,000</td>
+            <td><span style="color:var(--yellow)">Medium</span></td>
+          </tr>
+          <tr style="background:rgba(37,211,102,.05)">
+            <td colspan="3" style="font-weight:700;color:var(--wa)">TOTAL (Month 6 Estimate)</td>
+            <td style="font-size:1.1rem;font-weight:800;color:var(--wa)">₹1,84,550</td>
+            <td style="color:var(--wa);font-weight:600">~₹1.85L/mo</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="highlight" style="margin-top:24px">
+      <p>⚠️ <b>Note:</b> These are per-channel estimates. Doctor working time on telemedicine: ~4 hours/day. Physical practice can continue alongside. The tech investment to build this is <b>₹0-50K</b> (most tools free/cheap). AI brother builds it. Doctor brother runs it. ROI is extraordinary.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============== TIMELINE TAB ============== -->
+<div id="tab-timeline" class="section">
+  <div class="container">
+    <div class="section-head">
+      <h2>Build & Launch Timeline 🗺️</h2>
+      <p>8-week sprint to go from zero to live telemedicine on your existing website</p>
+    </div>
+
+    <div style="margin-bottom:8px">
+      <div class="timeline-row">
+        <div class="timeline-phase" style="background:rgba(37,211,102,.1);color:var(--wa);border:1px solid rgba(37,211,102,.3)">Week 1-2</div>
+        <div class="timeline-tasks">
+          <div style="font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;margin-bottom:8px;color:var(--wa)">Foundation</div>
+          <ul>
+            <li>Set up Supabase project (database + storage)</li>
+            <li>Build the WhatsApp widget React component</li>
+            <li>Add floating button + chat UI to existing site</li>
+            <li>Implement symptom input + quick-replies</li>
+          </ul>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-phase" style="background:rgba(79,142,247,.1);color:var(--accent);border:1px solid rgba(79,142,247,.3)">Week 3-4</div>
+        <div class="timeline-tasks">
+          <div style="font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;margin-bottom:8px;color:var(--accent)">Payments + Requests</div>
+          <ul>
+            <li>Add payment step (UPI QR + screenshot upload to Supabase)</li>
+            <li>Build doctor dashboard (/doctor route, password protected)</li>
+            <li>Real-time status updates via Supabase Realtime</li>
+            <li>Push notification when doctor approves</li>
+          </ul>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-phase" style="background:rgba(124,58,237,.1);color:var(--purple);border:1px solid rgba(124,58,237,.3)">Week 5-6</div>
+        <div class="timeline-tasks">
+          <div style="font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;margin-bottom:8px;color:var(--purple)">Video Call Integration</div>
+          <ul>
+            <li>Integrate Daily.co or Jitsi inside widget</li>
+            <li>Auto-create video room on doctor approval</li>
+            <li>Test audio/video quality on Bihar 4G networks (optimize for low bandwidth)</li>
+            <li>Add end-call flow + prescription send</li>
+          </ul>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-phase" style="background:rgba(234,179,8,.1);color:var(--yellow);border:1px solid rgba(234,179,8,.3)">Week 7</div>
+        <div class="timeline-tasks">
+          <div style="font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;margin-bottom:8px;color:var(--yellow)">Testing & Hardening</div>
+          <ul>
+            <li>Test with 10 real patients (friends/family) for free</li>
+            <li>Fix bugs from real usage</li>
+            <li>Test on cheap Android phones (most Bihar patients use budget phones)</li>
+            <li>Add Hindi language support to chat widget</li>
+          </ul>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-phase" style="background:rgba(239,68,68,.1);color:var(--wa);border:1px solid rgba(37,211,102,.3)">Week 8</div>
+        <div class="timeline-tasks">
+          <div style="font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;margin-bottom:8px;color:var(--wa)">🚀 Launch!</div>
+          <ul>
+            <li>Go live on doctors-profile-chi.vercel.app</li>
+            <li>WhatsApp broadcast to existing patients: "Now consult from home!"</li>
+            <li>Post on local Bihar Facebook groups + doctor associations</li>
+            <li>Add "हीटवेव में घर से डॉक्टर" campaign banner on website</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <p><b>💡 Quick Win Strategy:</b> Don't wait 8 weeks to start earning. In <b>Week 1</b>, add just the WhatsApp button that redirects to actual WhatsApp with a pre-filled message. Start getting patients immediately while you build the full in-browser experience in the background. <b>Ship fast, improve continuously.</b></p>
+    </div>
+
+    <div style="margin-top:24px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px">
+      <h3 style="font-family:'Syne',sans-serif;font-size:1.1rem;margin-bottom:16px">Total Cost to Build</h3>
+      <div class="grid3">
+        <div style="text-align:center;padding:12px;background:var(--card2);border-radius:10px">
+          <div style="font-size:1.4rem;font-weight:800;color:var(--wa);font-family:'Syne',sans-serif">₹0</div>
+          <div style="font-size:.78rem;color:var(--muted);margin-top:4px">If AI brother builds it<br>(Supabase free tier, Jitsi free)</div>
+        </div>
+        <div style="text-align:center;padding:12px;background:var(--card2);border-radius:10px">
+          <div style="font-size:1.4rem;font-weight:800;color:var(--accent);font-family:'Syne',sans-serif">₹5-15K</div>
+          <div style="font-size:.78rem;color:var(--muted);margin-top:4px">If hire 1 freelancer<br>(partial help)</div>
+        </div>
+        <div style="text-align:center;padding:12px;background:var(--card2);border-radius:10px">
+          <div style="font-size:1.4rem;font-weight:800;color:var(--purple);font-family:'Syne',sans-serif">~8 weeks</div>
+          <div style="font-size:.78rem;color:var(--muted);margin-top:4px">Development time<br>(working part-time)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-6px)}}
+</style>
+
+<script>
+// ===== NAV =====
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  const el = document.getElementById('tab-' + id);
+  if (el) { el.classList.add('active'); el.style.display = 'block'; }
+  const tabs = ['overview','demo','flow','tech','ideas','revenue','timeline'];
+  const idx = tabs.indexOf(id);
+  document.querySelectorAll('.nav-tab')[idx]?.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ===== WA WIDGET =====
+let waOpen = false;
+let currentStep = 1;
+let userConcern = '';
+let uploadDone = false;
+
+function toggleWA() {
+  waOpen = !waOpen;
+  const win = document.getElementById('waWindow');
+  win.classList.toggle('open', waOpen);
+  document.getElementById('waFab').innerHTML = waOpen ? '✕' : '💬<div class="wa-badge">1</div>';
+}
+
+function showStep(n) {
+  document.querySelectorAll('.wa-step').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('step' + n);
+  if (el) el.classList.add('active');
+  currentStep = n;
+}
+
+function sendMsg() {
+  const inp = document.getElementById('userInput');
+  const val = inp.value.trim();
+  if (!val) return;
+  addMsg(val, 'user');
+  userConcern = val;
+  inp.value = '';
+  setTimeout(() => {
+    addMsg("Got it! I understand your concern. Let's book a quick 10-minute video consultation. 📹\n\nConsultation fee: ₹199 only — pay via UPI.", 'bot');
+    setTimeout(() => showStep(2), 1500);
+  }, 800);
+}
+
+function sendQuick(text) {
+  document.getElementById('userInput').value = text;
+  sendMsg();
+}
+
+function addMsg(text, type) {
+  const area = document.getElementById('msgArea');
+  const div = document.createElement('div');
+  div.className = 'msg ' + type;
+  div.innerHTML = `<div class="msg-bubble">${text.replace(/\n/g,'<br>')}</div><div class="msg-time">Just now</div>`;
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+}
+
+function simulateUpload() {
+  uploadDone = true;
+  document.getElementById('uploadStatus').innerHTML = '✅ Screenshot uploaded!<br><span style="font-size:.7rem;color:var(--wa)">Payment verified pending doctor review</span>';
+}
+
+function submitPayment() {
+  document.getElementById('reqSummary').textContent = userConcern || 'Fever & headache since morning';
+  showStep(3);
+}
+
+function simulateDoctorApproval() {
+  // Show notification visual
+  if ('Notification' in window && Notification.permission === 'granted') {
+    new Notification('Dr. Deepak Kumar is Ready!', { body: 'Join your video call now. Tap to open.' });
+  }
+  showStep(4);
+  document.getElementById('waStatus').textContent = '🟢 Ready for your call!';
+}
+
+function joinCall() {
+  showStep(5);
+}
+
+function endCall() {
+  showStep(1);
+  document.getElementById('waStatus').textContent = '🟢 Available · Replies in ~10 min';
+  addMsg('✅ Consultation complete! Your digital prescription has been sent.\n\n💊 How are you feeling? We\'ll check in with you tomorrow.\n\nThank you for choosing Dr. Deepak Kumar! 🙏', 'bot');
+}
+
+function showApprovalFlow() {
+  document.getElementById('approvalMsg').style.display = 'block';
+}
+
+// Request notification permission
+if ('Notification' in window && Notification.permission === 'default') {
+  setTimeout(() => Notification.requestPermission(), 3000);
+}
+</script>
+</body>
+</html>
