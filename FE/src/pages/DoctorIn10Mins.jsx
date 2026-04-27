@@ -66,6 +66,30 @@ export default function DoctorIn10Mins() {
     return () => clearInterval(id);
   }, []);
 
+  // 7-Day Countdown Timer
+  const [timeLeft, setTimeLeft] = useState({ d: 7, h: 0, m: 0, s: 0 });
+  useEffect(() => {
+    // Target date: May 4, 2026
+    const targetDate = new Date('2026-05-04T23:59:59').getTime();
+    
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const diff = targetDate - now;
+      if (diff <= 0) {
+        clearInterval(interval);
+        setTimeLeft({ d: 0, h: 0, m: 0, s: 0 });
+      } else {
+        setTimeLeft({
+          d: Math.floor(diff / (1000 * 60 * 60 * 24)),
+          h: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          m: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+          s: Math.floor((diff % (1000 * 60)) / 1000)
+        });
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   const fmtTime = s => `${String(Math.floor(s / 60)).padStart(2,'0')}:${String(s % 60).padStart(2,'0')}`;
 
   return (
@@ -82,10 +106,20 @@ export default function DoctorIn10Mins() {
         <div className="max-w-7xl mx-auto px-6 md:px-8 grid md:grid-cols-2 gap-12 items-center relative z-10">
           {/* Left */}
           <div className="space-y-6">
-            <span className="inline-flex items-center gap-2 bg-red-50 text-red-600 border border-red-200 px-4 py-1.5 rounded-full text-sm font-semibold animate-pulse">
-              <span className="w-2 h-2 rounded-full bg-red-500 inline-block" />
-              {t('doctorIn10Badge')}
-            </span>
+            
+            {/* Offer Banner */}
+            <div className="inline-flex flex-col gap-1 bg-amber-50 border border-amber-200 p-3 rounded-2xl shadow-sm">
+              <span className="inline-flex items-center gap-2 text-amber-800 text-sm font-bold">
+                <span className="text-xl">🎉</span> 
+                {isHi ? 'लॉन्च ऑफर: 7 दिन के लिए मुफ़्त!' : 'Launch Offer: Free for 7 Days!'}
+              </span>
+              <div className="flex gap-2 text-amber-700 font-mono text-xs font-bold">
+                <div className="bg-amber-200/50 px-2 py-1 rounded">{timeLeft.d}d</div>:
+                <div className="bg-amber-200/50 px-2 py-1 rounded">{timeLeft.h}h</div>:
+                <div className="bg-amber-200/50 px-2 py-1 rounded">{timeLeft.m}m</div>:
+                <div className="bg-amber-200/50 px-2 py-1 rounded">{timeLeft.s}s</div>
+              </div>
+            </div>
 
             <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 leading-tight">
               {t('doctorIn10HeroHeadline')}
@@ -105,7 +139,10 @@ export default function DoctorIn10Mins() {
                 </svg>
                 {t('doctorIn10StartCTA')}
               </button>
-              <span className="text-slate-500 font-semibold text-sm">{t('doctorIn10FlatFee')}</span>
+              <div className="flex flex-col">
+                <span className="text-slate-500 font-semibold text-sm line-through decoration-red-500">{t('doctorIn10FlatFee')}</span>
+                <span className="text-amber-600 font-extrabold text-sm">{isHi ? 'अभी बिल्कुल मुफ़्त' : 'Absolutely FREE right now'}</span>
+              </div>
             </div>
           </div>
 
@@ -177,8 +214,8 @@ export default function DoctorIn10Mins() {
                 <div className="bg-green-50 p-4 rounded-xl text-sm text-green-800 border border-green-200 mt-2 mb-2 animate-fade-in">
                   <ul className="list-disc pl-5 space-y-1">
                     <li>{isHi ? 'विजेट में अपनी समस्या चुनें' : 'Select your concern in the widget'}</li>
-                    <li>{isHi ? '₹199 का UPI भुगतान करें' : 'Make a ₹199 UPI payment'}</li>
-                    <li>{isHi ? 'WhatsApp पर स्क्रीनशॉट भेजें' : 'Send the screenshot on WhatsApp'}</li>
+                    <li className="line-through opacity-50">{isHi ? '₹199 का भुगतान करें' : 'Make a ₹199 payment'}</li>
+                    <li className="text-amber-700 font-bold">{isHi ? 'अभी मुफ़्त: सीधे डॉक्टर को WhatsApp करें' : 'FREE NOW: WhatsApp the doctor directly'}</li>
                     <li>{isHi ? 'डॉक्टर से सीधा वीडियो कॉल' : 'Direct video call with the doctor'}</li>
                   </ul>
                 </div>
@@ -249,10 +286,14 @@ export default function DoctorIn10Mins() {
       <section className="py-16 bg-white">
         <div className="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-8 items-stretch">
           {/* Fee card */}
-          <div className="bg-slate-50 border border-slate-200 rounded-3xl p-8 space-y-5">
+          <div className="bg-slate-50 border border-amber-200 rounded-3xl p-8 space-y-5 relative overflow-hidden">
+            <div className="absolute top-0 right-0 bg-amber-500 text-black text-xs font-bold px-4 py-1.5 rounded-bl-xl">SPECIAL OFFER</div>
             <h3 className="font-bold text-slate-700 uppercase text-xs tracking-widest">{t('doctorIn10FeeTitle')}</h3>
-            <div className="text-5xl font-extrabold text-blue-900">{t('doctorIn10FeeAmount')}</div>
-            <p className="text-slate-500 text-sm leading-relaxed">{t('doctorIn10FeeValid')}</p>
+            <div className="flex items-center gap-3">
+              <span className="text-4xl text-slate-400 line-through decoration-red-500/70 font-bold">₹199</span>
+              <span className="text-5xl font-extrabold text-amber-500">FREE</span>
+            </div>
+            <p className="text-slate-500 text-sm leading-relaxed">{isHi ? 'लॉन्च ऑफर: अगले 7 दिनों तक कोई फीस नहीं।' : 'Launch Offer: No consultation fee for the next 7 days.'}</p>
             <ul className="space-y-3">
               {['doctorIn10FeeItem1','doctorIn10FeeItem2','doctorIn10FeeItem3'].map(k => (
                 <li key={k} className="flex items-center gap-3 text-slate-700 text-sm">
@@ -261,8 +302,8 @@ export default function DoctorIn10Mins() {
                 </li>
               ))}
             </ul>
-            <button onClick={openWidget} className="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 rounded-2xl transition-all">
-              {t('doctorIn10StartCTA')} →
+            <button onClick={openWidget} className="w-full bg-[#25D366] hover:bg-[#1fb356] text-black font-bold py-3 rounded-2xl transition-all shadow-[0_4px_14px_rgba(37,211,102,0.3)]">
+              {isHi ? 'मुफ़्त कंसल्टेशन शुरू करें' : 'Start Free Consultation'} →
             </button>
           </div>
 
@@ -335,7 +376,9 @@ export default function DoctorIn10Mins() {
                   <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
                     <td className="px-6 py-4 font-medium text-slate-700 border-t border-slate-100">{t(row[0])}</td>
                     <td className="px-6 py-4 text-center text-slate-500 border-t border-slate-100">{isHi ? row[1] : row[3]}</td>
-                    <td className="px-6 py-4 text-center font-semibold text-green-600 bg-green-50 border-t border-slate-100">{isHi ? row[2] : row[4]}</td>
+                    <td className="px-6 py-4 text-center font-semibold text-green-600 bg-green-50 border-t border-slate-100">
+                      {i === 2 ? (isHi ? 'मुफ़्त (ऑफर)' : 'FREE (Offer)') : (isHi ? row[2] : row[4])}
+                    </td>
                   </tr>
                 ))}
               </tbody>

@@ -46,8 +46,8 @@ export default function DoctorIn10Widget() {
 
     setTimeout(() => {
       setMessages(m => [...m, { from: 'bot', text: isHi 
-        ? "समझ गया! चलिए 10 मिनट का वीडियो कंसल्टेशन बुक करते हैं।\n\nफीस: ₹199 — नीचे दी गई UPI ID पर भुगतान करें।"
-        : "Got it! Let's book a quick 10-minute video consultation.\n\nConsultation fee: ₹199 only — please pay via UPI below." }]);
+        ? "समझ गया! चलिए 10 मिनट का वीडियो कंसल्टेशन बुक करते हैं।\n\n🎉 लॉन्च ऑफर: अगले 7 दिनों के लिए कंसल्टेशन बिल्कुल मुफ़्त है!"
+        : "Got it! Let's book a quick 10-minute video consultation.\n\n🎉 Launch Offer: Consultation is absolutely FREE for the next 7 days!" }]);
       setTimeout(() => setStep(2), 2000);
     }, 800);
   };
@@ -69,8 +69,8 @@ export default function DoctorIn10Widget() {
     }
 
     const message = isHi 
-      ? `नमस्ते डॉक्टर, मुझे कंसल्टेशन चाहिए।\n\nसमस्या: ${concern}\n\nमेरा UPI पेमेंट का स्क्रीनशॉट: [कृपया यहाँ फोटो जोड़ें]`
-      : `Hello Doctor, I need a consultation.\n\nConcern: ${concern}\n\nMy UPI Payment Screenshot: [Please attach photo here]`;
+      ? `नमस्ते डॉक्टर, मुझे कंसल्टेशन चाहिए। (7-Day Free Offer)\n\nसमस्या: ${concern}`
+      : `Hello Doctor, I need a consultation. (7-Day Free Offer)\n\nConcern: ${concern}`;
       
     const waUrl = `https://wa.me/${WA_PHONE_NUMBER}?text=${encodeURIComponent(message)}`;
     window.open(waUrl, '_blank');
@@ -163,30 +163,29 @@ export default function DoctorIn10Widget() {
             </>
           )}
 
-          {/* Step 2: Payment & WhatsApp Handoff */}
+          {/* Step 2: Payment & WhatsApp Handoff (Free Offer) */}
           {step === 2 && (
             <div className="flex-1 bg-[#111b21] p-5 flex flex-col items-center text-center justify-center">
-              <div className="bg-[#1e2d36] rounded-xl p-5 mb-6 w-full shadow-lg">
+              <div className="bg-[#1e2d36] rounded-xl p-5 mb-6 w-full shadow-lg border border-amber-500/30 relative overflow-hidden">
+                <div className="absolute top-0 right-0 bg-amber-500 text-black text-[10px] font-bold px-3 py-1 rounded-bl-lg">OFFER</div>
                 <h4 className="text-white text-sm font-semibold mb-2">💊 {isHi ? 'कंसल्टेशन फीस' : 'Consultation Fee'}</h4>
-                <div className="text-4xl font-bold text-[#25D366] my-2">₹199</div>
-                <p className="text-[#8696a0] text-xs mt-2">10-15 Min Video Call</p>
+                <div className="flex items-center justify-center gap-3 my-2">
+                  <span className="text-2xl text-[#8696a0] line-through decoration-red-500/70">₹199</span>
+                  <span className="text-4xl font-extrabold text-amber-400">FREE</span>
+                </div>
+                <p className="text-[#8696a0] text-xs mt-2 text-amber-200/70">10-15 Min Video Call (Valid for 7 days)</p>
               </div>
 
-              <div className="bg-[#1e2d36] rounded-xl p-4 mb-6 w-full text-sm text-[#8696a0] border border-[#2a3942]">
-                <p className="mb-2">💳 UPI ID:</p>
-                <p className="text-white font-mono text-lg font-bold select-all tracking-wider">deepakkumar@upi</p>
-              </div>
-
-              <p className="text-[#e0e0e0] text-sm mb-4">
-                {isHi ? '1. ₹199 का भुगतान करें' : '1. Pay ₹199 using any UPI app'}<br/>
-                {isHi ? '2. WhatsApp पर पेमेंट स्क्रीनशॉट भेजें' : '2. Send the screenshot on WhatsApp'}
+              <p className="text-[#e0e0e0] text-sm mb-6 leading-relaxed">
+                {isHi ? 'आपको किसी भी भुगतान की आवश्यकता नहीं है।' : 'No payment required.'}<br/>
+                {isHi ? 'सीधे WhatsApp पर मैसेज भेजें और डॉक्टर से बात करें!' : 'Send a message on WhatsApp to connect with the doctor directly!'}
               </p>
 
-              <button onClick={openWhatsApp} className="w-full bg-[#25D366] text-black font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 hover:bg-[#1fb358] transition-colors shadow-[0_4px_14px_rgba(37,211,102,0.3)]">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <button onClick={openWhatsApp} className="w-full bg-[#25D366] text-black font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-[#1fb358] transition-colors shadow-[0_4px_14px_rgba(37,211,102,0.3)] animate-pulse">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
                 </svg>
-                {isHi ? 'WhatsApp पर स्क्रीनशॉट भेजें' : 'Send Screenshot on WhatsApp'}
+                {isHi ? 'मुफ़्त कंसल्टेशन शुरू करें' : 'Start Free Consultation'}
               </button>
             </div>
           )}
