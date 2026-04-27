@@ -7,6 +7,7 @@ import logging
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from routers import telemedicine
 
 # ---------------------------------------------------------------------------
 # Logging
@@ -47,6 +48,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(telemedicine.router)
 
 
 @app.get("/", tags=["Home"])
