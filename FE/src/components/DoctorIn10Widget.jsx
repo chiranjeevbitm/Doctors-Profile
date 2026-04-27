@@ -52,28 +52,26 @@ export default function DoctorIn10Widget() {
     }, 800);
   };
 
-  const openWhatsApp = async () => {
-    // Optional: Send to backend analytics before redirecting
-    try {
-      await fetch('http://localhost:8000/api/telemedicine/requests', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          patient_name: 'WhatsApp Lead',
-          concern: concern,
-          amount_paid: 199
-        })
-      });
-    } catch (err) {
-      console.warn("Backend logging failed, but proceeding to WhatsApp");
-    }
+  const openWhatsApp = () => {
+    // Fire and forget analytics to prevent popup blocker
+    fetch('http://localhost:8000/api/telemedicine/requests', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        patient_name: 'WhatsApp Lead',
+        concern: concern,
+        amount_paid: 0 // Free offer
+      })
+    }).catch(err => console.warn("Backend logging failed, but proceeding to WhatsApp"));
 
     const message = isHi 
       ? `नमस्ते डॉक्टर, मुझे कंसल्टेशन चाहिए। (7-Day Free Offer)\n\nसमस्या: ${concern}`
       : `Hello Doctor, I need a consultation. (7-Day Free Offer)\n\nConcern: ${concern}`;
       
     const waUrl = `https://wa.me/${WA_PHONE_NUMBER}?text=${encodeURIComponent(message)}`;
-    window.open(waUrl, '_blank');
+    
+    // Redirect immediately in the same tab, or use window.open (same tab is safer on mobile)
+    window.location.href = waUrl;
     
     // Close widget and reset
     setOpen(false);
