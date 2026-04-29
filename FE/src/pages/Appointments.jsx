@@ -4,15 +4,13 @@ import emailjs from '@emailjs/browser';
 
 const TIME_SLOT_LABELS = {
   en: [
-    { value: 'morning', label: 'Morning (9 AM - 12 PM)' },
-    { value: 'afternoon', label: 'Afternoon (2 PM - 5 PM)' },
-    { value: 'evening', label: 'Evening Clinic (8:30 PM Onwards)' },
+    { value: 'slot1', label: '1st Slot (6 AM - 9 AM)' },
+    { value: 'slot2', label: '2nd Slot (3 PM - 6 PM)' },
     { value: 'teleconsult', label: 'Teleconsultation' },
   ],
   hi: [
-    { value: 'morning', label: 'सुबह (9 बजे - 12 बजे)' },
-    { value: 'afternoon', label: 'दोपहर (2 बजे - 5 बजे)' },
-    { value: 'evening', label: 'शाम का क्लिनिक (8:30 बजे के बाद)' },
+    { value: 'slot1', label: 'पहला स्लॉट (सुबह 6 बजे - 9 बजे)' },
+    { value: 'slot2', label: 'दूसरा स्लॉट (दोपहर 3 बजे - 6 बजे)' },
     { value: 'teleconsult', label: 'टेलीकंसल्टेशन' },
   ]
 };
@@ -29,7 +27,7 @@ const INITIAL_FORM = {
   phone: '',
   email: '',
   preferred_date: '',
-  time_slot: 'evening',
+  time_slot: 'slot1',
   medical_concern: '',
 };
 

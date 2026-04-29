@@ -138,7 +138,7 @@ const translations = {
     phoneNumber: "Phone Number",
     phoneValue: "919994381893",
     operatingHours: "Operating Hours",
-    hoursValue: "Morning visit timing 6:30am to 9am\nEvening visit timing 3pm to 6pm",
+    hoursValue: "Morning visit timing 6 am to 9 am\nEvening visit timing 3 pm to 6 pm",
     emailAddress: "Email Address",
     emailValue: "deepakkumar21121995@gmail.com",
     availableToday: "Available Today",
@@ -201,8 +201,8 @@ const translations = {
     patientPortal: "Patient Portal",
     reserve: "Reserve (Dashboard)",
     clinicLocationTitle: "Arogya Clinic Location",
-    morningTiming: "Morning visit timing 6:30am to 9am",
-    eveningTiming: "Evening visit timing 3pm to 6pm",
+    morningTiming: "Morning visit timing 6 am to 9 am",
+    eveningTiming: "Evening visit timing 3 pm to 6 pm",
     copyright: "© 2024 Dr. Deepak Kumar. All rights reserved.",
 
     // Common
@@ -429,7 +429,7 @@ const translations = {
     phoneNumber: "फोन नंबर",
     phoneValue: "919994381893",
     operatingHours: "संचालन के घंटे",
-    hoursValue: "सुबह का समय 6:30 बजे से 9 बजे तक\nशाम का समय 3 बजे से 6 बजे तक",
+    hoursValue: "सुबह का समय 6 बजे से 9 बजे तक\nशाम का समय 3 बजे से 6 बजे तक",
     emailAddress: "ईमेल पता",
     emailValue: "deepakkumar21121995@gmail.com",
     availableToday: "आज उपलब्ध",
@@ -492,7 +492,7 @@ const translations = {
     patientPortal: "रोगी पोर्टल",
     reserve: "रिजर्व (डैशबोर्ड)",
     clinicLocationTitle: "आरोग्य क्लिनिक का स्थान",
-    morningTiming: "सुबह का समय 6:30 बजे से 9 बजे तक",
+    morningTiming: "सुबह का समय 6 बजे से 9 बजे तक",
     eveningTiming: "शाम का समय 3 बजे से 6 बजे तक",
     copyright: "© 2024 डॉ. दीपक कुमार। सर्वाधिकार सुरक्षित।",
 
