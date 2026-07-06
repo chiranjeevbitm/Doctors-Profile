@@ -1,6 +1,6 @@
 # 🏥 Arogya Clinic — Dr. Deepak Kumar's Digital Practice
 
-> A full-stack web presence for **Dr. Deepak Kumar** (MBBS, SKMCH · MD, DMCH), practicing at **Arogya Clinic, Muzaffarpur, Bihar**. Patients can learn about the doctor, explore medical services, book appointments via email, and reach the clinic directly via WhatsApp — all from one clean, modern web app.
+> A full-stack web presence for **Dr. Deepak Kumar** (MBBS, SKMCH · MD, DMCH), **Senior Consultant MD General Medicine at I T MEMORIAL HOSPITAL near SKMCH, Muzaffarpur**, practicing at **Arogya Clinic, Muzaffarpur, Bihar**. Patients can learn about the doctor, explore medical services, book appointments via email, and reach the clinic directly via WhatsApp — all from one clean, modern web app.
 
 ---
 

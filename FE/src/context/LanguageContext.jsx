@@ -13,7 +13,7 @@ const translations = {
     welcome: "Welcome",
     drName: "Dr. Deepak Kumar",
     tagline: "Your Trusted Healthcare Partner",
-    specialty: "MBBS, MD (General Medicine)",
+    specialty: "Senior Consultant, MD General Medicine | I T MEMORIAL HOSPITAL, SKMCH, Muzaffarpur",
     experience: "15+ Years Experience",
     bookAppointment: "Book Appointment Now",
     viewServices: "View Our Services",
@@ -22,13 +22,13 @@ const translations = {
     education: "Education",
     educationDetail: "MBBS, SKMCH",
     specialization: "Specialization",
-    specializationDetail: "MD General medicine, DMCH Darbhanga",
+    specializationDetail: "Senior Consultant, MD General Medicine, DMCH Darbhanga | I T MEMORIAL HOSPITAL, SKMCH, Muzaffarpur",
 
     // Home Page — Why Choose Us
     whyChooseTitle: "Why Choose Our Practice",
     whyChooseDesc: "We combine academic rigour with patient-centric care to ensure you receive the best possible medical outcomes in Muzaffarpur.",
     academicExcellence: "Academic Excellence",
-    academicExcellenceDesc: "With foundational training from SKMCH and advanced MD General medicine specialization from DMCH Darbhanga, Dr. Deepak Kumar brings institutional expertise to private practice.",
+    academicExcellenceDesc: "Senior Consultant in General Medicine at I T MEMORIAL HOSPITAL, SKMCH, Muzaffarpur. With foundational training from SKMCH and advanced MD General medicine specialization from DMCH Darbhanga, Dr. Deepak Kumar brings institutional expertise to private practice.",
     patientFirst: "Patient First",
     patientFirstDesc: "Prioritizing listening and empathy. Every treatment plan is tailored to your unique health profile and lifestyle.",
     modernFacility: "Modern Facility",
@@ -58,7 +58,7 @@ const translations = {
     // About Page
     aboutTitle: "About Dr. Deepak Kumar",
     aboutSubtitle: "Dedicated to Excellence in Healthcare",
-    aboutDesc: "is a distinguished medical professional dedicated to revolutionizing patient care throughout the Tirhut division. Based in Muzaffarpur, the \"Capital of North Bihar,\" he bridges the gap between advanced medical science and compassionate healing, offering a trusted sanctuary for the community's health.",
+    aboutDesc: "is a distinguished medical professional dedicated to revolutionizing patient care throughout the Tirhut division. A Senior Consultant in MD General Medicine at I T MEMORIAL HOSPITAL near SKMCH Muzaffarpur, he bridges the gap between advanced medical science and compassionate healing, offering a trusted sanctuary for the community's health.",
     yearsExp: "5+ Years",
     yearsExpDesc: "Of clinical excellence and community service in Bihar.",
 
@@ -69,9 +69,9 @@ const translations = {
     mbbsDesc: "Completed his foundational medical education at one of Bihar's premier institutions, developing a robust clinical perspective.",
     md: "MD General medicine",
     mdCollege: "Darbhanga Medical College (DMCH Darbhanga)",
-    mdDesc: "Specialized training that honed his expertise in diagnostic precision and advanced therapeutic interventions.",
-    eliteTraining: "Elite Training",
-    eliteTrainingDesc: "Educated at Bihar's most rigorous medical sanctuaries.",
+    mdDesc: "Senior Consultant in General Medicine at I T MEMORIAL HOSPITAL near SKMCH Muzaffarpur. Specialized training that honed his expertise in diagnostic precision and advanced therapeutic interventions.",
+    eliteTraining: "Senior Consultant",
+    eliteTrainingDesc: "Senior Consultant MD General Medicine at I T MEMORIAL HOSPITAL near SKMCH Muzaffarpur — providing expert care with compassion and precision.",
 
     // About Page — Community
     communityTitle: "A Lifelong Vow to Muzaffarpur",
@@ -88,10 +88,10 @@ const translations = {
     academicCommencementDesc: "MBBS Graduation from SKMCH, Muzaffarpur.",
     specializationLabel: "Specialization",
     advancedMedicine: "Advanced Medicine",
-    advancedMedicineDesc: "Obtained MD General medicine from the prestigious Darbhanga Medical College.",
+    advancedMedicineDesc: "Senior Consultant MD General Medicine at I T MEMORIAL HOSPITAL near SKMCH Muzaffarpur. Obtained MD General medicine from the prestigious Darbhanga Medical College.",
     establishment: "Establishment",
     civicLeadership: "Civic Leadership",
-    civicLeadershipDesc: "Established the landmark clinic in Muzaffarpur focusing on empathetic care.",
+    civicLeadershipDesc: "Serves as Senior Consultant MD General Medicine at I T MEMORIAL HOSPITAL near SKMCH, Muzaffarpur. Established the landmark Arogya Clinic in Muzaffarpur focusing on empathetic care.",
 
     // About Page — Accreditations
     accreditationsTitle: "Accreditations & Honors",
@@ -195,7 +195,7 @@ const translations = {
     others: "Others",
 
     // Footer
-    footerDesc: "Expert healthcare professional dedicated to the wellness of the Muzaffarpur community at Arogya Clinic. MBBS (SKMCH), MD General medicine (DMCH Darbhanga).",
+    footerDesc: "Senior Consultant MD General Medicine at I T MEMORIAL HOSPITAL near SKMCH Muzaffarpur. Expert healthcare professional dedicated to the wellness of the Muzaffarpur community at Arogya Clinic. MBBS (SKMCH), MD General medicine (DMCH Darbhanga).",
     navigation: "Navigation",
     aboutUs: "About Us",
     patientPortal: "Patient Portal",
@@ -304,7 +304,7 @@ const translations = {
     welcome: "स्वागत है",
     drName: "डॉ. दीपक कुमार",
     tagline: "आपका विश्वसनीय स्वास्थ्य साथी",
-    specialty: "एमबीबीएस, एमडी (जनरल मेडिसिन)",
+    specialty: "वरिष्ठ सलाहकार, एमडी जनरल मेडिसिन | आई टी मेमोरियल हॉस्पिटल, एसकेएमसीएच, मुजफ्फरपुर",
     experience: "15+ वर्ष का अनुभव",
     bookAppointment: "अभी अपॉइंटमेंट बुक करें",
     viewServices: "हमारी सेवाएं देखें",
@@ -313,13 +313,13 @@ const translations = {
     education: "शिक्षा",
     educationDetail: "एमबीबीएस, एसकेएमसीएच",
     specialization: "विशेषज्ञता",
-    specializationDetail: "एमडी जनरल मेडिसिन, डीएमसीएच दरभंगा",
+    specializationDetail: "वरिष्ठ सलाहकार, एमडी जनरल मेडिसिन, डीएमसीएच दरभंगा | आई टी मेमोरियल हॉस्पिटल, एसकेएमसीएच, मुजफ्फरपुर",
 
     // Home Page — Why Choose Us
     whyChooseTitle: "हमारा अभ्यास क्यों चुनें",
     whyChooseDesc: "हम अकादमिक कठोरता को रोगी-केंद्रित देखभाल के साथ जोड़ते हैं ताकि आपको मुजफ्फरपुर में सर्वोत्तम संभव चिकित्सा परिणाम मिल सकें।",
     academicExcellence: "शैक्षणिक उत्कृष्टता",
-    academicExcellenceDesc: "एसकेएमसीएच से बुनियादी प्रशिक्षण और डीएमसीएच दरभंगा से उन्नत एमडी जनरल मेडिसिन विशेषज्ञता के साथ, डॉ. दीपक कुमार निजी अभ्यास में संस्थागत विशेषज्ञता लाते हैं।",
+    academicExcellenceDesc: "आई टी मेमोरियल हॉस्पिटल, एसकेएमसीएच, मुजफ्फरपुर में जनरल मेडिसिन में वरिष्ठ सलाहकार। एसकेएमसीएच से बुनियादी प्रशिक्षण और डीएमसीएच दरभंगा से उन्नत एमडी जनरल मेडिसिन विशेषज्ञता के साथ, डॉ. दीपक कुमार निजी अभ्यास में संस्थागत विशेषज्ञता लाते हैं।",
     patientFirst: "रोगी पहले",
     patientFirstDesc: "सुनने और सहानुभूति को प्राथमिकता देना। हर इलाज की योजना आपके अद्वितीय स्वास्थ्य प्रोफाइल और जीवनशैली के अनुसार तैयार की जाती है।",
     modernFacility: "आधुनिक सुविधा",
@@ -349,7 +349,7 @@ const translations = {
     // About Page
     aboutTitle: "डॉ. दीपक कुमार के बारे में",
     aboutSubtitle: "स्वास्थ्य सेवा में उत्कृष्टता के प्रति समर्पित",
-    aboutDesc: "तिरहुत संभाग में रोगी देखभाल में क्रांति लाने के लिए समर्पित एक प्रतिष्ठित चिकित्सा पेशेवर हैं। मुजफ्फरपुर, \"उत्तर बिहार की राजधानी\" में स्थित, वह उन्नत चिकित्सा विज्ञान और दयालु उपचार के बीच की खाई को पाटते हैं, समुदाय के स्वास्थ्य के लिए एक विश्वसनीय शरण प्रदान करते हैं।",
+    aboutDesc: "तिरहुत संभाग में रोगी देखभाल में क्रांति लाने के लिए समर्पित एक प्रतिष्ठित चिकित्सा पेशेवर हैं। आई टी मेमोरियल हॉस्पिटल, एसकेएमसीएच मुजफ्फरपुर में एमडी जनरल मेडिसिन में वरिष्ठ सलाहकार, वह उन्नत चिकित्सा विज्ञान और दयालु उपचार के बीच की खाई को पाटते हैं, समुदाय के स्वास्थ्य के लिए एक विश्वसनीय शरण प्रदान करते हैं।",
     yearsExp: "5+ वर्ष",
     yearsExpDesc: "बिहार में नैदानिक उत्कृष्टता और सामुदायिक सेवा का।",
 
@@ -360,9 +360,9 @@ const translations = {
     mbbsDesc: "बिहार के प्रमुख संस्थानों में से एक में उनकी बुनियादी चिकित्सा शिक्षा पूरी की, जिससे एक मजबूत नैदानिक दृष्टिकोण विकसित हुआ।",
     md: "एमडी जनरल मेडिसिन",
     mdCollege: "दरभंगा मेडिकल कॉलेज (डीएमसीएच दरभंगा)",
-    mdDesc: "विशेषज्ञ प्रशिक्षण जिसने नैदानिक सटीकता और उन्नत चिकित्सीय हस्तक्षेप में उनकी विशेषज्ञता को निखारा।",
-    eliteTraining: " elite प्रशिक्षण",
-    eliteTrainingDesc: "बिहार के सबसे कठोर चिकित्सा sanctuaries में शिक्षित।",
+    mdDesc: "आई टी मेमोरियल हॉस्पिटल, एसकेएमसीएच मुजफ्फरपुर में जनरल मेडिसिन में वरिष्ठ सलाहकार। विशेषज्ञ प्रशिक्षण जिसने नैदानिक सटीकता और उन्नत चिकित्सीय हस्तक्षेप में उनकी विशेषज्ञता को निखारा।",
+    eliteTraining: "वरिष्ठ सलाहकार",
+    eliteTrainingDesc: "आई टी मेमोरियल हॉस्पिटल, एसकेएमसीएच मुजफ्फरपुर में एमडी जनरल मेडिसिन में वरिष्ठ सलाहकार — करुणा और सटीकता के साथ विशेषज्ञ देखभाल प्रदान करते हैं।",
 
     // About Page — Community
     communityTitle: "मुजफ्फरपुर के प्रति आजीवन वचन",
@@ -379,10 +379,10 @@ const translations = {
     academicCommencementDesc: "एसकेएमसीएच, मुजफ्फरपुर से एमबीबीएस स्नातक।",
     specializationLabel: "विशेषज्ञता",
     advancedMedicine: "उन्नत चिकित्सा",
-    advancedMedicineDesc: "प्रतिष्ठित दरभंगा मेडिकल कॉलेज से एमडी जनरल मेडिसिन प्राप्त किया।",
+    advancedMedicineDesc: "आई टी मेमोरियल हॉस्पिटल, एसकेएमसीएच मुजफ्फरपुर में एमडी जनरल मेडिसिन में वरिष्ठ सलाहकार। प्रतिष्ठित दरभंगा मेडिकल कॉलेज से एमडी जनरल मेडिसिन प्राप्त किया।",
     establishment: "स्थापना",
     civicLeadership: "नागरिक नेतृत्व",
-    civicLeadershipDesc: "मुजफ्फरपुर में सहानुभूतिपूर्ण देखभाल पर केंद्रित एक प्रमुख क्लिनिक स्थापित किया।",
+    civicLeadershipDesc: "आई टी मेमोरियल हॉस्पिटल, एसकेएमसीएच, मुजफ्फरपुर में एमडी जनरल मेडिसिन में वरिष्ठ सलाहकार के रूप में सेवारत। मुजफ्फरपुर में सहानुभूतिपूर्ण देखभाल पर केंद्रित एक प्रमुख क्लिनिक स्थापित किया।",
 
     // About Page — Accreditations
     accreditationsTitle: "मान्यता और सम्मान",
@@ -486,7 +486,7 @@ const translations = {
     others: "अन्य",
 
     // Footer
-    footerDesc: "मुजफ्फरपुर में आरोग्य क्लिनिक पर समुदाय के कल्याण के लिए समर्पित विशेषज्ञ स्वास्थ्य देखभाल पेशेवर। एमबीबीएस (एसकेएमसीएच), एमडी जनरल मेडिसिन (डीएमसीएच दरभंगा)।",
+    footerDesc: "आई टी मेमोरियल हॉस्पिटल, एसकेएमसीएच मुजफ्फरपुर में एमडी जनरल मेडिसिन में वरिष्ठ सलाहकार। मुजफ्फरपुर में आरोग्य क्लिनिक पर समुदाय के कल्याण के लिए समर्पित विशेषज्ञ स्वास्थ्य देखभाल पेशेवर। एमबीबीएस (एसकेएमसीएच), एमडी जनरल मेडिसिन (डीएमसीएच दरभंगा)।",
     navigation: "नेविगेशन",
     aboutUs: "हमारे बारे में",
     patientPortal: "रोगी पोर्टल",
