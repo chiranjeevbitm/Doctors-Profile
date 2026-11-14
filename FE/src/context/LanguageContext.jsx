@@ -136,11 +136,11 @@ const translations = {
     // Appointments Page
     appointmentTitle: "Book Your Appointment",
     clinicLocation: "Clinic Location",
-    address: "Saktidharamkata Bada Jagganath, near God Father Public School, 842004",
+    address: "Bada Jagarnath, Shakti Dharmkanta, Ahiyapur, Muzaffarpur, Bihar 842001",
     phoneNumber: "Phone Number",
-    phoneValue: "919994381893",
+    phoneValue: "9199943818",
     operatingHours: "Operating Hours",
-    hoursValue: "Morning visit timing 6 am to 9 am\nEvening visit timing 3 pm to 6 pm",
+    hoursValue: "Morning 6 am to 9 am\nEvening 5 pm to 9 pm",
     emailAddress: "Email Address",
     emailValue: "deepakkumar21121995@gmail.com",
     availableToday: "Available Today",
@@ -204,7 +204,7 @@ const translations = {
     reserve: "Reserve (Dashboard)",
     clinicLocationTitle: "Arogya Clinic Location",
     morningTiming: "Morning visit timing 6 am to 9 am",
-    eveningTiming: "Evening visit timing 3 pm to 6 pm",
+    eveningTiming: "Evening visit timing 5 pm to 9 pm",
     copyright: "© 2024 Dr. Deepak Kumar. All rights reserved.",
 
     // Common
@@ -429,11 +429,11 @@ const translations = {
     // Appointments Page
     appointmentTitle: "अपना अपॉइंटमेंट बुक करें",
     clinicLocation: "क्लिनिक का स्थान",
-    address: "सक्तिधरमकटा बड़ा जगन्नाथ, गॉड फादर पब्लिक स्कूल के पास, 842004",
+    address: "बड़ा जगरनाथ, शक्ति धर्मकांटा, अहियापुर, मुज़फ़्फ़रपुर, बिहार 842001",
     phoneNumber: "फोन नंबर",
-    phoneValue: "919994381893",
+    phoneValue: "9199943818",
     operatingHours: "संचालन के घंटे",
-    hoursValue: "सुबह का समय 6 बजे से 9 बजे तक\nशाम का समय 3 बजे से 6 बजे तक",
+    hoursValue: "सुबह का समय 6 बजे से 9 बजे तक\nशाम का समय 5 बजे से 9 बजे तक",
     emailAddress: "ईमेल पता",
     emailValue: "deepakkumar21121995@gmail.com",
     availableToday: "आज उपलब्ध",
@@ -497,7 +497,7 @@ const translations = {
     reserve: "रिजर्व (डैशबोर्ड)",
     clinicLocationTitle: "आरोग्य क्लिनिक का स्थान",
     morningTiming: "सुबह का समय 6 बजे से 9 बजे तक",
-    eveningTiming: "शाम का समय 3 बजे से 6 बजे तक",
+    eveningTiming: "शाम का समय 5 बजे से 9 बजे तक",
     copyright: "© 2024 डॉ. दीपक कुमार। सर्वाधिकार सुरक्षित।",
 
     // Common
@@ -592,14 +592,23 @@ const translations = {
 const LanguageContext = createContext();
 
 export const LanguageProvider = ({ children }) => {
-  const [language, setLanguage] = useState(() => {
-    const saved = localStorage.getItem('doctor_profile_language');
-    return saved || 'en';
-  });
+  // Pages are pre-rendered in English. Start in English everywhere so the
+  // first client render matches that HTML, then switch to the saved choice.
+  const [language, setLanguage] = useState('en');
+  const [restored, setRestored] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('doctor_profile_language', language);
-  }, [language]);
+    try {
+      const saved = localStorage.getItem('doctor_profile_language');
+      if (saved === 'hi' || saved === 'en') setLanguage(saved);
+    } catch { /* storage blocked: stay in English */ }
+    setRestored(true);
+  }, []);
+
+  useEffect(() => {
+    if (!restored) return;
+    try { localStorage.setItem('doctor_profile_language', language); } catch { /* ignore */ }
+  }, [language, restored]);
 
   const t = (key) => translations[language][key] || key;
   const toggleLanguage = () => setLanguage(prev => prev === 'en' ? 'hi' : 'en');

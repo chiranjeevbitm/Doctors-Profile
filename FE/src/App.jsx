@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { LanguageProvider } from './context/LanguageContext';
 import LanguageToggle from './components/LanguageToggle';
 import Layout from './components/Layout';
@@ -25,10 +25,12 @@ function RouteFallback() {
   );
 }
 
-export default function App() {
+// The router is passed in: BrowserRouter in the browser (main.jsx),
+// StaticRouter when pre-rendering (entry-server.jsx).
+export default function App({ Router, routerProps = {} }) {
   return (
     <LanguageProvider>
-      <BrowserRouter>
+      <Router {...routerProps}>
         <Suspense fallback={<RouteFallback />}>
           <Routes>
             <Route path="/" element={<Layout />}>
@@ -43,7 +45,7 @@ export default function App() {
           </Routes>
         </Suspense>
         <LanguageToggle />
-      </BrowserRouter>
+      </Router>
     </LanguageProvider>
   );
 }

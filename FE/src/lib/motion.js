@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { clinicOpenNow } from './site.js';
 
 const reduced = () =>
   typeof window !== 'undefined' &&
@@ -22,6 +23,13 @@ export function useReveal(deps = []) {
       items.forEach((n) => n.classList.add('is-in'));
       return;
     }
+    // Anything already on screen stays put — pre-rendered text must not
+    // blink out and fade back in when the page hydrates.
+    const vh = window.innerHeight;
+    items.forEach((n) => {
+      const r = n.getBoundingClientRect();
+      if (r.top < vh && r.bottom > 0) n.classList.add('is-in');
+    });
     document.documentElement.classList.add('js-motion');
 
     const io = new IntersectionObserver(
@@ -80,10 +88,15 @@ export function useTilt(max = 7) {
 /** Counts up to a number once it scrolls into view. */
 export function useCountUp(target, ms = 1300) {
   const ref = useRef(null);
-  const [n, setN] = useState(reduced() ? target : 0);
+  // Starts at the real number so pre-rendered HTML (what crawlers read) says
+  // "5+", not "0+"; resets to 0 only on the client, just before animating.
+  const [n, setN] = useState(target);
   useEffect(() => {
     const el = ref.current;
     if (!el || reduced()) return;
+    const r = el.getBoundingClientRect();
+    if (r.top < window.innerHeight && r.bottom > 0) return; // already visible: leave it
+    setN(0);
     const io = new IntersectionObserver(
       ([e]) => {
         if (!e.isIntersecting) return;
@@ -127,4 +140,20 @@ export function useRichDevice() {
     setRich(big && gl && cores >= 4 && !saveData && !slow);
   }, []);
   return rich;
+}
+
+/**
+ * Open/closed right now, or null before the browser has checked. The server
+ * (and first client render) can't know the visitor's "now", so callers show
+ * the timings while this is null — same markup on both sides, no mismatch.
+ */
+export function useOpenNow() {
+  const [open, setOpen] = useState(null);
+  useEffect(() => {
+    const check = () => setOpen(clinicOpenNow());
+    check();
+    const id = setInterval(check, 60_000);
+    return () => clearInterval(id);
+  }, []);
+  return open;
 }

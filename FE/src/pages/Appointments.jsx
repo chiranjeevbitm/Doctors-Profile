@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import Icon from '../components/Icon';
 import { useLanguage } from '../context/LanguageContext';
-import { useReveal } from '../lib/motion';
+import { useReveal, useOpenNow } from '../lib/motion';
+import Faq from '../components/Faq';
+import { FAQ_BOOKING } from '../lib/seo';
 import emailjs from '@emailjs/browser';
 import BookButton from '../components/BookButton';
-import { PHONE, PHONE_TEL, MAPS_URL, BOOKING_URL, clinicOpenNow } from '../lib/site';
+import { PHONE, PHONE_TEL, MAPS_URL, BOOKING_URL, ADDRESS, ADDRESS_LINE } from '../lib/site';
 
 const EMAILJS_CONFIG = {
   serviceId: import.meta.env.VITE_EMAILJS_SERVICE_ID,
@@ -27,33 +29,12 @@ const TIME_SLOTS = {
 
 const INITIAL = { full_name: '', phone: '', email: '', preferred_date: '', time_slot: 'morning', medical_concern: '' };
 
-function Faq({ q, a }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <div className="card overflow-hidden">
-      <button
-        className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-      >
-        <span className="text-[16px] font-bold text-text">{q}</span>
-        <Icon n="add" size={22} className={`text-ink transition-transform duration-300 ${open ? 'rotate-45' : ''}`} />
-      </button>
-      <div className={`grid transition-[grid-template-rows] duration-300 ease-out ${open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
-        <div className="overflow-hidden">
-          <p className="px-6 pb-5 text-[15.5px] leading-relaxed text-muted">{a}</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function Appointments() {
   const { t, language } = useLanguage();
   const root = useReveal([language]);
   const hi = language === 'hi';
   const slots = TIME_SLOTS[language] || TIME_SLOTS.en;
-  const openNow = clinicOpenNow();
+  const openNow = useOpenNow();
 
   const [form, setForm] = useState(INITIAL);
   const [status, setStatus] = useState('idle');
@@ -91,39 +72,10 @@ export default function Appointments() {
     }
   };
 
-  const faqs = hi
-    ? [
-        ['क्या ऑनलाइन बुकिंग मुफ़्त है?', 'हाँ। ऑनलाइन समय बुक करने का कोई शुल्क नहीं है। परामर्श शुल्क क्लिनिक पर लिया जाता है।'],
-        ['क्या बिना बुकिंग के आ सकते हैं?', 'आ सकते हैं, लेकिन बुक किए गए मरीज़ों को पहले देखा जाता है। व्यस्त दिनों में प्रतीक्षा लंबी हो सकती है।'],
-        ['बुकिंग के बाद क्या होता है?', 'आपके WhatsApp पर तुरंत पुष्टि आती है, और अपॉइंटमेंट से एक दिन पहले याद दिलाने वाला संदेश।'],
-        ['समय बदलना या रद्द करना हो तो?', `क्लिनिक को ${PHONE} पर कॉल या WhatsApp करें। जितना जल्दी बताएँगे, स्लॉट किसी और को मिल सकेगा।`],
-        ['क्या पर्ची डिजिटल मिलती है?', 'हाँ। डॉक्टर की डिजिटल हस्ताक्षर वाली पर्ची WhatsApp पर भेजी जा सकती है, जो सभी फार्मेसियों में मान्य है।'],
-      ]
-    : [
-        ['Is online booking free?', 'Yes. There is no charge to reserve a slot. The consultation fee is paid at the clinic.'],
-        ['Can I walk in without booking?', 'You can, but booked patients are seen first. On busy mornings the wait can be long.'],
-        ['What happens after I book?', 'A confirmation reaches your WhatsApp straight away, and a reminder goes out the day before your appointment.'],
-        ['How do I change or cancel?', `Call or WhatsApp the clinic on ${PHONE}. The earlier you tell us, the sooner the slot can go to someone else.`],
-        ['Will I get a digital prescription?', 'Yes. A digitally signed prescription can be sent to your WhatsApp, and it is valid at any pharmacy.'],
-      ];
+  const faqs = hi ? FAQ_BOOKING.hi : FAQ_BOOKING.en;
 
   return (
     <div ref={root}>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'FAQPage',
-            mainEntity: faqs.map(([q, a]) => ({
-              '@type': 'Question',
-              name: q,
-              acceptedAnswer: { '@type': 'Answer', text: a },
-            })),
-          }),
-        }}
-      />
-
       {/* masthead + primary action */}
       <section className="relative overflow-hidden border-b border-line bg-paper py-16 md:py-20">
         <div className="grain pointer-events-none absolute inset-0 opacity-60" />
@@ -132,7 +84,7 @@ export default function Appointments() {
           <div className="space-y-5 md:col-span-7">
             <span className={`reveal inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[13px] font-semibold ${openNow ? 'bg-neem-soft text-neem' : 'bg-desk-2 text-muted'}`}>
               <span className={`h-2 w-2 rounded-full ${openNow ? 'bg-neem' : 'bg-faint'}`} />
-              {openNow ? (hi ? 'अभी खुला है' : 'Open right now') : (hi ? 'अभी बंद है' : 'Closed right now')}
+              {openNow === null ? (hi ? 'रोज़ खुला: सुबह 6–9 · शाम 5–9' : 'Open every day: 6–9 am · 5–9 pm') : openNow ? (hi ? 'अभी खुला है' : 'Open right now') : (hi ? 'अभी बंद है' : 'Closed right now')}
             </span>
             <h1 className="reveal font-head text-[36px] font-extrabold leading-[1.1] text-text md:text-[52px]" data-d="1">
               {t('appointmentTitle')}
@@ -157,7 +109,7 @@ export default function Appointments() {
           <div className="reveal reveal-r md:col-span-5" data-d="2">
             <div className="card divide-y divide-line overflow-hidden">
               {[
-                ['location_on', t('clinicLocation'), 'Bada Jagrnath, Shakti Dharmkanta, Ahiyapur, Muzaffarpur, Bihar 842001', MAPS_URL],
+                ['location_on', t('clinicLocation'), ADDRESS_LINE, MAPS_URL],
                 ['call', t('phoneNumber'), PHONE, `tel:${PHONE_TEL}`],
                 ['schedule', t('operatingHours'), hi ? 'सुबह 6:00–9:00 · शाम 5:00–9:00' : 'Morning 6:00–9:00 am · Evening 5:00–9:00 pm', null],
                 ['mail', t('emailAddress'), t('emailValue'), `mailto:${t('emailValue')}`],
@@ -283,9 +235,9 @@ export default function Appointments() {
             <div className="relative grid gap-0 bg-desk md:grid-cols-12">
               <div className="p-8 md:col-span-5">
                 <Icon n="pin_drop" size={32} className="mb-4 block text-ink" />
-                <p className="font-head text-[20px] font-bold text-text">Arogya Clinic</p>
+                <p className="font-head text-[20px] font-bold text-text">Arogya Clinic: Dr. Deepak Kumar</p>
                 <p className="mt-2 text-[15px] leading-relaxed text-muted">
-                  Bada Jagrnath, Shakti Dharmkanta,<br />Ahiyapur, Muzaffarpur, Bihar 842001
+                  {ADDRESS.street},<br />{ADDRESS.locality}, {ADDRESS.region} {ADDRESS.postalCode}
                 </p>
                 <span className="mt-5 inline-flex items-center gap-2 font-bold text-ink group-hover:underline">
                   {hi ? 'Google Maps में खोलें' : 'Open in Google Maps'}

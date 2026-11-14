@@ -1,3 +1,4 @@
+import { ADDRESS_LINE } from '../lib/site';
 import React from 'react';
 import Icon from '../components/Icon';
 import { useLanguage } from '../context/LanguageContext';
@@ -136,7 +137,7 @@ export default function About() {
               <img src={clinicImg} alt="Arogya Clinic, Ahiyapur, Muzaffarpur" width="1100" height="733" loading="lazy" decoding="async" className="aspect-[4/3] w-full object-cover" />
               <div className="bg-desk px-5 py-4">
                 <p className="font-head text-[16px] font-bold text-ink-deep">Arogya Clinic</p>
-                <p className="text-[13.5px] text-muted">Bada Jagrnath, Shakti Dharmkanta, Ahiyapur, Muzaffarpur</p>
+                <p className="text-[13.5px] text-muted">{ADDRESS_LINE}</p>
               </div>
             </div>
             <div className="mt-5">

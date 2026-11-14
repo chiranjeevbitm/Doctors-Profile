@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import { createRoot, hydrateRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
 // Fonts are self-hosted (same families as Arogya Rx) rather than pulled from
 // Google Fonts: one less third-party round trip, and the page still renders
 // correctly on networks that block fonts.googleapis.com.
@@ -19,8 +20,14 @@ import '@fontsource/martel/900.css'
 import './index.css'
 import App from './App.jsx'
 
-createRoot(document.getElementById('root')).render(
+const container = document.getElementById('root')
+const app = (
   <StrictMode>
-    <App />
-  </StrictMode>,
+    <App Router={BrowserRouter} />
+  </StrictMode>
 )
+
+// Production pages arrive pre-rendered (scripts/prerender.mjs): attach to that
+// HTML instead of replacing it. The dev server serves an empty #root.
+if (container.firstElementChild) hydrateRoot(container, app)
+else createRoot(container).render(app)

@@ -324,3 +324,13 @@ Built by **Chiranjeev Kumar** — AI Engineer & Full-Stack Developer
 ## 📄 License
 
 This project is private and intended for clinical use by Dr. Deepak Kumar's practice. All rights reserved © 2024.
+
+## Search and AI visibility
+
+Every page is pre-rendered to plain HTML at build time, so crawlers that don't run JavaScript (GPTBot, ClaudeBot, PerplexityBot and friends) read the full text, not an empty `<div id="root">`.
+
+- `FE/src/lib/site.js`: the one place for name, address, phone, hours and the Google Maps link. Change NAP here only.
+- `FE/src/lib/seo.js`: page titles and descriptions, the question-and-answer copy (English and Hindi), the JSON-LD graph and `llms.txt`.
+- `FE/scripts/prerender.mjs`: runs after `vite build` and the SSR build. Writes `index.html`, `about.html`, … and `404.html`, plus `sitemap.xml`, `robots.txt` and `llms.txt`.
+- `npm run build` does all three steps; `vercel.json` serves `/about` from `about.html` (`cleanUrls`) and real 404s for unknown paths.
+- Check what a crawler sees: `curl -s https://doctors-profile-chi.vercel.app/about | grep -c "Dr. Deepak Kumar"`.

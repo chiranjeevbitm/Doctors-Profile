@@ -4,7 +4,9 @@ import { NavLink, Link, Outlet, useLocation } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import DoctorIn10Widget from './DoctorIn10Widget';
 import BookButton from './BookButton';
-import { PHONE, PHONE_TEL, MAPS_URL, clinicOpenNow } from '../lib/site';
+import { PHONE, PHONE_TEL, MAPS_URL, ADDRESS, SESSIONS } from '../lib/site';
+import { useOpenNow } from '../lib/motion';
+import { routeMeta } from '../lib/seo';
 
 const NAV = [
   { to: '/', key: 'home', end: true },
@@ -17,7 +19,7 @@ export default function Layout() {
   const { t, language } = useLanguage();
   const [open, setOpen] = useState(false);
   const [solid, setSolid] = useState(false);
-  const [isOpenNow, setIsOpenNow] = useState(() => clinicOpenNow());
+  const isOpenNow = useOpenNow();
   const loc = useLocation();
 
   // nav condenses once you leave the top — passive listener, no layout reads
@@ -31,10 +33,13 @@ export default function Layout() {
   useEffect(() => { setOpen(false); }, [loc.pathname]);
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }); }, [loc.pathname]);
   useEffect(() => { document.documentElement.lang = language; }, [language]);
+  // Keep title and description right after client-side navigation (the
+  // pre-rendered HTML already carries them for the first load).
   useEffect(() => {
-    const id = setInterval(() => setIsOpenNow(clinicOpenNow()), 60_000);
-    return () => clearInterval(id);
-  }, []);
+    const m = routeMeta(loc.pathname);
+    document.title = m.title;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', m.description);
+  }, [loc.pathname]);
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
@@ -172,17 +177,19 @@ export default function Layout() {
           <div className="space-y-3 md:col-span-4">
             <h4 className="eyebrow">{t('clinicLocationTitle')}</h4>
             <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" className="block text-[15px] leading-relaxed text-muted transition-colors hover:text-ink">
-              Bada Jagrnath, Shakti Dharmkanta,<br />Ahiyapur, Muzaffarpur, Bihar 842001
+              {ADDRESS.street},<br />{ADDRESS.locality}, {ADDRESS.region} {ADDRESS.postalCode}
             </a>
             <div className="space-y-1 text-[15px]">
               <p className="flex items-center gap-2 font-semibold">
                 <span className={`h-2 w-2 flex-none rounded-full ${isOpenNow ? 'bg-neem' : 'bg-faint'}`} />
-                {isOpenNow
-                  ? (language === 'hi' ? 'अभी खुला है' : 'Open now')
-                  : (language === 'hi' ? 'अभी बंद है' : 'Closed now')}
+                {isOpenNow === null
+                  ? (language === 'hi' ? 'रोज़ खुला' : 'Open every day')
+                  : isOpenNow
+                    ? (language === 'hi' ? 'अभी खुला है' : 'Open now')
+                    : (language === 'hi' ? 'अभी बंद है' : 'Closed now')}
               </p>
-              <p className="text-muted">{language === 'hi' ? 'सुबह' : 'Morning'} 6:00–9:00</p>
-              <p className="text-muted">{language === 'hi' ? 'शाम' : 'Evening'} 5:00–9:00</p>
+              <p className="text-muted">{language === 'hi' ? SESSIONS[0].hi : `Morning ${SESSIONS[0].en}`}</p>
+              <p className="text-muted">{language === 'hi' ? SESSIONS[1].hi : `Evening ${SESSIONS[1].en}`}</p>
             </div>
             <a href={`tel:${PHONE_TEL}`} className="inline-flex items-center gap-2 font-bold text-ink">
               <Icon n="call" size={20} />{PHONE}

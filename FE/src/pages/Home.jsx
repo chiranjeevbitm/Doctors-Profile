@@ -2,10 +2,12 @@ import React from 'react';
 import Icon from '../components/Icon';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { useReveal, useTilt, useCountUp } from '../lib/motion';
+import { useReveal, useTilt, useCountUp, useOpenNow } from '../lib/motion';
 import HeroBackdrop from '../components/HeroBackdrop';
 import BookButton from '../components/BookButton';
-import { PHONE, PHONE_TEL, MAPS_URL, clinicOpenNow } from '../lib/site';
+import Faq from '../components/Faq';
+import { PHONE, PHONE_TEL, MAPS_URL, ADDRESS_LINE, ADDRESS_HI, HOURS_EN, HOURS_HI } from '../lib/site';
+import { FAQ_HOME } from '../lib/seo';
 import heroImg from '../assets/hero.webp';
 import clinicImg from '../assets/arogya_clinic_front.webp';
 
@@ -30,7 +32,7 @@ export default function Home() {
   const { t, language } = useLanguage();
   const root = useReveal([language]);
   const tilt = useTilt(6);
-  const openNow = clinicOpenNow();
+  const openNow = useOpenNow();
   const hi = language === 'hi';
 
   return (
@@ -47,7 +49,9 @@ export default function Home() {
                   {openNow && <span className="pulse-dot absolute inline-flex h-2 w-2 rounded-full bg-neem" />}
                   <span className={`relative inline-flex h-2 w-2 rounded-full ${openNow ? 'bg-neem' : 'bg-faint'}`} />
                 </span>
-                {openNow ? (hi ? 'अभी क्लिनिक खुला है' : 'Clinic open now') : (hi ? 'अभी बंद — ऑनलाइन बुक करें' : 'Closed now — book online')}
+                {openNow === null
+                  ? (hi ? 'रोज़ सुबह 6–9 · शाम 5–9' : 'Open daily 6–9 am · 5–9 pm')
+                  : openNow ? (hi ? 'अभी क्लिनिक खुला है' : 'Clinic open now') : (hi ? 'अभी बंद — ऑनलाइन बुक करें' : 'Closed now — book online')}
               </span>
               <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-full bg-ink-soft px-3 py-1.5 text-[13px] font-semibold text-ink transition-colors hover:bg-ink hover:text-white">
                 <Icon n="location_on" size={16} />
@@ -261,8 +265,31 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ───────────── questions & answers ───────────── */}
+      <section className="border-t border-line bg-paper py-20 md:py-28" aria-labelledby="faq-h">
+        <div className="wrap grid gap-10 md:grid-cols-12">
+          <div className="reveal md:col-span-4">
+            <p className="eyebrow mb-3">{hi ? 'सवाल-जवाब' : 'Questions & answers'}</p>
+            <h2 id="faq-h" className="sec-h mb-4">{hi ? 'मरीज़ अक्सर पूछते हैं' : 'What patients ask'}</h2>
+            <p className="sec-p">
+              {hi ? `${ADDRESS_HI}। ${HOURS_HI}।` : `${ADDRESS_LINE}. ${HOURS_EN}.`}
+            </p>
+            <a href={`tel:${PHONE_TEL}`} className="mt-5 inline-flex items-center gap-2 font-bold text-ink">
+              <Icon n="call" size={20} />{PHONE}
+            </a>
+          </div>
+          <div className="space-y-3 md:col-span-8">
+            {(hi ? FAQ_HOME.hi : FAQ_HOME.en).map(([q, a], i) => (
+              <div key={q} className="reveal" data-d={(i % 4) + 1}>
+                <Faq q={q} a={a} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ───────────── closing CTA ───────────── */}
-      <section className="pb-24">
+      <section className="pb-24 pt-20 md:pt-24">
         <div className="wrap">
           <div className="reveal relative overflow-hidden rounded-2xl bg-ink-deep p-9 text-white shadow-ink md:p-16">
             <div className="grain absolute inset-0 opacity-25" />
