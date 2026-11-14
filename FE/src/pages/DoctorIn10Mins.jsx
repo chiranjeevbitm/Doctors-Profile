@@ -27,7 +27,7 @@ const TESTIMONIALS = [
 const COMP_ROWS = [
   ['doctorIn10CompRow1', '✅ हाँ', '❌ नहीं', '✅ Yes', '❌ No'],
   ['doctorIn10CompRow2', '30–60 मिनट', '~10 मिनट', '30–60 min', '~10 min'],
-  ['doctorIn10CompRow3', '₹300–500', '₹199', '₹300–500', '₹199'],
+  ['doctorIn10CompRow3', '₹300–500', '₹499', '₹300–500', '₹499'],
   ['doctorIn10CompRow4', 'कागज', 'डिजिटल PDF', 'Paper', 'Digital PDF'],
   ['doctorIn10CompRow5', '⚠️ जोखिम', '✅ सुरक्षित', '⚠️ Risk', '✅ Safe'],
 ];
@@ -214,7 +214,7 @@ export default function DoctorIn10Mins() {
                 <div className="bg-green-50 p-4 rounded-xl text-sm text-green-800 border border-green-200 mt-2 mb-2 animate-fade-in">
                   <ul className="list-disc pl-5 space-y-1">
                     <li>{isHi ? 'विजेट में अपनी समस्या चुनें' : 'Select your concern in the widget'}</li>
-                    <li className="line-through opacity-50">{isHi ? '₹199 का भुगतान करें' : 'Make a ₹199 payment'}</li>
+                    <li className="line-through opacity-50">{isHi ? '₹499 का भुगतान करें' : 'Make a ₹499 payment'}</li>
                     <li className="text-amber-700 font-bold">{isHi ? 'अभी मुफ़्त: सीधे डॉक्टर को WhatsApp करें' : 'FREE NOW: WhatsApp the doctor directly'}</li>
                     <li>{isHi ? 'डॉक्टर से सीधा वीडियो कॉल' : 'Direct video call with the doctor'}</li>
                   </ul>
@@ -275,7 +275,7 @@ export default function DoctorIn10Mins() {
             >
               {t('doctorIn10StartCTA')} →
             </button>
-            <p className="text-slate-400 text-xs mt-3">₹199 · {isHi ? '3 दिन फॉलो-अप' : '3-day follow-up included'}</p>
+            <p className="text-slate-400 text-xs mt-3">₹499 · {isHi ? '3 दिन फॉलो-अप' : '3-day follow-up included'}</p>
           </div>
         </div>
       </section>
@@ -290,7 +290,7 @@ export default function DoctorIn10Mins() {
             <div className="absolute top-0 right-0 bg-amber-500 text-black text-xs font-bold px-4 py-1.5 rounded-bl-xl">SPECIAL OFFER</div>
             <h3 className="font-bold text-slate-700 uppercase text-xs tracking-widest">{t('doctorIn10FeeTitle')}</h3>
             <div className="flex items-center gap-3">
-              <span className="text-4xl text-slate-400 line-through decoration-red-500/70 font-bold">₹199</span>
+              <span className="text-4xl text-slate-400 line-through decoration-red-500/70 font-bold">₹499</span>
               <span className="text-5xl font-extrabold text-amber-500">FREE</span>
             </div>
             <p className="text-slate-500 text-sm leading-relaxed">{isHi ? 'लॉन्च ऑफर: अगले 7 दिनों तक कोई फीस नहीं।' : 'Launch Offer: No consultation fee for the next 7 days.'}</p>

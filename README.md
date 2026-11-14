@@ -252,7 +252,7 @@ Appointments are handled **100% on the frontend** using [EmailJS](https://www.em
 The application features a deeply integrated **"Doctor in 10 Minutes"** telemedicine widget (`DoctorIn10Widget.jsx`) floating on every page:
 
 1. **Instant Chat**: Patients can select their symptoms (e.g., Fever, Stomach Pain).
-2. **Payment Handoff**: Displays a ₹199 consultation fee with the clinic's UPI ID.
+2. **Payment Handoff**: Displays a ₹499 consultation fee with the clinic's UPI ID.
 3. **Deep Linking**: Clicking the "Send Screenshot" button redirects the patient directly to the Doctor's native WhatsApp app (`wa.me`) with a pre-filled message detailing their symptoms.
 4. **Video Call**: The doctor verifies the UPI screenshot on WhatsApp and initiates a native WhatsApp video call, removing the need for complex external video SDKs.
 

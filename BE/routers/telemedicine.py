@@ -9,7 +9,7 @@ router = APIRouter(prefix="/api/telemedicine", tags=["Telemedicine"])
 class ConsultationLead(BaseModel):
     patient_name: str
     concern: str
-    amount_paid: int = 199
+    amount_paid: int = 499
 
 class LeadResponse(ConsultationLead):
     id: str

@@ -170,7 +170,7 @@ export default function DoctorIn10Widget() {
                 <div className="absolute top-0 right-0 bg-amber-500 text-black text-[10px] font-bold px-3 py-1 rounded-bl-lg">OFFER</div>
                 <h4 className="text-white text-sm font-semibold mb-2">💊 {isHi ? 'कंसल्टेशन फीस' : 'Consultation Fee'}</h4>
                 <div className="flex items-center justify-center gap-3 my-2">
-                  <span className="text-2xl text-[#8696a0] line-through decoration-red-500/70">₹199</span>
+                  <span className="text-2xl text-[#8696a0] line-through decoration-red-500/70">₹499</span>
                   <span className="text-4xl font-extrabold text-amber-400">FREE</span>
                 </div>
                 <p className="text-[#8696a0] text-xs mt-2 text-amber-200/70">10-15 Min Video Call (Valid for 7 days)</p>
