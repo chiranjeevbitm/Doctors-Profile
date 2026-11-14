@@ -7,6 +7,8 @@ const translations = {
     about: "About",
     services: "Services",
     appointments: "Book Appointment",
+    navAppointments: "Appointments",
+    navQuick: "Doctor in 10",
     contact: "Contact",
 
     // Home Page — Hero
@@ -298,6 +300,8 @@ const translations = {
     about: "परिचय",
     services: "सेवाएं",
     appointments: "अपॉइंटमेंट बुक करें",
+    navAppointments: "अपॉइंटमेंट",
+    navQuick: "10 मिनट में डॉक्टर",
     contact: "संपर्क करें",
 
     // Home Page — Hero
