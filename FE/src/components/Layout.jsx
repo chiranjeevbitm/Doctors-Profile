@@ -1,110 +1,221 @@
-import React, { useState } from 'react';
-import { NavLink, Link, Outlet } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import Icon from './Icon';
+import { NavLink, Link, Outlet, useLocation } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import DoctorIn10Widget from './DoctorIn10Widget';
+import BookButton from './BookButton';
+import { PHONE, PHONE_TEL, MAPS_URL, clinicOpenNow } from '../lib/site';
+
+const NAV = [
+  { to: '/', key: 'home', end: true },
+  { to: '/about', key: 'about' },
+  { to: '/services', key: 'services' },
+  { to: '/appointments', key: 'navAppointments' },
+];
 
 export default function Layout() {
-  const { t } = useLanguage();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { t, language } = useLanguage();
+  const [open, setOpen] = useState(false);
+  const [solid, setSolid] = useState(false);
+  const [isOpenNow, setIsOpenNow] = useState(() => clinicOpenNow());
+  const loc = useLocation();
 
-  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
-  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+  // nav condenses once you leave the top — passive listener, no layout reads
+  useEffect(() => {
+    const onScroll = () => setSolid(window.scrollY > 12);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
-  const getNavLinkClass = ({ isActive }) => {
-    return isActive
-      ? "text-blue-900 font-bold border-b-2 border-blue-900 pb-1"
-      : "text-slate-600 hover:text-blue-900 transition-opacity duration-200";
-  };
+  useEffect(() => { setOpen(false); }, [loc.pathname]);
+  useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }); }, [loc.pathname]);
+  useEffect(() => { document.documentElement.lang = language; }, [language]);
+  useEffect(() => {
+    const id = setInterval(() => setIsOpenNow(clinicOpenNow()), 60_000);
+    return () => clearInterval(id);
+  }, []);
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [open]);
+
+  const navCls = ({ isActive }) =>
+    `relative px-1 py-1.5 text-[15.5px] font-semibold transition-colors ${
+      isActive ? 'text-ink' : 'text-muted hover:text-text'
+    } after:absolute after:left-0 after:-bottom-0.5 after:h-[2px] after:bg-ink after:transition-all after:duration-300 ${
+      isActive ? 'after:w-full' : 'after:w-0 hover:after:w-full'
+    }`;
 
   return (
-    <div className="flex flex-col min-h-screen bg-surface text-on-surface">
-      {/* TopNavBar */}
-      <nav className="fixed top-0 w-full z-50 bg-slate-50/80 backdrop-blur-md shadow-sm">
-        <div className="flex justify-between items-center px-4 md:px-8 py-4 max-w-7xl mx-auto">
-          <Link to="/" onClick={closeMobileMenu} className="text-2xl font-bold tracking-tight text-blue-900">{t('drName')}</Link>
-          
-          <button 
-            className="md:hidden text-blue-900 p-2"
-            onClick={toggleMobileMenu}
-            aria-label="Toggle navigation"
-          >
-            <span className="material-symbols-outlined text-2xl">
-              {isMobileMenuOpen ? 'close' : 'menu'}
-            </span>
-          </button>
+    <div className="flex min-h-screen flex-col bg-desk text-text">
+      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-sm focus:bg-ink focus:px-4 focus:py-2 focus:text-white">
+        Skip to content
+      </a>
 
-          <div className="hidden md:flex space-x-8 items-center">
-            <NavLink className={getNavLinkClass} to="/">{t('home')}</NavLink>
-            <NavLink className={getNavLinkClass} to="/about">{t('about')}</NavLink>
-            <NavLink className={getNavLinkClass} to="/services">{t('services')}</NavLink>
-            <NavLink className={getNavLinkClass} to="/appointments">{t('appointments')}</NavLink>
-            <NavLink className={getNavLinkClass} to="/doctor-in-10-mins">
-              <span className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse inline-block" />
-                {t('doctorIn10NavLabel')}
+      <header
+        className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ease-out ${
+          solid ? 'bg-paper/85 shadow-lift backdrop-blur-xl' : 'bg-transparent'
+        }`}
+        style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
+      >
+        <div className="wrap flex items-center justify-between" style={{ height: 'var(--nav-h)' }}>
+          <Link to="/" className="group flex flex-none items-center gap-2.5" aria-label="Arogya Clinic — home">
+            <span className="grid h-9 w-9 flex-none place-items-center rounded-[10px] bg-ink font-head text-[20px] font-black leading-none text-white transition-transform duration-300 group-hover:scale-105">
+              आ
+            </span>
+            <span className="leading-tight">
+              <span className="block whitespace-nowrap font-head text-[16px] font-extrabold text-ink-deep">{t('drName')}</span>
+              <span className="block whitespace-nowrap text-[11.5px] font-medium text-muted">MBBS, MD · Arogya Clinic</span>
+            </span>
+          </Link>
+
+          <nav className="hidden items-center gap-6 lg:flex xl:gap-7">
+            {NAV.map((n) => (
+              <NavLink key={n.to} to={n.to} end={n.end} className={navCls}>{t(n.key)}</NavLink>
+            ))}
+            <NavLink to="/doctor-in-10-mins" className={navCls}>
+              <span className="flex items-center gap-1.5">
+                <span className="relative flex h-2 w-2">
+                  <span className="pulse-dot absolute inline-flex h-2 w-2 rounded-full bg-neem" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-neem" />
+                </span>
+                {t('navQuick')}
               </span>
             </NavLink>
+          </nav>
 
+          <div className="hidden items-center gap-2 lg:flex">
+            <a href={`tel:${PHONE_TEL}`} className="btn btn-ghost px-3 text-[15px]" aria-label={`Call ${PHONE}`}>
+              <Icon n="call" size={20} />
+              <span className="hidden xl:inline">{PHONE}</span>
+            </a>
+            <BookButton>{t('bookNow')}</BookButton>
           </div>
-          <Link to="/appointments" className="hidden md:block bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded-xl font-semibold hover:opacity-90 active:scale-95 transition-all">
-            {t('appointments')}
-          </Link>
+
+          <button
+            className="grid h-11 w-11 place-items-center rounded-sm text-ink-deep lg:hidden"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="Menu"
+            aria-expanded={open}
+          >
+            <Icon n={open ? 'close' : 'menu'} size={26} />
+          </button>
         </div>
 
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden bg-white border-t border-slate-200 px-4 pt-2 pb-4 space-y-2 shadow-lg">
-            <NavLink className="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-blue-900 hover:bg-slate-50" onClick={closeMobileMenu} to="/">{t('home')}</NavLink>
-            <NavLink className="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-blue-900 hover:bg-slate-50" onClick={closeMobileMenu} to="/about">{t('about')}</NavLink>
-            <NavLink className="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-blue-900 hover:bg-slate-50" onClick={closeMobileMenu} to="/services">{t('services')}</NavLink>
-            <NavLink className="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-blue-900 hover:bg-slate-50" onClick={closeMobileMenu} to="/appointments">{t('appointments')}</NavLink>
-            <NavLink className="block px-3 py-3 rounded-md text-base font-bold text-green-700 hover:bg-green-50" onClick={closeMobileMenu} to="/doctor-in-10-mins">
+        {/* mobile sheet */}
+        <div
+          className={`overflow-hidden border-line bg-paper transition-[max-height,opacity] duration-300 ease-out lg:hidden ${
+            open ? 'max-h-[26rem] border-t opacity-100' : 'max-h-0 opacity-0'
+          }`}
+        >
+          <nav className="wrap flex flex-col gap-1 py-3">
+            {NAV.map((n) => (
+              <NavLink
+                key={n.to}
+                to={n.to}
+                end={n.end}
+                className={({ isActive }) =>
+                  `rounded-sm px-3 py-3 text-[16px] font-semibold ${isActive ? 'bg-ink-soft text-ink' : 'text-text'}`
+                }
+              >
+                {t(n.key)}
+              </NavLink>
+            ))}
+            <NavLink to="/doctor-in-10-mins" className="rounded-sm px-3 py-3 text-[16px] font-bold text-neem">
               {t('doctorIn10NavLabel')} ⚡
             </NavLink>
-          </div>
-        )}
-      </nav>
+            <div className="mt-2 grid grid-cols-2 gap-2 px-1 pb-2">
+              <a href={`tel:${PHONE_TEL}`} className="btn">
+                <Icon n="call" size={20} />
+                {language === 'hi' ? 'कॉल करें' : 'Call'}
+              </a>
+              <BookButton>{t('bookNow')}</BookButton>
+            </div>
+          </nav>
+        </div>
+      </header>
 
-      {/* Main Content Area */}
-      <main className="pt-20 flex-grow">
+      <main id="main" className="flex-grow" style={{ paddingTop: 'var(--nav-h)' }}>
         <Outlet />
       </main>
 
-      {/* Footer */}
-      <footer className="bg-slate-200 w-full mt-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4 md:px-8 py-12 max-w-7xl mx-auto">
-          <div className="space-y-4">
-            <div className="text-xl font-bold text-blue-900">{t('drName')}</div>
-            <p className="text-slate-500 max-w-xs leading-relaxed">{t('footerDesc')}</p>
+      <footer className="mt-auto border-t border-line bg-paper">
+        <div className="wrap grid grid-cols-1 gap-10 py-14 md:grid-cols-12">
+          <div className="space-y-4 md:col-span-5">
+            <div className="flex items-center gap-2.5">
+              <span className="grid h-10 w-10 place-items-center rounded-[10px] bg-ink font-head text-[22px] font-black text-white">आ</span>
+              <span>
+                <span className="block font-head text-[17px] font-extrabold text-ink-deep">{t('drName')}</span>
+                <span className="block text-[12.5px] text-muted">MBBS, MD (General Medicine)</span>
+              </span>
+            </div>
+            <p className="max-w-sm text-[15px] leading-relaxed text-muted">{t('footerDesc')}</p>
+            <div className="flex flex-wrap gap-2 pt-1">
+              <span className="tag tag-ink">IMA</span>
+              <span className="tag tag-ink">SKMCH</span>
+              <span className="tag tag-ink">DMCH Darbhanga</span>
+            </div>
           </div>
-          <div className="space-y-4">
-            <h4 className="font-bold text-blue-900 uppercase text-xs tracking-widest">{t('navigation')}</h4>
-            <ul className="space-y-2">
-              <li><Link className="text-slate-500 hover:text-blue-900 transition-colors" to="/about">{t('aboutUs')}</Link></li>
-              <li><Link className="text-slate-500 hover:text-blue-900 transition-colors" to="/appointments">{t('patientPortal')}</Link></li>
-              <li><Link className="text-slate-500 hover:text-blue-900 transition-colors" to="/services">{t('services')}</Link></li>
-              <li><Link className="text-slate-500 hover:text-blue-900 transition-colors" to="/reserve">{t('reserve')}</Link></li>
-              <li><Link className="text-slate-500 hover:text-green-700 font-semibold transition-colors" to="/doctor-in-10-mins">{t('doctorIn10NavLabel')} ⚡</Link></li>
 
+          <div className="space-y-3 md:col-span-3">
+            <h4 className="eyebrow">{t('navigation')}</h4>
+            <ul className="space-y-2 text-[15px]">
+              {[['/about', 'aboutUs'], ['/services', 'services'], ['/appointments', 'appointments'], ['/doctor-in-10-mins', 'doctorIn10NavLabel']].map(([to, key]) => (
+                <li key={to}>
+                  <Link className="text-muted transition-colors hover:text-ink" to={to}>{t(key)}</Link>
+                </li>
+              ))}
             </ul>
           </div>
-          <div className="space-y-4">
-            <h4 className="font-bold text-blue-900 uppercase text-xs tracking-widest">{t('clinicLocationTitle')}</h4>
-            <p className="text-slate-500 leading-relaxed">
-              <a href="https://www.google.com/maps/place/Dr+Deepak+kumar/@26.1500074,85.4007174,17z/data=!4m6!3m5!1s0x39ed110057681ebf:0xcc7a1deab9d79035!8m2!3d26.150109!4d85.400502!16s%2Fg%2F11z5t68_qr?entry=ttu&g_ep=EgoyMDI2MDQxOS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" className="hover:text-blue-900 transition-colors">
-                {t('address')}
-              </a><br/>
-              <span className="inline-block mt-2 font-semibold">{t('morningTiming')}<br/>{t('eveningTiming')}</span><br/>
-              <span className="inline-block mt-1 font-semibold text-blue-900">{t('phone')}</span>
+
+          <div className="space-y-3 md:col-span-4">
+            <h4 className="eyebrow">{t('clinicLocationTitle')}</h4>
+            <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" className="block text-[15px] leading-relaxed text-muted transition-colors hover:text-ink">
+              Bada Jagrnath, Shakti Dharmkanta,<br />Ahiyapur, Muzaffarpur, Bihar 842001
+            </a>
+            <div className="space-y-1 text-[15px]">
+              <p className="flex items-center gap-2 font-semibold">
+                <span className={`h-2 w-2 flex-none rounded-full ${isOpenNow ? 'bg-neem' : 'bg-faint'}`} />
+                {isOpenNow
+                  ? (language === 'hi' ? 'अभी खुला है' : 'Open now')
+                  : (language === 'hi' ? 'अभी बंद है' : 'Closed now')}
+              </p>
+              <p className="text-muted">{language === 'hi' ? 'सुबह' : 'Morning'} 6:00–9:00</p>
+              <p className="text-muted">{language === 'hi' ? 'शाम' : 'Evening'} 5:00–9:00</p>
+            </div>
+            <a href={`tel:${PHONE_TEL}`} className="inline-flex items-center gap-2 font-bold text-ink">
+              <Icon n="call" size={20} />{PHONE}
+            </a>
+          </div>
+        </div>
+
+        <div className="border-t border-line">
+          <div className="wrap flex flex-col gap-2 py-5 text-[13px] text-faint md:flex-row md:items-center md:justify-between">
+            <p>© {new Date().getFullYear()} Dr. Deepak Kumar · Arogya Clinic, Muzaffarpur</p>
+            <p>
+              {language === 'hi' ? 'संचालित' : 'Runs on'}{' '}
+              <span className="font-semibold text-muted">Arogya Rx</span>
             </p>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 border-t border-slate-300">
-          <p className="text-slate-500 text-sm">{t('copyright')}</p>
-        </div>
       </footer>
 
-      {/* Pre-consultation WhatsApp Chat Widget - visible on all pages */}
+      {/* mobile action bar — the two things a patient actually wants */}
+      <div
+        className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 gap-2 border-t border-line bg-paper/95 px-3 pt-2 backdrop-blur-xl lg:hidden"
+        style={{ paddingBottom: 'calc(0.5rem + env(safe-area-inset-bottom, 0px))' }}
+      >
+        <a href={`tel:${PHONE_TEL}`} className="btn">
+          <Icon n="call" size={20} />
+          {language === 'hi' ? 'कॉल' : 'Call'}
+        </a>
+        <BookButton className="whitespace-nowrap">
+          {language === 'hi' ? 'बुक करें' : 'Book now'}
+        </BookButton>
+      </div>
+      <div className="h-[76px] lg:hidden" aria-hidden="true" />
+
       <DoctorIn10Widget />
     </div>
   );

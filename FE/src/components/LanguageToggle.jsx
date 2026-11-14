@@ -1,41 +1,23 @@
+import Icon from './Icon';
 import { useLanguage } from '../context/LanguageContext';
 
+/**
+ * Sits bottom-left so it never fights the WhatsApp widget on the right, and
+ * clears the mobile action bar and the phone's home indicator.
+ */
 const LanguageToggle = () => {
   const { language, toggleLanguage } = useLanguage();
+  const next = language === 'en' ? 'हिन्दी' : 'English';
 
   return (
     <button
       onClick={toggleLanguage}
-      style={{
-        position: 'fixed',
-        bottom: '100px',
-        right: '20px',
-        width: '55px',
-        height: '55px',
-        borderRadius: '50%',
-        backgroundColor: '#2563eb',
-        color: 'white',
-        border: 'none',
-        fontWeight: '700',
-        fontSize: '14px',
-        cursor: 'pointer',
-        boxShadow: '0 4px 15px rgba(37, 99, 235, 0.4)',
-        zIndex: '9999',
-        transition: 'all 0.3s ease',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-      onMouseOver={(e) => {
-        e.target.style.transform = 'scale(1.1)';
-        e.target.style.boxShadow = '0 6px 20px rgba(37, 99, 235, 0.5)';
-      }}
-      onMouseOut={(e) => {
-        e.target.style.transform = 'scale(1)';
-        e.target.style.boxShadow = '0 4px 15px rgba(37, 99, 235, 0.4)';
-      }}
+      aria-label={language === 'en' ? 'हिन्दी में पढ़ें' : 'Read in English'}
+      className="group fixed left-4 z-[70] lg:!bottom-6 inline-flex items-center gap-2 rounded-full border border-line bg-paper/95 px-4 py-2.5 text-[14px] font-bold text-ink shadow-lift backdrop-blur-xl transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-lift-lg active:translate-y-0"
+      style={{ bottom: 'calc(92px + env(safe-area-inset-bottom, 0px))' }}
     >
-      {language === 'en' ? 'हिन्दी' : 'ENG'}
+      <Icon n="translate" size={18} />
+      {next}
     </button>
   );
 };

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import Icon from './Icon';
 import { useLanguage } from '../context/LanguageContext';
 
 const WA_PHONE_NUMBER = '918877556142'; // Dr. Deepak's WhatsApp
@@ -93,20 +94,21 @@ export default function DoctorIn10Widget() {
       <button
         id="dr-deepak-widget-launcher"
         onClick={handleOpen}
-        className="fixed bottom-6 right-6 w-16 h-16 rounded-full flex items-center justify-center text-white text-3xl shadow-xl z-[9999] hover:scale-110 transition-transform"
+        className="fixed right-4 md:right-6 lg:!bottom-6 w-16 h-16 rounded-full flex items-center justify-center text-white text-3xl shadow-xl z-[60] hover:scale-110 transition-transform"
         style={{
+          bottom: 'calc(88px + env(safe-area-inset-bottom, 0px))',
           background: '#25D366',
           boxShadow: '0 8px 32px rgba(37,211,102,0.4)',
           animation: open ? 'none' : 'wa-pulse-ring 2s infinite'
         }}
       >
-        {open ? <span className="text-2xl material-symbols-outlined">close</span> : '💬'}
+        {open ? <Icon n="close" size={26} /> : '💬'}
         {!open && <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 border-2 border-white rounded-full flex items-center justify-center text-[10px] font-bold">1</div>}
       </button>
 
       {/* Widget Window */}
       {open && (
-        <div className="fixed bottom-24 right-4 md:right-6 w-[360px] max-w-[calc(100vw-32px)] bg-[#0d1117] border border-[#1e2840] rounded-2xl shadow-2xl flex flex-col z-[9998] overflow-hidden" style={{ height: '520px' }}>
+        <div className="fixed bottom-[168px] lg:bottom-28 right-4 md:right-6 w-[360px] max-w-[calc(100vw-32px)] bg-[#0d1117] border border-[#1e2840] rounded-2xl shadow-2xl flex flex-col z-[61] overflow-hidden" style={{ height: '520px' }}>
           
           {/* Header */}
           <div className="bg-[#128C7E] px-4 py-3 flex items-center gap-3">
@@ -155,7 +157,7 @@ export default function DoctorIn10Widget() {
                   className="flex-1 bg-[#2a3942] border-none rounded-full px-4 py-2.5 text-sm text-white focus:outline-none placeholder:text-[#8696a0]"
                 />
                 <button onClick={handleSend} className="w-10 h-10 rounded-full bg-[#128C7E] flex items-center justify-center text-white shrink-0 hover:bg-[#25D366] transition-colors">
-                  <span className="material-symbols-outlined text-[18px] ml-1">send</span>
+                  <Icon n="send" size={18} className="ml-1" />
                 </button>
               </div>
             </>

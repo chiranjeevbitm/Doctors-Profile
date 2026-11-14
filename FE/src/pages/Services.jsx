@@ -1,161 +1,144 @@
 import React from 'react';
+import Icon from '../components/Icon';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
+import { useReveal } from '../lib/motion';
+import BookButton from '../components/BookButton';
+import bannerImg from '../assets/services_banner.webp';
 
 export default function Services() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const root = useReveal([language]);
+  const hi = language === 'hi';
+
+  const minor = [
+    ['endocrineCare', 'endocrineCareDesc', 'endocrinology'],
+    ['respiratoryHealth', 'respiratoryHealthDesc', 'pulmonology'],
+    ['abdomenDiseases', 'abdomenDiseasesDesc', 'gastroenterology'],
+    ['teleconsultation', 'teleconsultationDesc', 'videocam'],
+  ];
 
   return (
-    <>
-      {/* Hero Section */}
-      <section className="relative px-8 py-20 overflow-hidden">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
-          <div className="flex-1 z-10">
-            <div className="inline-flex items-center px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed text-sm font-semibold mb-6">
-              <span className="material-symbols-outlined text-sm mr-2">verified_user</span>
-              {t('servicesHeroBadge')}
+    <div ref={root}>
+      {/* masthead */}
+      <section className="relative overflow-hidden border-b border-line bg-paper py-16 md:py-24">
+        <div className="grain pointer-events-none absolute inset-0 opacity-60" />
+        <div className="float-slower pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-neem/[0.08] blur-3xl" />
+        <div className="wrap relative max-w-3xl">
+          <p className="reveal eyebrow mb-3">{t('servicesHeroBadge')}</p>
+          <h1 className="reveal font-head text-[36px] font-extrabold leading-[1.1] text-text md:text-[54px]" data-d="1">
+            {t('servicesHeroTitle')}
+          </h1>
+          <p className="reveal mt-5 text-[17px] leading-relaxed text-muted md:text-[18.5px]" data-d="2">
+            {t('servicesHeroDesc')}
+          </p>
+          <div className="reveal mt-7 flex flex-wrap gap-3" data-d="3">
+            <BookButton size="lg">{t('scheduleAppt')}</BookButton>
+          </div>
+        </div>
+      </section>
+
+      {/* flagship service */}
+      <section className="py-20 md:py-24">
+        <div className="wrap">
+          <div className="reveal mb-10 max-w-2xl">
+            <h2 className="sec-h mb-4">{t('clinicalServices')}</h2>
+            <p className="sec-p">{t('clinicalServicesDesc')}</p>
+          </div>
+
+          <article className="reveal relative overflow-hidden rounded-2xl bg-ink text-white shadow-ink" data-d="1">
+            <div className="grain absolute inset-0 opacity-20" />
+            <div className="relative grid gap-0 md:grid-cols-12">
+              <div className="p-9 md:col-span-7 md:p-12">
+                <Icon n="monitor_heart" size={40} className="mb-6 block" />
+                <h3 className="mb-4 font-head text-[26px] font-extrabold leading-snug md:text-[32px]">{t('diabetesBp')}</h3>
+                <p className="max-w-lg text-[16px] leading-relaxed text-white/85">{t('diabetesBpDesc')}</p>
+                <div className="mt-7 flex flex-wrap gap-2">
+                  {['HbA1c', 'BP charting', 'Lipid profile', 'Diet plan'].map((x) => (
+                    <span key={x} className="rounded-full bg-white/15 px-3 py-1 text-[13px] font-semibold">{x}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="relative min-h-[240px] md:col-span-5">
+                <img src={bannerImg} alt="" aria-hidden="true" width="904" height="523" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover opacity-70 mix-blend-luminosity" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent md:bg-gradient-to-r" />
+              </div>
             </div>
-            <h1 className="font-headline text-5xl md:text-6xl font-extrabold tracking-tight text-primary leading-[1.1] mb-6">
-              {t('servicesHeroTitle')}
-            </h1>
-            <p className="text-lg md:text-xl text-on-surface-variant leading-relaxed max-w-2xl mb-8">
-              {t('servicesHeroDesc')}
+          </article>
+
+          <div className="mt-5 grid gap-5 md:grid-cols-2">
+            {minor.map(([title, desc, icon], i) => (
+              <article key={title} className="reveal lift-hover card group p-8 hover:border-ink" data-d={i + 1}>
+                <div className="mb-5 grid h-13 w-13 place-items-center rounded-lg bg-ink-soft p-3 transition-transform duration-300 group-hover:scale-110">
+                  <Icon n={icon} size={26} className="text-ink" />
+                </div>
+                <h3 className="mb-2 text-[20px] font-bold text-text">{t(title)}</h3>
+                <p className="text-[15.5px] leading-relaxed text-muted">{t(desc)}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* partnership */}
+      <section className="border-y border-line bg-paper py-20 md:py-24">
+        <div className="wrap">
+          <h2 className="reveal sec-h mb-10 max-w-2xl">{t('beyondMedicine')}</h2>
+          <div className="grid gap-5 md:grid-cols-2">
+            {[['evidenceBased', 'evidenceBasedDesc', 'science'], ['personalizedTouch', 'personalizedTouchDesc', 'diversity_1']].map(([title, desc, icon], i) => (
+              <div key={title} className="reveal rounded-lg border border-line bg-desk p-8" data-d={i + 1}>
+                <Icon n={icon} size={30} className="mb-4 block text-neem" />
+                <h3 className="mb-2 text-[19px] font-bold text-text">{t(title)}</h3>
+                <p className="text-[15.5px] leading-relaxed text-muted">{t(desc)}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* what to bring — practical, and the kind of thing patients search for */}
+      <section className="py-20 md:py-24">
+        <div className="wrap grid gap-10 md:grid-cols-12">
+          <div className="reveal md:col-span-5">
+            <h2 className="sec-h mb-4">{hi ? 'अपॉइंटमेंट पर क्या लाएँ' : 'What to bring to your visit'}</h2>
+            <p className="sec-p">
+              {hi
+                ? 'ये चीज़ें साथ लाने से परामर्श तेज़ होता है और दोबारा जाँच कराने की ज़रूरत नहीं पड़ती।'
+                : 'Bringing these makes the consultation faster and usually saves you from repeating a test.'}
             </p>
           </div>
-          <div className="flex-1 relative">
-            <div className="aspect-square rounded-3xl overflow-hidden shadow-2xl relative">
-              <img className="w-full h-full object-cover" alt="professional medical setting with modern diagnostic equipment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAcY89hGQbZC7A1BgiyItCfj2abPLHHWoiXaWY2bETea7xwvBhGpIiC-c4GAFSnuQvY2QjRzwu3jA_BBI4BIwv_DkbCdDOdk-neH76gs8tYwOiH1WxhRuc5GxLSWplkoVKjCF4lAl5Q_faOEZw_tomtfIy6H2BYvyyHNy_yrgwhr1w3O2TNdP3yne19phJDEmIx2luMYQb9hDhuGIYlOKMcOrQizSh-pXaV7XDYCk3WBDAQ3jt9smanUpzuXiK-Nezc0BUCxr7VpU" />
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent"></div>
-            </div>
-            <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-secondary-container rounded-2xl -z-10 opacity-50"></div>
-          </div>
+          <ul className="grid gap-3 md:col-span-7 md:grid-cols-2">
+            {(hi
+              ? ['पुरानी पर्चियाँ', 'हाल की जाँच रिपोर्ट', 'चल रही दवाइयों के पत्ते', 'शुगर / BP की डायरी', 'एलर्जी की जानकारी', 'आधार या कोई पहचान पत्र']
+              : ['Old prescriptions', 'Recent test reports', 'Current medicine strips', 'Sugar / BP diary', 'Known allergies', 'Aadhaar or any ID']
+            ).map((item, i) => (
+              <li key={item} className="reveal flex items-center gap-3 rounded-lg border border-line bg-paper px-5 py-4" data-d={(i % 5) + 1}>
+                <Icon n="check" size={20} className="flex-none text-ink" />
+                <span className="text-[15px] font-medium text-text">{item}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
-      {/* Services Bento Grid */}
-      <section className="px-8 py-16 bg-surface-container-low">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col mb-16">
-            <h2 className="font-headline text-4xl font-bold text-primary mb-4">{t('clinicalServices')}</h2>
-            <p className="text-on-surface-variant max-w-xl">{t('clinicalServicesDesc')}</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-            <div className="md:col-span-8 bg-surface-container-lowest p-8 rounded-xl flex flex-col justify-between group hover:shadow-lg transition-shadow duration-300">
-              <div>
-                <div className="w-14 h-14 bg-primary/10 rounded-lg flex items-center justify-center text-primary mb-6">
-                  <span className="material-symbols-outlined text-3xl">monitor_heart</span>
-                </div>
-                <h3 className="font-headline text-2xl font-bold text-primary mb-3">{t('diabetesBp')}</h3>
-                <p className="text-on-surface-variant leading-relaxed max-w-lg mb-8">
-                  {t('diabetesBpDesc')}
-                </p>
+      {/* CTA */}
+      <section className="pb-24">
+        <div className="wrap">
+          <div className="reveal relative overflow-hidden rounded-2xl border border-line bg-paper p-9 md:p-14">
+            <div className="float-slow pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-ink/[0.07] blur-3xl" />
+            <div className="relative flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
+              <div className="max-w-lg">
+                <h2 className="mb-3 font-head text-[28px] font-extrabold text-text md:text-[36px]">{t('startRecovery')}</h2>
+                <p className="text-[16.5px] leading-relaxed text-muted">{t('startRecoveryDesc')}</p>
               </div>
-              <Link to="/appointments" className="inline-flex items-center text-tertiary font-bold group-hover:gap-2 transition-all">
-                {t('learnMore')} <span className="material-symbols-outlined ml-1">arrow_forward</span>
-              </Link>
-            </div>
-            <div className="md:col-span-4 bg-surface-container-lowest p-8 rounded-xl flex flex-col group hover:shadow-lg transition-shadow duration-300">
-              <div className="w-14 h-14 bg-secondary/10 rounded-lg flex items-center justify-center text-secondary mb-6">
-                <span className="material-symbols-outlined text-3xl">local_pharmacy</span>
+              <div className="flex flex-col gap-3">
+                <BookButton size="lg">{t('scheduleAppt')}</BookButton>
+                <Link to="/appointments" className="btn">{hi ? 'क्लिनिक की जानकारी' : 'Clinic details'}</Link>
               </div>
-              <h3 className="font-headline text-2xl font-bold text-primary mb-3">{t('endocrineCare')}</h3>
-              <p className="text-on-surface-variant mb-6 flex-grow">{t('endocrineCareDesc')}</p>
-              <Link to="/appointments" className="inline-flex items-center text-tertiary font-bold">
-                {t('learnMore')} <span className="material-symbols-outlined ml-1">arrow_forward</span>
-              </Link>
-            </div>
-            <div className="md:col-span-4 bg-surface-container-lowest p-8 rounded-xl flex flex-col group hover:shadow-lg transition-shadow duration-300">
-              <div className="w-14 h-14 bg-tertiary/10 rounded-lg flex items-center justify-center text-tertiary mb-6">
-                <span className="material-symbols-outlined text-3xl">pulmonology</span>
-              </div>
-              <h3 className="font-headline text-2xl font-bold text-primary mb-3">{t('respiratoryHealth')}</h3>
-              <p className="text-on-surface-variant mb-6 flex-grow">{t('respiratoryHealthDesc')}</p>
-              <Link to="/appointments" className="inline-flex items-center text-tertiary font-bold">
-                {t('learnMore')} <span className="material-symbols-outlined ml-1">arrow_forward</span>
-              </Link>
-            </div>
-            <div className="md:col-span-4 bg-surface-container-lowest p-8 rounded-xl flex flex-col group hover:shadow-lg transition-shadow duration-300">
-              <div className="w-14 h-14 bg-primary-container/10 rounded-lg flex items-center justify-center text-primary-container mb-6">
-                <span className="material-symbols-outlined text-3xl">gastroenterology</span>
-              </div>
-              <h3 className="font-headline text-2xl font-bold text-primary mb-3">{t('abdomenDiseases')}</h3>
-              <p className="text-on-surface-variant mb-6 flex-grow">{t('abdomenDiseasesDesc')}</p>
-              <Link to="/appointments" className="inline-flex items-center text-tertiary font-bold">
-                {t('learnMore')} <span className="material-symbols-outlined ml-1">arrow_forward</span>
-              </Link>
-            </div>
-            <div className="md:col-span-4 bg-surface-container-lowest p-8 rounded-xl flex flex-col group hover:shadow-lg transition-shadow duration-300">
-              <div className="w-14 h-14 bg-secondary-container/20 rounded-lg flex items-center justify-center text-secondary mb-6">
-                <span className="material-symbols-outlined text-3xl">video_camera_front</span>
-              </div>
-              <h3 className="font-headline text-2xl font-bold text-primary mb-3">{t('teleconsultation')}</h3>
-              <p className="text-on-surface-variant mb-6 flex-grow">{t('teleconsultationDesc')}</p>
-              <Link to="/appointments" className="inline-flex items-center text-tertiary font-bold">
-                {t('learnMore')} <span className="material-symbols-outlined ml-1">arrow_forward</span>
-              </Link>
             </div>
           </div>
         </div>
       </section>
-
-      {/* Trust Section */}
-      <section className="px-8 py-20 bg-background relative overflow-hidden">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
-          <div className="md:w-1/2">
-            <h2 className="font-headline text-4xl font-bold text-primary mb-8 leading-tight">{t('beyondMedicine')}</h2>
-            <div className="space-y-10">
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-tertiary-fixed rounded-full flex items-center justify-center text-on-tertiary-fixed">
-                  <span className="material-symbols-outlined">task_alt</span>
-                </div>
-                <div>
-                  <h4 className="font-bold text-primary text-lg">{t('evidenceBased')}</h4>
-                  <p className="text-on-surface-variant">{t('evidenceBasedDesc')}</p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-secondary-fixed rounded-full flex items-center justify-center text-on-secondary-fixed">
-                  <span className="material-symbols-outlined">diversity_1</span>
-                </div>
-                <div>
-                  <h4 className="font-bold text-primary text-lg">{t('personalizedTouch')}</h4>
-                  <p className="text-on-surface-variant">{t('personalizedTouchDesc')}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="md:w-1/2 grid grid-cols-2 gap-4">
-            <div className="space-y-4 pt-12">
-              <img className="w-full h-64 object-cover rounded-2xl shadow-md" alt="close up of a compassionate doctor holding a patient's hand" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4gnSosnoHdB_bNcWc09Vc4J1ZCOW76FuDb0-QfCpMlwvrRig7GaRHA0nCI4JPPITZp1yCJgZw4V_NbjIQ7C37IxrdKbgETaAnunpq5NLjbf8m6bjgsLWIPNHn0p4s1hvgQhN21dZJEPjVLPH7W_ZXQih4qNvCyAmzSZ58Lm_O1VCf7n0WryVzyEF9N3pYm744TGKHS_k06Oq0g-GVj47zDofU1qjRStJ8M-Zf_reB4N6ajSujsScXKF96jNiS7s_JGSP7ouh5FeE" />
-              <img className="w-full h-48 object-cover rounded-2xl shadow-md" alt="clean bright laboratory with microscope" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQCxQehDcjv3OmlzxBQc5e9YUlVdvfJRkBvHU9C24HCyomL_kQ5KAF-yAgwwklvSawm20nX4RNWgi2zALavN-8WRscxV7nlJ8wJOpCD-IrXrJ32Jl3p4r6xjGNLZlw3uHA317sP27Z7HEUoNFexCYWWaIArouncVHc7tuhoX4b1c4aCytn1mDp5P7zhCkv_MvlCYaV6kA398v_efE5gZZNtlNj7Mgmw9NSpJwoWZ44TGTFPwL6MaUjfmMiol9LhCF8EOp7mjN8oEs" />
-            </div>
-            <div className="space-y-4">
-              <img className="w-full h-48 object-cover rounded-2xl shadow-md" alt="modern hospital hallway" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwJBMB5SBfEl0otRxQXHDFXNB-e-NNzLiJQB83AWyE-q7aMGmtUMhV_5fvAbjuOBIrSeceBs-8dgb_Lvd0OOn6fuJlO4i_WxcyV7vIMOEOhUu6ExzYJcaGeMt806QqFHqrDg2kPeBqpFTy73WhW_7N6oqbH55B5wGrlYN86J5A_6-CHX8bPgQxcvTkqYdtV4L6f0X6kYzQhX_2UK7iJEyTBisokhGvW5zZTIzLPN5s991YLiyhA8P6ggCQnufns2RThQkXuN6X60Y" />
-              <img className="w-full h-64 object-cover rounded-2xl shadow-md" alt="stethoscope on a desk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGkoVgRYHqpI8YwnoXBm3Yqys0-t8u7HIZWBrJN5qK2RBw3nSYbyfXC0ujTY34Zey0Nla8I7ZCawJMcsBDzuiWIHS2XykOHzWdCkSCE8bPoQg2eWlAYByekmKl-dHIeicrj6cJweeYGSkEr9IwadKIM5m4z2N31n3-zXc3DRdXkfjeHGoS15D1ghLu5n1RGgsqMpkci5ZEyfxqVpa7bmWu4wG3Sr-6gDDKzwXY1R6w24Xc4cvTImp3GIqSnZpC1M0aLQJEaAfFkwo" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="px-8 py-20">
-        <div className="max-w-5xl mx-auto rounded-[2rem] bg-gradient-to-br from-primary to-primary-container p-12 md:p-20 text-center relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/20 rounded-full blur-3xl -mr-32 -mt-32"></div>
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-tertiary/20 rounded-full blur-3xl -ml-32 -mb-32"></div>
-          <h2 className="font-headline text-3xl md:text-5xl font-extrabold text-white mb-6 relative z-10">{t('startRecovery')}</h2>
-          <p className="text-on-primary-container text-lg md:text-xl max-w-2xl mx-auto mb-10 relative z-10">
-            {t('startRecoveryDesc')}
-          </p>
-          <div className="flex flex-col md:flex-row justify-center gap-4 relative z-10">
-            <Link to="/appointments" className="px-8 py-4 bg-surface-container-lowest text-primary rounded-xl font-bold shadow-xl hover:scale-105 transition-transform text-center">
-              {t('scheduleAppt')}
-            </Link>
-            <Link to="/appointments" className="px-8 py-4 bg-transparent border border-white/30 text-white rounded-xl font-bold hover:bg-white/10 transition-colors text-center">
-              {t('viewPricing')}
-            </Link>
-          </div>
-        </div>
-      </section>
-    </>
+    </div>
   );
 }

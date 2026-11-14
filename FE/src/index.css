@@ -2,24 +2,189 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ───────────────────────────────────────────────────────────────
+   Arogya Clinic — public site
+   Design language shared with Arogya Rx: ink blue + sindoor red on
+   a cool blue-grey desk. Martel for headings, Hind for UI; both
+   carry Devanagari so the Hindi toggle reads properly.
+   Motion rule: transform and opacity only, nothing else.
+   ─────────────────────────────────────────────────────────────── */
+
 @layer base {
+  :root {
+    --ink: #1626B8;
+    --ink-deep: #0E1A6E;
+    --desk: #EEF0F6;
+    --nav-h: 68px;
+    color-scheme: light;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+
   body {
-    font-family: 'Inter', sans-serif;
-    background-color: theme('colors.surface'); /* #f7f9fb */
-    color: theme('colors.on-surface'); /* #191c1e */
+    font-family: 'Hind', 'Noto Sans Devanagari', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    background-color: #EEF0F6;
+    color: #161A2E;
+    -webkit-font-smoothing: antialiased;
+    font-variant-numeric: tabular-nums;
+    overflow-x: hidden;
   }
+
   h1, h2, h3, h4 {
-    font-family: 'Manrope', sans-serif;
+    font-family: 'Martel', 'Noto Serif Devanagari', Georgia, serif;
+    text-wrap: balance;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
   }
+
+  :focus-visible {
+    outline: 2.5px solid var(--ink);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  ::selection { background: #E6E9FB; }
+
+  /* Hindi sets slightly larger — Devanagari needs the height */
+  html[lang="hi"] body { font-size: 15.5px; line-height: 1.6; }
+}
+
+@layer components {
+  .wrap { @apply max-w-content mx-auto px-5 md:px-8; }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 font-semibold rounded-sm
+           px-5 py-3 border border-line-2 bg-paper text-text no-underline
+           transition-[background-color,border-color,transform,box-shadow] duration-150 ease-out
+           active:translate-y-px;
+    min-height: 46px;
+  }
+  .btn:hover { @apply border-ink; }
+  .btn-primary {
+    @apply bg-ink border-ink text-white shadow-ink;
+  }
+  .btn-primary:hover { @apply bg-ink-deep border-ink-deep; }
+  .btn-good { @apply bg-neem border-neem text-white; }
+  .btn-ghost { @apply bg-transparent border-transparent; }
+  .btn-ghost:hover { @apply bg-desk-2 border-transparent; }
+  .btn-lg { @apply px-7 text-[17px]; min-height: 54px; }
+
+  .card {
+    @apply bg-paper border border-line rounded-lg;
+  }
+
+  .tag {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-sm
+           text-[12.5px] font-semibold bg-desk-2 text-muted whitespace-nowrap;
+  }
+  .tag-ink { @apply bg-ink-soft text-ink; }
+  .tag-red { @apply bg-sindoor-soft text-sindoor; }
+  .tag-green { @apply bg-neem-soft text-neem; }
+  .tag-amber { @apply bg-haldi-soft text-haldi; }
+
+  .eyebrow {
+    @apply text-[12px] font-bold uppercase tracking-[0.14em] text-ink;
+  }
+
+  /* Section heading pair used on every page */
+  .sec-h { @apply text-[30px] md:text-[40px] font-extrabold text-text; }
+  .sec-p { @apply text-[17px] md:text-[18px] text-muted leading-relaxed; }
 }
 
 @layer utilities {
-  .material-symbols-outlined {
-    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-    vertical-align: middle;
+
+  /* ── scroll reveal ──────────────────────────────────────────
+     Markup is visible by default. JS adds .js-motion to <html>,
+     which arms the hidden state; IntersectionObserver then adds
+     .is-in. No JS, or reduced motion → everything simply shows. */
+  .js-motion .reveal {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+    transition: opacity .62s cubic-bezier(.22,.61,.36,1),
+                transform .62s cubic-bezier(.22,.61,.36,1);
+    will-change: opacity, transform;
   }
-  .glass-nav {
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+  .js-motion .reveal.is-in {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+  .js-motion .reveal-l { transform: translate3d(-22px, 0, 0); }
+  .js-motion .reveal-r { transform: translate3d(22px, 0, 0); }
+  .js-motion .reveal-s { transform: scale(.965); }
+
+  /* stagger children */
+  .js-motion .reveal[data-d="1"] { transition-delay: .07s }
+  .js-motion .reveal[data-d="2"] { transition-delay: .14s }
+  .js-motion .reveal[data-d="3"] { transition-delay: .21s }
+  .js-motion .reveal[data-d="4"] { transition-delay: .28s }
+  .js-motion .reveal[data-d="5"] { transition-delay: .35s }
+
+  /* ── tilt card (CSS 3D, no library) ───────────────────────── */
+  .tilt { transform-style: preserve-3d; perspective: 900px; }
+  .tilt-in {
+    transition: transform .4s cubic-bezier(.22,.61,.36,1);
+    transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(0);
+  }
+
+  .lift-hover {
+    transition: transform .28s cubic-bezier(.22,.61,.36,1), box-shadow .28s ease-out;
+  }
+  .lift-hover:hover { transform: translateY(-4px); }
+
+  /* ── the ECG line that runs under the hero ─────────────────── */
+  .ecg path {
+    stroke-dasharray: 1400;
+    stroke-dashoffset: 1400;
+    animation: ecg-draw 4.2s cubic-bezier(.4,0,.2,1) .35s forwards;
+  }
+  @keyframes ecg-draw { to { stroke-dashoffset: 0 } }
+
+  .pulse-dot { animation: pulse-ring 2.4s ease-out infinite; }
+  @keyframes pulse-ring {
+    0%   { transform: scale(.85); opacity: .85 }
+    70%  { transform: scale(2.2);  opacity: 0 }
+    100% { transform: scale(2.2);  opacity: 0 }
+  }
+
+  .float-slow { animation: float-y 7s ease-in-out infinite; }
+  .float-slower { animation: float-y 11s ease-in-out infinite reverse; }
+  @keyframes float-y {
+    0%, 100% { transform: translate3d(0, 0, 0) }
+    50%      { transform: translate3d(0, -14px, 0) }
+  }
+
+  .shimmer {
+    background: linear-gradient(100deg, transparent 20%, rgba(255,255,255,.55) 45%, transparent 70%);
+    background-size: 220% 100%;
+    animation: shimmer-x 2.6s linear infinite;
+  }
+  @keyframes shimmer-x { to { background-position: -220% 0 } }
+
+  .grain {
+    background-image: radial-gradient(rgba(22,38,184,.06) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+
+  .hairline { box-shadow: inset 0 -1px 0 #D5DBE8; }
+
+  .marquee-track { animation: marquee 34s linear infinite; }
+  @keyframes marquee { to { transform: translate3d(-50%, 0, 0) } }
+
+  /* One switch turns the whole motion system off. */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .001ms !important;
+      scroll-behavior: auto !important;
+    }
+    .js-motion .reveal { opacity: 1 !important; transform: none !important; }
+    .ecg path { stroke-dashoffset: 0 !important; }
   }
 }
